@@ -375,17 +375,11 @@ body {
 #lens-pane-top {
     top: 0;
     height: 50%;
-    /* Micro-Feather (8px) - Softens the hard line just a bit */
-    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 8px), transparent 100%);
-    mask-image: linear-gradient(to bottom, black calc(100% - 8px), transparent 100%);
 }
 
 #lens-pane-bottom {
     bottom: 0;
     top: 50%;
-    /* Micro-Feather (8px) - Softens the hard line just a bit */
-    -webkit-mask-image: linear-gradient(to top, black calc(100% - 8px), transparent 100%);
-    mask-image: linear-gradient(to top, black calc(100% - 8px), transparent 100%);
 }
 
 .hero-section {
@@ -400,8 +394,6 @@ body {
     height: 300px;
     pointer-events: none;
     z-index: 31;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 60px rgba(0, 175, 176, 0.05);
     opacity: 0;
     transition: opacity 0.4s ease-out;
