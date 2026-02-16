@@ -5,9 +5,9 @@
 @section('content')
 {{-- Hero Section --}}
 <section class="hero-section relative min-h-[85vh] flex items-center gradient-hero overflow-hidden">
-    {{-- Fresh Structural Blur — Inline High-Contrast + 50px Feather (Blur 5px) --}}
-    <div id="lens-pane-top" class="hero-blur-pane" style="position: absolute; left: 0; right: 0; z-index: 50; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); background: rgba(0, 0, 0, 0.5); -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%); mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%);"></div>
-    <div id="lens-pane-bottom" class="hero-blur-pane" style="position: absolute; left: 0; right: 0; z-index: 50; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); background: rgba(0, 0, 0, 0.5); -webkit-mask-image: linear-gradient(to top, black calc(100% - 50px), transparent 100%); mask-image: linear-gradient(to top, black calc(100% - 50px), transparent 100%);"></div>
+    {{-- Fresh Structural Blur — Inline High-Contrast + 50px Feather (Blur 5px, Lighter) --}}
+    <div id="lens-pane-top" class="hero-blur-pane" style="position: absolute; left: 0; right: 0; z-index: 50; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); background: rgba(0, 0, 0, 0.3); -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%); mask-image: linear-gradient(to bottom, black calc(100% - 50px), transparent 100%);"></div>
+    <div id="lens-pane-bottom" class="hero-blur-pane" style="position: absolute; left: 0; right: 0; z-index: 50; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); background: rgba(0, 0, 0, 0.3); -webkit-mask-image: linear-gradient(to top, black calc(100% - 50px), transparent 100%); mask-image: linear-gradient(to top, black calc(100% - 50px), transparent 100%);"></div>
     {{-- Lens cursor circle --}}
     <div class="hero-lens-cursor"></div>
 
