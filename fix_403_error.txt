@@ -1,0 +1,30 @@
+This error happens because your server is looking at the "root" folder (where you see app, bootstrap, public, etc.) but Laravel needs to start from the "public" folder.
+
+OPTION 1: Change Document Root (Recommended)
+---------------------------------------------
+If your hosting (cPanel/Plesk) allows it:
+1. Go to "Domains" or "Subdomains".
+2. Change the "Document Root" for your domain from `.../ecommerce` to `.../ecommerce/public`.
+3. Save. This fixes it instantly.
+
+OPTION 2: Use .htaccess (If Option 1 is not possible)
+-----------------------------------------------------
+If you cannot change the document root, create a file named `.htaccess` in the ROOT folder (the one in your screenshot, next to 'app' and 'public').
+
+1. Create a new file named `.htaccess`
+2. Paste the following code into it:
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L,QSA]
+</IfModule>
+
+3. Save the file.
+
+Permissions Check
+-----------------
+Ensure permissions are correct:
+- Folders: 755 (drwxr-xr-x)
+- Files: 644 (-rw-r--r--)
+- specifically `public/index.php` should be 644.

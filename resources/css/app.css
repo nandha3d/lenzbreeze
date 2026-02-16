@@ -1,0 +1,414 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+
+    /* Brand Colors — deep navy family */
+    --color-brand-50: #e8f0f8;
+    --color-brand-100: #c5d9ed;
+    --color-brand-200: #9fbfe0;
+    --color-brand-300: #7aa5d3;
+    --color-brand-400: #5b8ec7;
+    --color-brand-500: #0e3558;
+    --color-brand-600: #0c2d4c;
+    --color-brand-700: #0a243d;
+    --color-brand-800: #071a2e;
+    --color-brand-900: #04101d;
+
+    /* Accent — teal family derived from #00afb0 */
+    --color-accent-50: #e6fafa;
+    --color-accent-100: #b3f0f0;
+    --color-accent-200: #80e6e6;
+    --color-accent-300: #4ddbdc;
+    --color-accent-400: #26d1d2;
+    --color-accent-500: #00afb0;
+    --color-accent-600: #009494;
+    --color-accent-700: #007a7a;
+    --color-accent-800: #005f60;
+    --color-accent-900: #003d3d;
+
+    /* Warm Gray */
+    --color-warm-50: #fafaf9;
+    --color-warm-100: #f5f5f4;
+    --color-warm-200: #e7e5e4;
+    --color-warm-300: #d6d3d1;
+    --color-warm-400: #a8a29e;
+    --color-warm-500: #78716c;
+    --color-warm-600: #57534e;
+    --color-warm-700: #44403c;
+    --color-warm-800: #292524;
+    --color-warm-900: #1c1917;
+
+    /* Shadow colors — used in buttons & cards */
+    --shadow-accent: rgba(0, 175, 176, 0.3);
+    --shadow-accent-hover: rgba(0, 175, 176, 0.45);
+}
+
+/* ===== Utility Overrides ===== */
+[x-cloak] {
+    display: none !important;
+}
+
+.h-18 {
+    height: 4.5rem;
+}
+
+.top-18 {
+    top: 4.5rem;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+/* ===== Global Styles ===== */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    @apply font-sans text-warm-800 antialiased;
+}
+
+/* ===== Section Spacing ===== */
+.section-padding {
+    @apply py-16 md:py-24;
+}
+
+.container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* ===== Gradient Utilities ===== */
+.gradient-brand {
+    background: linear-gradient(135deg, var(--color-brand-500) 0%, var(--color-brand-700) 100%);
+}
+
+.gradient-accent {
+    background: linear-gradient(135deg, var(--color-accent-500) 0%, var(--color-accent-700) 100%);
+}
+
+.gradient-hero {
+    background: linear-gradient(135deg, var(--color-brand-500) 0%, var(--color-accent-600) 50%, var(--color-brand-700) 100%);
+}
+
+/* ===== Button Styles ===== */
+.btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-white rounded-lg transition-all duration-300 ease-out;
+    background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-600));
+    box-shadow: 0 4px 14px var(--shadow-accent);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow-accent-hover);
+}
+
+.btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-brand-500 bg-white border-2 border-brand-500 rounded-lg transition-all duration-300 ease-out;
+}
+
+.btn-secondary:hover {
+    @apply text-white;
+    background: var(--color-brand-500);
+    transform: translateY(-2px);
+}
+
+.btn-outline-white {
+    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-white border-2 border-white/40 rounded-lg transition-all duration-300 ease-out;
+    backdrop-filter: blur(4px);
+}
+
+.btn-outline-white:hover {
+    @apply bg-white/10 border-white/70;
+    transform: translateY(-2px);
+}
+
+/* ===== Card Styles ===== */
+.card {
+    @apply bg-white rounded-2xl shadow-lg transition-all duration-300 overflow-hidden;
+}
+
+.card:hover {
+    @apply shadow-xl;
+    transform: translateY(-4px);
+}
+
+.card-glass {
+    @apply rounded-2xl shadow-lg transition-all duration-300 overflow-hidden;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* ===== Section Headers ===== */
+.section-title {
+    @apply text-3xl md:text-4xl font-bold font-display text-brand-500;
+}
+
+.section-subtitle {
+    @apply text-lg text-warm-500 mt-4 max-w-2xl;
+}
+
+/* ===== WhatsApp Floating Button ===== */
+.whatsapp-float {
+    @apply fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300;
+    background: #25D366;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+}
+
+/* ===== Animations ===== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out forwards;
+}
+
+/* Stagger delays */
+.delay-100 {
+    animation-delay: 0.1s;
+}
+
+.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.delay-300 {
+    animation-delay: 0.3s;
+}
+
+.delay-400 {
+    animation-delay: 0.4s;
+}
+
+/* ===== Admin Panel ===== */
+.admin-sidebar {
+    @apply bg-brand-900 text-white min-h-screen w-64 transition-all duration-300;
+}
+
+.admin-sidebar a {
+    @apply flex items-center gap-3 px-6 py-3 text-warm-300 transition-colors duration-200;
+}
+
+.admin-sidebar a:hover,
+.admin-sidebar a.active {
+    @apply bg-brand-700 text-white;
+}
+
+/* ===== Advanced Animations ===== */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes float-delayed {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+    animation: float-delayed 8s ease-in-out infinite;
+    animation-delay: 2s;
+}
+
+/* Glass Elements */
+.glass-ball {
+    @apply absolute rounded-full pointer-events-none opacity-60 mix-blend-screen;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.1));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Shimmer Effect */
+.shimmer-hover {
+    @apply relative overflow-hidden;
+}
+
+.shimmer-hover::after {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-full pointer-events-none opacity-0 transition-opacity duration-300;
+    background: linear-gradient(120deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.4) 50%,
+            transparent 70%);
+    background-size: 200% 100%;
+}
+
+.shimmer-hover:hover::after {
+    @apply opacity-100;
+    animation: shimmer 1.5s infinite linear;
+}
+
+/* Before/After Slider */
+.slider-container {
+    @apply relative w-full overflow-hidden rounded-2xl select-none;
+    aspect-ratio: 16/9;
+}
+
+.slider-image {
+    @apply absolute top-0 left-0 w-full h-full object-cover;
+}
+
+.slider-handle {
+    @apply absolute top-0 bottom-0 w-1 bg-white cursor-col-resize z-20 flex items-center justify-center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.slider-circle {
+    @apply w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-500 font-bold text-xs border-2 border-brand-500;
+}
+
+.hero-blur-pane {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    /* Locked from inline success */
+    pointer-events: none;
+    backdrop-filter: blur(20px);
+    /* Locked from inline success */
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(0, 0, 0, 0.5);
+    /* Locked from inline success */
+    will-change: height, top;
+}
+
+#lens-pane-top {
+    top: 0;
+    height: 50%;
+    /* Micro-Feather (8px) - Softens the hard line just a bit */
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 8px), transparent 100%);
+    mask-image: linear-gradient(to bottom, black calc(100% - 8px), transparent 100%);
+}
+
+#lens-pane-bottom {
+    bottom: 0;
+    top: 50%;
+    /* Micro-Feather (8px) - Softens the hard line just a bit */
+    -webkit-mask-image: linear-gradient(to top, black calc(100% - 8px), transparent 100%);
+    mask-image: linear-gradient(to top, black calc(100% - 8px), transparent 100%);
+}
+
+.hero-section {
+    position: relative;
+}
+
+/* Full-width horizontal boxed lens indicator */
+.hero-lens-cursor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 300px;
+    pointer-events: none;
+    z-index: 31;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 60px rgba(0, 175, 176, 0.05);
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+    transform: translateY(-50%);
+    /* Positioned via JS --lens-y */
+}
+
+.hero-section:hover .hero-lens-cursor {
+    opacity: 1;
+}
