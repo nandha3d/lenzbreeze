@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const y = e.clientY - rect.top;
             const heroH = rect.height;
             // Gap size (clear area)
-            const gapRadius = 100;
+            const gapRadius = 200;
 
             // Top Pane: Ends at cursor - gap
             paneTop.style.height = `${Math.max(0, y - gapRadius)}px`;
