@@ -8,6 +8,7 @@ use App\Models\ProductCategory;
 use App\Models\Inquiry;
 use App\Models\Subscriber;
 use App\Models\Page;
+use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -15,14 +16,86 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $stats = [
-            'products' => Product::count(),
-            'inquiries' => Inquiry::count(),
-            'new_inquiries' => Inquiry::where('status', 'new')->count(),
-            'subscribers' => Subscriber::where('status', 'active')->count(),
-        ];
+        $productCount = Product::count();
+        $newInquiries = Inquiry::where('status', 'new')->count();
+        $subscriberCount = Subscriber::where('status', 'active')->count();
+        $pageCount = Page::count();
+        $warrantyCount = Warranty::count();
+        
         $recentInquiries = Inquiry::latest()->take(5)->get();
-        return view('admin.dashboard', compact('stats', 'recentInquiries'));
+        $recentSubscribers = Subscriber::latest()->take(5)->get();
+        $recentWarranties = Warranty::latest()->take(5)->get();
+
+        return view('admin.dashboard', compact(
+            'productCount', 
+            'newInquiries', 
+            'subscriberCount', 
+            'pageCount', 
+            'warrantyCount',
+            'recentInquiries', 
+            'recentSubscribers',
+            'recentWarranties'
+        ));
+    }
+
+    // Warranties
+    public function warranties(Request $request)
+    {
+        $query = Warranty::latest();
+        if ($request->filled('search')) {
+            $query->where('serial_number', 'like', '%' . $request->search . '%')
+                  ->orWhere('customer_name', 'like', '%' . $request->search . '%');
+        }
+        $warranties = $query->paginate(20);
+        return view('admin.warranties.index', compact('warranties'));
+    }
+
+    public function createWarranty()
+    {
+        return view('admin.warranties.form');
+    }
+
+    public function storeWarranty(Request $request)
+    {
+        $validated = $request->validate([
+            'product_name' => 'required|string|max:255',
+            'customer_name' => 'required|string|max:255',
+            'retailer_name' => 'nullable|string|max:255',
+            'purchase_date' => 'required|date',
+            'expiry_date' => 'required|date|after:purchase_date',
+            'status' => 'required|in:active,expired,void',
+            'notes' => 'nullable|string',
+        ]);
+
+        Warranty::create($validated);
+        return redirect()->route('admin.warranties')->with('success', 'Warranty generated successfully.');
+    }
+
+    public function editWarranty(Warranty $warranty)
+    {
+        return view('admin.warranties.form', compact('warranty'));
+    }
+
+    public function updateWarranty(Request $request, Warranty $warranty)
+    {
+        $validated = $request->validate([
+            'product_name' => 'required|string|max:255',
+            'customer_name' => 'required|string|max:255',
+            'retailer_name' => 'nullable|string|max:255',
+            'purchase_date' => 'required|date',
+            'expiry_date' => 'required|date|after:purchase_date',
+            'status' => 'required|in:active,expired,void',
+            'notes' => 'nullable|string',
+        ]);
+
+        $warranty->update($validated);
+        return redirect()->route('admin.warranties')->with('success', 'Warranty updated successfully.');
+    }
+
+    public function deleteWarranty(Warranty $warranty)
+    {
+        $warranty->delete();
+        return redirect()->route('admin.warranties')->with('success', 'Warranty deleted successfully.');
     }
 
     // Products
@@ -35,7 +108,7 @@ class AdminController extends Controller
     public function createProduct()
     {
         $categories = ProductCategory::active()->orderBy('display_order')->get();
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.form', compact('categories'));
     }
 
     public function storeProduct(Request $request)
@@ -65,7 +138,7 @@ class AdminController extends Controller
     public function editProduct(Product $product)
     {
         $categories = ProductCategory::active()->orderBy('display_order')->get();
-        return view('admin.products.edit', compact('product', 'categories'));
+        return view('admin.products.form', compact('product', 'categories'));
     }
 
     public function updateProduct(Request $request, Product $product)
@@ -121,7 +194,7 @@ class AdminController extends Controller
     public function subscribers()
     {
         $subscribers = Subscriber::latest()->paginate(20);
-        return view('admin.subscribers.index', compact('subscribers'));
+        return view('admin.subscribers', compact('subscribers'));
     }
 
     public function exportSubscribers()

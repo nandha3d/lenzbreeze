@@ -32,106 +32,223 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Photochromic Lenses', 'slug' => 'photochromic', 'description' => 'Lenses that adapt to changing light conditions — clear indoors, tinted outdoors.', 'display_order' => 4],
             ['name' => 'Polarized Lenses', 'slug' => 'polarized', 'description' => 'Superior glare reduction for driving, water sports, and outdoor activities.', 'display_order' => 5],
             ['name' => 'Anti-Glare Lenses', 'slug' => 'anti-glare', 'description' => 'Multi-layer anti-reflective coating for crystal-clear vision and reduced eye strain.', 'display_order' => 6],
+            ['name' => 'Bifocal Lenses', 'slug' => 'bifocal', 'description' => 'Double-vision lenses for distance and near reading in one lens.', 'display_order' => 7],
         ];
 
         foreach ($categories as $cat) {
             ProductCategory::updateOrCreate(['slug' => $cat['slug']], $cat);
         }
 
-        // Products - Lenz Breeze Brand
+        // Clear existing products
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        Product::truncate();
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+
+        // Technical Data Structures
+        $data_cr39 = [
+            'summary' => 'CR-39 (Columbia Resin #39) is the industry standard for "plastic" eyeglass lenses, providing a lightweight, shatter-resistant alternative to glass.',
+            'highlight_title' => 'Thermoset Durability',
+            'highlight_desc' => 'Unlike some plastics, CR-39 is a "thermoset" material, meaning it won\'t melt or warp easily under high heat and is resistant to most household chemicals.',
+            'specs' => [
+                ['label' => 'Material', 'value' => 'Allyl Diglycol Carbonate (ADC)'],
+                ['label' => 'Refractive Index', 'value' => '1.498 (Standard Index)'],
+                ['label' => 'Abbe Value', 'value' => '58 (Highest optical clarity)'],
+                ['label' => 'Specific Gravity', 'value' => '1.32 (Roughly half the weight of glass)'],
+            ],
+            'benefits' => [
+                'Superior Optics: High Abbe value means very low chromatic aberration for blur-free edges.',
+                'Affordability: The most budget-friendly premium lens material currently available.',
+                'Lightweight: About 50% lighter than glass, making it comfortable for all-day wear.',
+                'Exceptional Tinting: Porous enough to absorb dyes easily for custom fashion gradients.',
+            ]
+        ];
+
+        $data_hard_coat = [
+            'summary' => 'A clear, durable protection layer applied to extend the lifespan of your lenses by resisting daily abrasions.',
+            'highlight_title' => 'Polysiloxane Barrier',
+            'highlight_desc' => 'Our hard coat is a clear, durable layer applied by dipping the lens and curing it with UV light to form a tough shield against scratches.',
+            'specs' => [
+                ['label' => 'Base Treatment', 'value' => 'Polysiloxane Dip/Spin Coat'],
+                ['label' => 'Durability', 'value' => 'High Scratch Resistance'],
+                ['label' => 'Visibility', 'value' => '100% Optically Clear'],
+                ['label' => 'Foundation', 'value' => 'Required for Anti-Glare (ARC)'],
+            ],
+            'benefits' => [
+                'Extended Lifespan: Resists daily abrasions from wiping with microfiber cloths.',
+                'Surface Integrity: Prevents fine hairline scratches that cause hazy vision over time.',
+                'Smooth Finish: Creates a perfectly flat foundation for secondary high-tech coatings.',
+            ]
+        ];
+
+        $data_photochromic = [
+            'summary' => 'Light-adaptive lenses that change their tint automatically based on ultraviolet (UV) light exposure.',
+            'highlight_title' => 'Molecule Adaptation',
+            'highlight_desc' => 'Lenses contain millions of light-sensitive molecules (like naphthopyrans) that undergo structural change when exposed to UV, absorbing visible light.',
+            'specs' => [
+                ['label' => 'Technology', 'value' => 'Naphthopyran Molecular Transition'],
+                ['label' => 'Activation', 'value' => 'Rapid Darkening (Sunlight)'],
+                ['label' => 'Deactivation', 'value' => 'Fades back to Clear (Indoors)'],
+                ['label' => 'Protection', 'value' => '100% UVA & UVB Blockage'],
+            ],
+            'benefits' => [
+                '2-in-1 Convenience: Eliminates the need to carry separate prescription sunglasses.',
+                'Reduced Fatigue: Less squinting and eye strain when moving between lighting conditions.',
+                'UV Shield: Provides constant protection against harmful atmospheric solar radiation.',
+            ]
+        ];
+
+        $data_blue_cut = [
+            'summary' => 'Designed to protect eyes from digital strain by filtering high-energy visible (HEV) blue light from screens.',
+            'highlight_title' => 'Blue Light Shield',
+            'highlight_desc' => 'Filters blue light (380nm–450nm) via a specialized surface reflective coating or a monomer absorber mixed directly into the lens.',
+            'specs' => [
+                ['label' => 'Filtering Range', 'value' => '380nm – 450nm (HEV Blue Light)'],
+                ['label' => 'Method', 'value' => 'Monomer Absorption / Surface Reflection'],
+                ['label' => 'Residual Tint', 'value' => 'Very slight warm/yellowish tone'],
+                ['label' => 'Clarity', 'value' => 'High Definition Digital Viewing'],
+            ],
+            'benefits' => [
+                'Screen Comfort: Reduces dry eyes and headaches from prolonged computer or gaming use.',
+                'Sleep Support: Preserves natural circadian rhythms by reducing nighttime blue light.',
+                'Sharp Contrast: Enhances visual comfort when reading small text on digital displays.',
+            ]
+        ];
+
+        $data_hd_digital = [
+            'summary' => 'Representing a massive leap in precision, these lenses move from mechanical grinding to 3D computer-aided laser surfacing.',
+            'highlight_title' => 'Precision Surfacing',
+            'highlight_desc' => 'Manufactured using CNC surfacing, carving the prescription onto the back of the lens accurately to 1/100th of a diopter.',
+            'specs' => [
+                ['label' => 'Manufacturing', 'value' => 'Freeform 3D Digital Surfacing'],
+                ['label' => 'Precision', 'value' => '1/100th Diopter Accuracy'],
+                ['label' => 'Field of View', 'value' => 'Wide, Edge-to-Edge Clarity'],
+                ['label' => 'Customization', 'value' => 'Point-by-Point Tailored Optics'],
+            ],
+            'benefits' => [
+                'Maximum Clarity: Deeply crisp vision across the entire lens surface.',
+                'Zero Distortion: Eliminates the "swim" effect and peripheral blurriness.',
+                'Sharper Contrast: Provides brighter, high-definition vision in all conditions.',
+            ]
+        ];
+
+        $data_polarized = [
+            'summary' => 'The gold standard for bright light, using microscopic vertical filters to block intense horizontal glare.',
+            'highlight_title' => 'Light Polarization',
+            'highlight_desc' => 'Acts like a window blind, allowing useful vertical light in while completely blocking horizontal glare from reflective surfaces.',
+            'specs' => [
+                ['label' => 'Filter Type', 'value' => 'Micro-Aligned Polyvinyl Alcohol Film'],
+                ['label' => 'Glare Reduction', 'value' => 'Up to 99.9% Horizontal Glare removal'],
+                ['label' => 'Outdoor Performance', 'value' => 'Premium Contrast & Detail'],
+                ['label' => 'Environment', 'value' => 'Ideal for Water, Snow, and Wet Roads'],
+            ],
+            'benefits' => [
+                'Visual Comfort: Drastically reduces blinding glare in bright midday sun.',
+                'Driving Safety: Removes intense reflections from wet roads and car hoods.',
+                'True Colors: Delivers more accurate color perception than standard tinted lenses.',
+            ]
+        ];
+
+        $data_hmc = [
+            'summary' => 'Crucial for visual clarity, HMC uses microscopic oxide layers to neutralize light waves bouncing off the lens surface.',
+            'highlight_title' => 'Destructive Interference',
+            'highlight_desc' => 'Metallic oxide layers (titanium/silicon) are applied in a vacuum to neutralize light waves, allowing more light through.',
+            'specs' => [
+                ['label' => 'Light Transmission', 'value' => 'Up to 99% Through-put (Sharper Vision)'],
+                ['label' => 'Technology', 'value' => 'Vacuum-layered Metallic Oxides'],
+                ['label' => 'Aesthetic Colour', 'value' => 'Emerald Green or Sapphire Blue reflection'],
+                ['label' => 'Reflection Loss', 'value' => 'Reduced from 8-10% down to less than 1%'],
+            ],
+            'benefits' => [
+                'Night Safety: Drastically reduces halos around headlights and streetlights.',
+                'Invisible Look: People see your eyes clearly instead of a distracting reflection.',
+                'Crisper View: Sharpens vision by eliminating internal "ghost images" and haze.',
+            ]
+        ];
+
+        // Products
         $products = [
             [
-                'category_id' => 1, 'brand' => 'Lenz Breeze', 'name' => 'ClearView SV',
-                'slug' => 'clearview-sv', 'tagline' => 'Crystal clarity, everyday comfort',
-                'description' => 'The ClearView SV is our flagship single vision lens, crafted with premium optical-grade materials for unmatched clarity. Featuring our proprietary HydroShield coating, it repels water, oil, and dust while maintaining a pristine surface throughout the day.',
-                'features' => ['HydroShield Coating', 'UV400 Protection', 'Scratch Resistant', 'Anti-Static', 'Easy to Clean'],
-                'specifications' => ['Material' => 'CR-39 / Polycarbonate', 'Refractive Index' => '1.56 / 1.61 / 1.67', 'Coating' => 'Multi-Layer AR + HydroShield', 'UV Protection' => 'UV400', 'Abbe Value' => '32-42'],
-                'technologies' => ['Anti-Glare', 'UV Protection'],
+                'category_id' => 2, 'brand' => 'EYE MEK', 'name' => 'Eye Mek Premium Progressive RX',
+                'slug' => 'premium-progressive-rx', 'tagline' => 'Seamless Sight. Absolute Protection.',
+                'image' => 'images/products/premium-progressive-rx.png',
+                'gallery' => ['images/products/premium-progressive-rx.png', 'images/products/premium-progressive-rx-tech.jpg'],
+                'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">The Lens That Thinks for You. 🌓</span> From the boardroom to the beach, Eye Mek Progressive Photochromic lenses adapt instantly to your environment...',
+                'features' => ['Seamless Multifocal: Distance, Mid, and Near vision', 'Rapid UV Activation', 'Blue Light Protection', '100% UV400 Protection'],
+                'specifications' => [
+                    'Material' => 'CR-39 / High Index',
+                    'variants' => [
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
+                        ['name' => 'Uncoated', 'icon_type' => 'clear', 'details' => array_merge($data_cr39, ['summary' => 'Pure lens material without external treatments.', 'details' => ['specs' => [['label' => 'Coating', 'value' => 'None']]]])],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'details' => $data_photochromic, 'sub_variants' => ['Photo Grey', 'Photo Brown']],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'details' => $data_blue_cut],
+                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'details' => $data_hd_digital],
+                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'details' => $data_polarized],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'details' => $data_hmc, 'sub_variants' => ['Emerald Green ARC', 'Sapphire Blue ARC']],
+                        ['name' => 'Drive x', 'icon_type' => 'drive', 'details' => array_merge($data_hmc, ['name' => 'Drive x', 'summary' => 'Optimized for high-visual comfort during transit.'])],
+                    ]
+                ],
+                'technologies' => ['Progressive', 'Photochromic', 'Blue Cut', 'Polarized', 'Anti-Glare'],
                 'is_featured' => true, 'display_order' => 1,
             ],
+            // Single Vision
             [
-                'category_id' => 2, 'brand' => 'Lenz Breeze', 'name' => 'ProVision HD',
-                'slug' => 'provision-hd', 'tagline' => 'See life without limits',
-                'description' => 'The ProVision HD progressive lens uses advanced free-form digital surfacing technology to deliver wider corridors and smoother transitions between distance, intermediate, and near zones. Perfect for professionals and active lifestyles.',
-                'features' => ['Free-Form Digital Design', 'Wide Reading Zone', 'Smooth Transitions', 'Personalized Fitting', 'Reduced Swim Effect'],
-                'specifications' => ['Material' => 'MR-8 / MR-7', 'Refractive Index' => '1.60 / 1.67 / 1.74', 'Design' => 'Digital Free-Form', 'Corridor Length' => '14mm / 17mm', 'Fitting Height' => 'Min 16mm'],
-                'technologies' => ['Progressive', 'Anti-Glare'],
+                'category_id' => 1, 'brand' => 'EYE MEK', 'name' => 'Eye Mek Single Vision',
+                'slug' => 'single-vision-rx', 'tagline' => 'Your Vision, Upgraded.',
+                'image' => 'images/products/single-vision-rx.png',
+                'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">Welcome to the next level of visual clarity.</span> EYE MEK isn\'t just a lens; it’s a premium vision solution tailored to your lifestyle. Whether you\'re navigating a digital workspace, driving under the sun, or looking for everyday durability, we have the perfect fit.<br><br>Here is a breakdown of the EYE MEK Single Vision (SV) collection, crafted for those who refuse to compromise on quality.',
+                'features' => ['Advanced Polarization', 'UV400 Protection', 'Impact Resistance'],
+                'specifications' => [
+                    'Material' => 'CR-39 / Polycarbonate',
+                    'variants' => [
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'details' => $data_photochromic, 'sub_variants' => ['Photo Grey', 'Photo Brown']],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'details' => $data_blue_cut],
+                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'details' => $data_hd_digital],
+                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'details' => $data_polarized],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'details' => $data_hmc],
+                    ]
+                ],
+                'technologies' => ['Anti-Glare', 'Blue Cut', 'Polarized', 'Photochromic'],
                 'is_featured' => true, 'display_order' => 2,
             ],
+            // Bifocals
             [
-                'category_id' => 3, 'brand' => 'Lenz Breeze', 'name' => 'DigiShield Pro',
-                'slug' => 'digishield-pro', 'tagline' => 'Your digital eye armor',
-                'description' => 'DigiShield Pro lenses are engineered for the digital age. Our triple-layer blue light filter blocks up to 42% of harmful blue-violet light (380-455nm) while maintaining true color perception — no yellowish tint.',
-                'features' => ['42% Blue Light Block', 'True Color Vision', 'Anti-Fatigue Design', 'EMI Shield', 'Oleophobic Coating'],
-                'specifications' => ['Material' => 'NK-55 / Polycarbonate', 'Blue Cut Range' => '380-455nm', 'Block Rate' => '42%', 'Color Distortion' => 'Less than 3%', 'Available In' => 'SV / Progressive / Bifocal'],
-                'technologies' => ['Blue Cut', 'Anti-Glare'],
+                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'D Bifocal Lens',
+                'slug' => 'd-bifocal-lens', 'tagline' => 'Wide View. Sharp Focus.',
+                'image' => 'images/products/bifocal-lens.png',
+                'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">The D-Segment Advantage.</span> Wider reading area...',
+                'features' => ['Wide Reading Area', 'Sharp Distance Vision', 'Photochromic Adaptation'],
+                'specifications' => [
+                    'Material' => 'CR-39 White',
+                    'variants' => [
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'details' => $data_photochromic],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'details' => $data_blue_cut],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'details' => $data_hmc],
+                    ]
+                ],
+                'technologies' => ['Bifocal', 'Photochromic', 'Anti-Glare'],
                 'is_featured' => true, 'display_order' => 3,
             ],
+            // Kryptok
             [
-                'category_id' => 4, 'brand' => 'Lenz Breeze', 'name' => 'AdaptLens Ultra',
-                'slug' => 'adaptlens-ultra', 'tagline' => 'Adapts to your world',
-                'description' => 'AdaptLens Ultra photochromic lenses featuring Gen-8 photochromic molecules activate in under 30 seconds and fade back in under 5 minutes. Works even behind car windshields thanks to our dual-activation technology.',
-                'features' => ['30s Activation', '5min Fade-Back', 'Works Behind Windshield', 'Temperature Stable', 'Category 0-3 Darkness'],
-                'specifications' => ['Material' => 'Polycarbonate / MR-8', 'Activation Speed' => '<30 seconds', 'Fade-Back' => '<5 minutes', 'Max Darkness' => 'Category 3 (85%)', 'Indoor Clarity' => '95% Light Transmission'],
-                'technologies' => ['Photochromic', 'UV Protection'],
-                'is_featured' => true, 'display_order' => 4,
-            ],
-            // EYE MEK Brand Products
-            [
-                'category_id' => 5, 'brand' => 'EYE MEK', 'name' => 'Polarized Single Vision',
-                'slug' => 'polarized-single-vision', 'tagline' => 'Designed for those who demand ultimate clarity in the great outdoors.',
-                'description' => 'The Eye Mek Polarized Single Vision lenses are engineered for the ultimate outdoor experience. By eliminating 99.9% of reflective glare from water, roads, and snow, these lenses provide unmatched visual comfort and safety.',
-                'features' => [
-                    'Advanced Polarization: Eliminates 99.9% of reflective glare.',
-                    'True Color Perception: Enhanced contrast without distortion.',
-                    'UV400 Protection: Full-spectrum defense against UVA/UVB.',
-                    'Impact Resistance: Durable material for active lifestyles.'
+                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'Kryptok Bifocals',
+                'slug' => 'kryptok-bifocals', 'tagline' => 'Classic Reading Clarity.',
+                'image' => 'images/products/bifocal-lens.png',
+                'description' => 'Reliable and affordable bifocal solution.',
+                'features' => ['Distance Zone', 'Reading Zone'],
+                'specifications' => [
+                    'variants' => [
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'details' => $data_hard_coat],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'details' => $data_hmc],
+                    ]
                 ],
-                'specifications' => ['Material' => 'Polycarbonate / TAC', 'Polarizing Efficiency' => '99.9%', 'UV Protection' => 'UV400', 'Impact Resistance' => 'ANSI Z87.1'],
-                'technologies' => ['Polarized', 'UV Protection'],
-                'is_featured' => true, 'display_order' => 1,
-            ],
-            [
-                'category_id' => 4, 'brand' => 'EYE MEK', 'name' => 'Progressive Photochromic',
-                'slug' => 'progressive-photochromic', 'tagline' => 'The Lens That Thinks for You.',
-                'description' => 'From the boardroom to the beach, Eye Mek Progressive Photochromic lenses adapt instantly to your environment. No more switching frames—just seamless, high-definition vision that darkens in seconds when you step outside.',
-                'features' => [
-                    'Seamless Multifocal: Clear vision at near, mid, and far.',
-                    'Rapid Activation: Darkens in under 30 seconds.',
-                    'Easy Adaptation: Smooth, fluid, and natural transitions.',
-                    'Blue Light Shield: Built-in digital protection indoors.',
-                    'Total UV Defense: Blocks 100% of harmful rays.'
-                ],
-                'specifications' => ['Material' => 'MR-8 / High Index', 'Design' => 'Digital Free-Form', 'Activation' => '< 30s', 'Fade-Back' => '< 5m'],
-                'technologies' => ['Progressive', 'Photochromic', 'Blue Cut'],
-                'is_featured' => true, 'display_order' => 2,
-            ],
-            [
-                'category_id' => 6, 'brand' => 'EYE MEK', 'name' => 'CrystalCoat AR',
-                'slug' => 'crystalcoat-ar', 'tagline' => 'See the difference clearly',
-                'description' => 'CrystalCoat AR features a 7-layer anti-reflective coating stack that reduces surface reflections to less than 0.5%, providing the clearest vision possible. Enhanced with our DuraGuard top coat for lasting protection.',
-                'features' => ['7-Layer AR Stack', '<0.5% Reflection', 'DuraGuard Top Coat', 'Anti-Static', 'Night Driving Optimized'],
-                'specifications' => ['Material' => 'CR-39 / MR-8', 'AR Layers' => '7 Layers', 'Residual Reflection' => '<0.5%', 'Hardness' => '5H Pencil Test', 'Coating Warranty' => '2 Years'],
-                'technologies' => ['Anti-Glare'],
-                'is_featured' => false, 'display_order' => 6,
-            ],
-            [
-                'category_id' => 1, 'brand' => 'EYE MEK', 'name' => 'EcoVision Green',
-                'slug' => 'ecovision-green', 'tagline' => 'See green, live green',
-                'description' => 'EcoVision Green lenses are manufactured using our sustainable production process with bio-based materials. Same optical quality, lower carbon footprint.',
-                'features' => ['Bio-Based Materials', 'Carbon Neutral Production', 'Full UV Protection', 'Super Hydrophobic', 'Recyclable Packaging'],
-                'specifications' => ['Material' => 'Bio-based Resin', 'Refractive Index' => '1.56', 'UV Protection' => 'UV400', 'Certification' => 'ISO 14001', 'Carbon Offset' => '100%'],
-                'technologies' => ['UV Protection', 'Anti-Glare'],
-                'is_featured' => false, 'display_order' => 7,
-            ],
-            [
-                'category_id' => 3, 'brand' => 'EYE MEK', 'name' => 'ScreenGuard Plus',
-                'slug' => 'screenguard-plus', 'tagline' => 'Work smarter, see better',
-                'description' => 'ScreenGuard Plus combines blue cut technology with an occupational lens design optimized for near and intermediate distances — perfect for office workers and gamers.',
-                'features' => ['Blue Cut + Occupational', 'Optimized for 40-100cm', 'Anti-Fatigue Zone', 'Low Color Shift', 'Gaming Ready'],
-                'specifications' => ['Material' => 'MR-8', 'Blue Block' => '38%', 'Design' => 'Occupational Progressive', 'Near Zone Width' => 'Extra Wide', 'Color Accuracy' => '97%'],
-                'technologies' => ['Blue Cut', 'Anti-Glare', 'Progressive'],
-                'is_featured' => false, 'display_order' => 8,
+                'technologies' => ['Bifocal'],
+                'is_featured' => false, 'display_order' => 4,
             ],
         ];
 
@@ -139,37 +256,11 @@ class DatabaseSeeder extends Seeder
             Product::updateOrCreate(['slug' => $product['slug']], $product);
         }
 
-        // Pages
-        Page::updateOrCreate(
-            ['slug' => 'privacy-policy'],
-            [
-                'title' => 'Privacy Policy',
-                'content' => '<h2>Privacy Policy</h2><p>Last updated: ' . now()->format('F Y') . '</p><p>Lenz Breeze Optical Pvt. Ltd. ("we", "our", "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website.</p><h3>Information We Collect</h3><p>We collect information you provide directly, such as your name, email address, phone number, and company name when you fill out our contact form or subscribe to our newsletter.</p><h3>How We Use Your Information</h3><p>We use the information to respond to your inquiries, send newsletter updates (with your consent), improve our website, and comply with legal obligations.</p><h3>Contact Us</h3><p>If you have any questions about this Privacy Policy, please contact us at info@lenzbreeze.com.</p>',
-            ]
-        );
-
-        Page::updateOrCreate(
-            ['slug' => 'terms-conditions'],
-            [
-                'title' => 'Terms & Conditions',
-                'content' => '<h2>Terms & Conditions</h2><p>Last updated: ' . now()->format('F Y') . '</p><p>Welcome to Lenz Breeze. By accessing and using this website, you agree to comply with these Terms & Conditions.</p><h3>Use of Website</h3><p>This website is for informational purposes only. Product information, specifications, and images are provided as-is and may change without notice.</p><h3>Intellectual Property</h3><p>All content, logos, and trademarks on this website are the property of Lenz Breeze Optical Pvt. Ltd. Unauthorized use is prohibited.</p><h3>Limitation of Liability</h3><p>We make no warranties regarding the accuracy of information on this website. Use of information is at your own risk.</p>',
-            ]
-        );
-
         // Settings
         $settings = [
             'company_name' => 'Lenz Breeze Optical Pvt. Ltd.',
             'company_email' => 'info@lenzbreeze.com',
             'company_phone' => '+91 471 234 5678',
-            'company_whatsapp' => '914712345678',
-            'address_trivandrum' => 'TC 25/1234, Industrial Estate, Kazhakkoottam, Trivandrum, Kerala 695582',
-            'address_kochi' => 'Door No. 12/456, Kakkanad Industrial Area, Kochi, Kerala 682030',
-            'address_chennai' => 'Plot 45, SIDCO Industrial Estate, Ambattur, Chennai, Tamil Nadu 600098',
-            'address_delhi' => 'B-23, Sector 63, Noida, Uttar Pradesh 201301',
-            'social_facebook' => 'https://facebook.com/lenzbreeze',
-            'social_instagram' => 'https://instagram.com/lenzbreeze',
-            'social_linkedin' => 'https://linkedin.com/company/lenzbreeze',
-            'social_youtube' => 'https://youtube.com/@lenzbreeze',
         ];
 
         foreach ($settings as $key => $value) {

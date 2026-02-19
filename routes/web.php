@@ -16,6 +16,7 @@ Route::get('/partners', [PageController::class, 'partners'])->name('partners');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy');
 Route::get('/terms-conditions', [PageController::class, 'terms'])->name('terms');
+Route::get('/warranty', [PageController::class, 'warranty'])->name('warranty');
 
 // Admin Routes
 Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
@@ -41,6 +42,14 @@ Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {
     Route::get('/pages', [AdminController::class, 'pages'])->name('pages');
     Route::get('/pages/{page}/edit', [AdminController::class, 'editPage'])->name('pages.edit');
     Route::put('/pages/{page}', [AdminController::class, 'updatePage'])->name('pages.update');
+
+    // Warranties
+    Route::get('/warranties', [AdminController::class, 'warranties'])->name('warranties');
+    Route::get('/warranties/create', [AdminController::class, 'createWarranty'])->name('warranties.create');
+    Route::post('/warranties', [AdminController::class, 'storeWarranty'])->name('warranties.store');
+    Route::get('/warranties/{warranty}/edit', [AdminController::class, 'editWarranty'])->name('warranties.edit');
+    Route::put('/warranties/{warranty}', [AdminController::class, 'updateWarranty'])->name('warranties.update');
+    Route::delete('/warranties/{warranty}', [AdminController::class, 'deleteWarranty'])->name('warranties.delete');
 });
 
 // Auth routes (simple)

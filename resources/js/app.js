@@ -57,20 +57,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroSection && paneTop && paneBottom) {
         console.log('LB Lens: Fresh Structural Initialized');
 
-        // Function to set Idle State (Full Blur)
+        // Function to set Idle State (Full Blur - No Seam)
+        // We use just one pane to cover everything to avoid the 1px gap line
         const setIdleState = () => {
-            paneTop.style.height = '120%';
+            paneTop.style.height = '100%';
             paneBottom.style.top = '100%';
             paneBottom.style.height = '0%';
-            if (lensCursor) lensCursor.style.top = '-500px';
+            if (lensCursor) lensCursor.style.opacity = '0';
         };
 
-        const updateLens = (e) => {
+        // Function to set Active/Clear State (No Blur)
+        const setClearState = () => {
+            paneTop.style.height = '0%';
+            paneBottom.style.top = '100%';
+            paneBottom.style.height = '0%';
+            if (lensCursor) lensCursor.style.opacity = '0';
+        };
+
+        const updateLens = (clientY) => {
             const rect = heroSection.getBoundingClientRect();
-            const y = e.clientY - rect.top;
+            const y = clientY - rect.top;
             const heroH = rect.height;
             // Gap size (clear area)
-            const gapRadius = 200;
+            const gapRadius = 150;
 
             // Top Pane: Ends at cursor - gap
             paneTop.style.height = `${Math.max(0, y - gapRadius)}px`;
@@ -86,13 +95,66 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // Initialize in Idle State to prevent "Center Line" on load
-        setIdleState();
+        // Check for mobile/touch device
+        const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-        heroSection.addEventListener('mousemove', (e) => {
-            requestAnimationFrame(() => updateLens(e));
-        });
+        if (isMobile) {
+            // Mobile: Automatic Reveal
+            // 1. Start fully blurred
+            setIdleState();
 
-        heroSection.addEventListener('mouseleave', setIdleState);
+            // 2. Prepare for split animation (force layout calc)
+            // We want the starting point of animation to be the center split
+            requestAnimationFrame(() => {
+                paneTop.style.height = '50%';
+                paneBottom.style.top = '50%';
+                paneBottom.style.height = '50%';
+
+                // 3. Add transition and trigger reveal after a moment
+                setTimeout(() => {
+                    paneTop.style.transition = 'height 1.5s ease-in-out';
+                    paneBottom.style.transition = 'top 1.5s ease-in-out, height 1.5s ease-in-out';
+                    setClearState();
+                }, 500);
+            });
+
+        } else {
+            // Desktop: Interactive Hover with Buffer
+            setIdleState();
+
+            // Remove transitions for instant responsiveness
+            paneTop.style.transition = 'none';
+            paneBottom.style.transition = 'none';
+
+            // Buffer distance in pixels to keep tracking outside the box
+            const BUFFER = 100;
+
+            window.addEventListener('mousemove', (e) => {
+                const rect = heroSection.getBoundingClientRect();
+                const clientY = e.clientY;
+
+                // Check if mouse is near the hero section (including buffer)
+                const isNear = clientY >= (rect.top - BUFFER) &&
+                    clientY <= (rect.bottom + BUFFER);
+
+                if (isNear) {
+                    // Update lens position relative to hero, allowing it to go off-edges
+                    requestAnimationFrame(() => updateLens(clientY));
+                } else {
+                    // Too far away, reset to full blur
+                    setIdleState();
+                }
+            });
+
+            // Handle scrolling - update positions if mouse stays still but page moves
+            window.addEventListener('scroll', () => {
+                // Optional: strictly re-check mouse pos or just let the next mousemove handle it. 
+                // For simplicity and performance, we rely on mouse movement or just set idle if scrolled far away.
+                const rect = heroSection.getBoundingClientRect();
+                if (rect.bottom < 0 || rect.top > window.innerHeight) {
+                    setIdleState();
+                }
+            }, { passive: true });
+        }
     }
 });

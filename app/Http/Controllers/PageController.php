@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Page;
 use App\Models\Setting;
+use App\Models\Warranty;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
@@ -73,5 +75,17 @@ class PageController extends Controller
     {
         $page = Page::where('slug', 'terms-conditions')->first();
         return view('pages.legal', ['page' => $page, 'title' => 'Terms & Conditions']);
+    }
+
+    public function warranty(Request $request)
+    {
+        $warranty = null;
+        if ($request->filled('serial')) {
+            $warranty = Warranty::where('serial_number', $request->serial)->first();
+            if (!$warranty) {
+                return back()->with('error', 'Invalid Serial Number.');
+            }
+        }
+        return view('pages.warranty', compact('warranty'));
     }
 }

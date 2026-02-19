@@ -3,8 +3,7 @@
         <div class="flex items-center justify-between h-18">
             {{-- Logo --}}
             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze Logo" class="w-14 h-14 object-contain">
-                <img src="{{ asset('images/logo-text.png') }}" alt="Lenz Breeze" class="h-10 object-contain hidden sm:block">
+                <img src="{{ asset('images/logo.png') }}" alt="EYE MEK Logo" class="h-12 object-contain group-hover:scale-105 transition-transform duration-300">
             </a>
 
             {{-- Desktop Nav --}}

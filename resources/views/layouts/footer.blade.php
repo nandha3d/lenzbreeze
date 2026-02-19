@@ -20,8 +20,7 @@
             {{-- Brand --}}
             <div>
                 <div class="flex items-center gap-3 mb-4">
-                    <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze Logo" class="w-12 h-12 object-contain">
-                    <img src="{{ asset('images/logo-text.png') }}" alt="Lenz Breeze" class="h-9 object-contain brightness-0 invert">
+                    <img src="{{ asset('images/logo.png') }}" alt="EYE MEK Logo" class="h-10 object-contain brightness-0 invert">
                 </div>
                 <p class="text-sm leading-relaxed text-warm-400">Premium optical lens manufacturer with state-of-the-art facilities across India. Trusted by thousands of optical partners nationwide.</p>
                 <div class="flex gap-3 mt-6">
@@ -49,6 +48,7 @@
                     <li><a href="{{ route('technologies') }}" class="hover:text-accent-400 transition-colors">Technologies</a></li>
                     <li><a href="{{ route('facilities') }}" class="hover:text-accent-400 transition-colors">Facilities</a></li>
                     <li><a href="{{ route('partners') }}" class="hover:text-accent-400 transition-colors">Partners</a></li>
+                    <li><a href="{{ route('warranty') }}" class="hover:text-accent-400 transition-colors">Product Warranty</a></li>
                     <li><a href="{{ route('contact') }}" class="hover:text-accent-400 transition-colors">Contact</a></li>
                 </ul>
             </div>
