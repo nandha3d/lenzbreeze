@@ -206,6 +206,168 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-logo-yellow/10 to-transparent blur-3xl pointer-events-none"></div>
 </section>
 
+@elseif($product->slug === 'premium-progressive-rx')
+<section x-data="{ 
+    activeSlide: 1, 
+    totalSlides: 3, 
+    interval: null,
+    leaving: false,
+    nextSlide() {
+        if (this.leaving) return;
+        this.leaving = true;
+        setTimeout(() => {
+            this.activeSlide = this.activeSlide === this.totalSlides ? 1 : this.activeSlide + 1;
+            this.leaving = false;
+        }, 700);
+    },
+    startAutoScroll() {
+        this.interval = setInterval(() => this.nextSlide(), 7000);
+    },
+    stopAutoScroll() {
+        clearInterval(this.interval);
+    }
+}" 
+x-init="startAutoScroll()" 
+@mouseenter="stopAutoScroll()" 
+@mouseleave="startAutoScroll()"
+class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
+    
+    {{-- Slide 1: Master Every Distance --}}
+    <div x-show="activeSlide === 1" 
+         :class="{'active-slide': activeSlide === 1, 'leaving-slide': leaving && activeSlide === 1}"
+         class="absolute inset-0 z-10 transition-opacity duration-1000">
+        {{-- Stripe Transition Background --}}
+        <div class="stripe-container absolute inset-0">
+            @for($i=0; $i<5; $i++)
+            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens1.jpeg') }}');"></div>
+            @endfor
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-[11]"></div>
+        
+        {{-- Sci-Fi Overlays --}}
+        <div class="scifi-scan-line"></div>
+        <div class="absolute inset-0 hud-grid-bg opacity-10"></div>
+
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12 relative h-full flex items-center z-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+                <div class="max-w-2xl text-white relative ml-4 lg:ml-12">
+                    <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
+                    
+                    <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8 animate-slide-up">
+                        EYE MEK PROGRESSIVE SERIES
+                    </h2>
+                    <div class="space-y-6">
+                        <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1] animate-slide-up" style="animation-delay: 0.2s">
+                            Master Every Distance. <br/> Conquer Every Drive.
+                        </h1>
+                        <p class="text-xl md:text-2xl font-bold text-warm-100/90 leading-tight animate-slide-up" style="animation-delay: 0.4s">
+                            Introducing EYE MEK Progressive—engineered for those who never slow down.
+                        </p>
+                        <p class="text-lg text-warm-200/80 leading-relaxed max-w-xl animate-slide-up" style="animation-delay: 0.6s">
+                            Featuring our signature <span class="text-logo-yellow font-bold uppercase tracking-wider">Drive X technology</span>, optimized for the road.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Slide 2: Drive X Technology --}}
+    <div x-show="activeSlide === 2" 
+         :class="{'active-slide': activeSlide === 2, 'leaving-slide': leaving && activeSlide === 2}"
+         class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
+        <div class="stripe-container absolute inset-0">
+            @for($i=0; $i<5; $i++)
+            <div class="stripe-item" style="background-image: url('{{ asset('images/products/premium-progressive-rx-tech.jpg') }}');"></div>
+            @endfor
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-l from-black/95 via-black/60 to-black/20 z-[11]"></div>
+        
+        <div class="scifi-scan-line opacity-50"></div>
+
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12 relative h-full flex items-center z-20">
+            <div class="flex justify-end items-center w-full">
+                <div class="max-w-xl text-white text-right relative group mr-4 lg:mr-12">
+                    <div class="absolute -bottom-10 -right-10 w-24 h-24 border-b-2 border-r-2 border-logo-yellow/30"></div>
+                    
+                    <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-r-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                        PRECISION IN MOTION
+                    </h2>
+                    <div class="space-y-6">
+                        <h1 class="font-display text-4xl md:text-5xl font-black leading-[1.1]">
+                            Reduce Fatigue. <br/> Sharpen Reactions.
+                        </h1>
+                        <p class="text-xl font-bold text-warm-100/90 leading-tight">
+                            Optimized for the road, reducing dashboard-to-distance fatigue and sharpening your reaction time.
+                        </p>
+                        <p class="text-lg text-warm-200/80 leading-relaxed max-w-xl ml-auto">
+                            From the precision of <span class="text-logo-yellow">HD Digital surfacing</span> to glare-killing Polarized power.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Slide 3: The Visual Edge --}}
+    <div x-show="activeSlide === 3" 
+         :class="{'active-slide': activeSlide === 3, 'leaving-slide': leaving && activeSlide === 3}"
+         class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
+        <div class="stripe-container absolute inset-0">
+            @for($i=0; $i<5; $i++)
+            <div class="stripe-item" style="background-image: url('{{ asset('images/products/progressive-photochromic.png') }}');"></div>
+            @endfor
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/40 to-transparent z-[11]"></div>
+
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12 relative h-full flex items-center z-20">
+            <div class="max-w-2xl text-white relative ml-4 lg:ml-12">
+                <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
+                
+                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                    THE VISUAL EDGE
+                </h2>
+                
+                <div class="space-y-6">
+                    <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
+                        EYE MEK isn't just <br/> a lens. It’s your edge.
+                    </h1>
+                    <p class="text-xl md:text-2xl font-bold text-warm-100/90 leading-tight">
+                        Available in Sapphire Blue or Emerald Green HMC.
+                    </p>
+                    <div class="flex gap-4 items-center">
+                        <div class="h-px flex-1 bg-logo-yellow/20"></div>
+                        <span class="text-logo-yellow font-black tracking-widest text-xs uppercase">Precision Defined</span>
+                        <div class="h-px w-12 bg-logo-yellow/20"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Navigation Indicators --}}
+    <div class="absolute bottom-12 left-0 w-full z-30 pointer-events-none">
+        <div class="max-w-[1600px] mx-auto px-6 lg:px-12 flex justify-between items-end">
+            <div class="flex gap-3 pointer-events-auto">
+                <template x-for="i in totalSlides">
+                    <button @click="if(activeSlide !== i) { leaving = true; setTimeout(() => { activeSlide = i; leaving = false; }, 700); }"
+                            class="group relative h-1.5 transition-all duration-500 overflow-hidden rounded-full"
+                            :class="activeSlide === i ? 'w-12 bg-logo-yellow' : 'w-6 bg-white/20 hover:bg-white/40'">
+                        <div x-show="activeSlide === i" 
+                             class="absolute inset-0 bg-logo-yellow/40 animate-[progress_7s_linear_infinite]"></div>
+                    </button>
+                </template>
+            </div>
+            <div class="text-white/40 font-mono text-[10px] tracking-[0.3em] uppercase">
+                Slide <span class="text-logo-yellow font-black" x-text="activeSlide"></span> of 3
+            </div>
+        </div>
+    </div>
+
+    {{-- Interactive Background Accent --}}
+    <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-logo-yellow/10 to-transparent blur-3xl pointer-events-none"></div>
+</section>
+
 <style>
     @keyframes slide-up {
         from { opacity: 0; transform: translateY(40px); }
