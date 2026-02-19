@@ -54,7 +54,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
             <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner1.jpeg') }}');"></div>
             @endfor
         </div>
-        <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-[11]"></div>
         
         {{-- Sci-Fi Overlays --}}
         <div class="scifi-scan-line"></div>
@@ -99,7 +99,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
             <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner2.jpeg') }}');"></div>
             @endfor
         </div>
-        <div class="absolute inset-0 bg-gradient-to-l from-black/95 via-black/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-l from-black/95 via-black/60 to-black/20 z-[11]"></div>
         
         {{-- Sci-Fi Overlays --}}
         <div class="scifi-scan-line opacity-50"></div>
@@ -143,7 +143,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
             <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner3.jpeg') }}');"></div>
             @endfor
         </div>
-        <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/40 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/40 to-transparent z-[11]"></div>
 
         <div class="max-w-[1600px] mx-auto px-6 lg:px-12 relative h-full flex items-center z-20">
             <div class="max-w-2xl text-white relative ml-4 lg:ml-12">
