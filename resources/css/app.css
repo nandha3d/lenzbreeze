@@ -420,64 +420,65 @@ body {
     background-size: 30px 30px;
 }
 
-/* ---- Stripe Transition Effect ---- */
+/* ---- Stripe-Reveal Transition Effect (Precision Clip-Path) ---- */
 .stripe-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    width: 100%;
-    height: 100%;
-    gap: 0;
+    position: absolute;
+    inset: 0;
+    display: block;
+    z-index: 10;
 }
 
 .stripe-item {
-    height: 100%;
-    background-size: 500% 100%;
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
-    transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-    transform: scaleY(0) translateZ(0);
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: scaleY(0);
     opacity: 0;
     transform-origin: top;
     will-change: transform, opacity;
     backface-visibility: hidden;
-    margin-right: -1px;
-    /* Slight overlap for sub-pixel safety */
+    pointer-events: none;
 }
 
-/* Slide is active — stripes reveal */
+/* Precise Clip-Path Slices for 5 segments */
+.stripe-item:nth-child(1) {
+    clip-path: inset(0 80% 0 0);
+    transition-delay: 0.1s;
+}
+
+.stripe-item:nth-child(2) {
+    clip-path: inset(0 60% 0 20%);
+    transition-delay: 0.2s;
+}
+
+.stripe-item:nth-child(3) {
+    clip-path: inset(0 40% 0 40%);
+    transition-delay: 0.3s;
+}
+
+.stripe-item:nth-child(4) {
+    clip-path: inset(0 20% 0 60%);
+    transition-delay: 0.4s;
+}
+
+.stripe-item:nth-child(5) {
+    clip-path: inset(0 0 0 80%);
+    transition-delay: 0.5s;
+}
+
+/* Active & Leaving States */
 .active-slide .stripe-item {
     transform: scaleY(1);
     opacity: 1;
 }
 
-/* Slide is leaving — stripes retract differently */
 .leaving-slide .stripe-item {
     transform: scaleY(0);
     opacity: 0;
     transition-delay: 0s !important;
-}
-
-/* Precise VW offsets to ensure single continuous image */
-/* Precise percentage offsets for a 5-stripe 500% wide image */
-.stripe-item:nth-child(1) {
-    background-position: 0% 50%;
-    transition-delay: 0.1s;
-}
-
-.stripe-item:nth-child(2) {
-    background-position: 25% 50%;
-    transition-delay: 0.2s;
-}
-
-.stripe-item:nth-child(3) {
-    background-position: 50% 50%;
-    transition-delay: 0.3s;
-}
-
-.stripe-item:nth-child(4) {
-    background-position: 75% 50%;
-    transition-delay: 0.4s;
-}
-
 }
 
 .hud-grid-bg {

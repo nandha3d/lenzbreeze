@@ -84,14 +84,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                     </div>
                 </div>
 
-                {{-- Right Side: Minimal HUD Accents --}}
-                <div class="hidden lg:flex justify-end items-center relative animate-fade-in" style="animation-delay: 0.8s">
-                    <div class="text-[10px] font-mono text-logo-yellow/40 space-y-1 text-right border-r-2 border-logo-yellow/20 pr-6">
-                        <div>REF_COORD: 40.7128° N</div>
-                        <div>OPTIC_RES: 8K_DYNAMIC</div>
-                        <div>STATUS: PEAK_CLARITY</div>
-                    </div>
-                </div>
+                {{-- Removed distracting HUD metadata to clear view of subjects --}}
             </div>
         </div>
     </div>
