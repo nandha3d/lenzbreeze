@@ -309,13 +309,13 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
         </div>
     </div>
 
-    {{-- Slide 3: The Visual Edge --}}
+    {{-- Slide 3: One Lens. Infinite Possibilities --}}
     <div x-show="activeSlide === 3" 
          :class="{'active-slide': activeSlide === 3, 'leaving-slide': leaving && activeSlide === 3}"
          class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/products/progressive-photochromic.png') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens2.png') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/40 to-transparent z-[11]"></div>
@@ -325,20 +325,38 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
                 
                 <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                    THE VISUAL EDGE
+                    MODERN VISIONARY // ALL-IN-ONE
                 </h2>
                 
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
-                        EYE MEK isn't just <br/> a lens. It’s your edge.
+                        One Lens. <br/> Infinite Possibilities. ♾️
                     </h1>
-                    <p class="text-xl md:text-2xl font-bold text-warm-100/90 leading-tight">
-                        Available in Sapphire Blue or Emerald Green HMC.
+                    <p class="text-xl font-bold text-warm-100/90 leading-tight">
+                        Meet the EYE MEK Progressive collection. Whether you're behind the wheel or behind a screen, we’ve got you covered:
                     </p>
-                    <div class="flex gap-4 items-center">
-                        <div class="h-px flex-1 bg-logo-yellow/20"></div>
-                        <span class="text-logo-yellow font-black tracking-widest text-xs uppercase">Precision Defined</span>
-                        <div class="h-px w-12 bg-logo-yellow/20"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-8 pt-2">
+                        <div class="flex items-center gap-3">
+                            <span class="text-logo-yellow text-xl leading-none">🚗</span>
+                            <span class="text-sm font-bold tracking-wide uppercase">Drive X: <span class="text-warm-300 font-medium">Ultimate road clarity</span></span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-logo-yellow text-xl leading-none">💻</span>
+                            <span class="text-sm font-bold tracking-wide uppercase">Blue Cut + HD Digital</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-logo-yellow text-xl leading-none">☀️</span>
+                            <span class="text-sm font-bold tracking-wide uppercase">Photochromic & Polarized</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-logo-yellow text-xl leading-none">💎</span>
+                            <span class="text-sm font-bold tracking-wide uppercase">HMC Finishes: <span class="text-warm-300 font-medium">Blue or Green</span></span>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
+                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-xs">EYE MEK: PREMIUM OPTICS FOR THE MODERN VISIONARY.</span>
                     </div>
                 </div>
             </div>
