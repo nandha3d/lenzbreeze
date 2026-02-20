@@ -349,6 +349,70 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-logo-yellow/10 to-transparent blur-3xl pointer-events-none"></div>
 </section>
 
+@elseif($product->slug === 'd-bifocal-lens')
+<section class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
+    {{-- Background Image --}}
+    <div class="absolute inset-0 z-0">
+        <img src="{{ asset('images/products/bifocal-lens.png') }}" alt="Bifocal Lenses" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+    </div>
+
+    {{-- Sci-Fi Overlays --}}
+    <div class="scifi-scan-line"></div>
+    <div class="absolute inset-0 hud-grid-bg opacity-10"></div>
+
+    <div class="relative z-20 h-full container-custom flex items-center">
+        <div class="max-w-2xl text-white">
+            <div class="relative inline-block px-12 py-24">
+                {{-- HUD Accent: Top Left Corner --}}
+                <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
+                
+                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                    PRECISION // DUAL_FOCUS
+                </h2>
+                
+                <div class="space-y-6">
+                    <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
+                        Dual Focus. <br/> Seamless Living.
+                    </h1>
+                    
+                    <p class="text-lg text-warm-200 leading-relaxed max-w-lg">
+                        Classic visual correction meets modern manufacturing. Experience sharp clarity for both distance and reading in a single, trusted lens design.
+                    </p>
+
+                    <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
+                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bifocal Segment Callout --}}
+        <div class="absolute bottom-[28%] right-[32%] hidden lg:block">
+            <div class="relative">
+                {{-- The "HUD" Pointer --}}
+                <div class="absolute -left-12 -top-12 w-24 h-24 border-2 border-logo-yellow/40 rounded-full animate-pulse"></div>
+                <div class="w-4 h-4 rounded-full bg-logo-yellow shadow-[0_0_15px_#f8b803]"></div>
+                
+                {{-- Connecting Line --}}
+                <div class="absolute bottom-4 left-4 w-32 h-px bg-gradient-to-r from-logo-yellow to-transparent rotate-[35deg] origin-left"></div>
+                
+                {{-- Text --}}
+                <div class="absolute -bottom-16 left-32 whitespace-nowrap">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-logo-yellow">Segment</span>
+                        <span class="text-2xl font-black text-white drop-shadow-lg">Bifocal Lens</span>
+                        <div class="w-12 h-0.5 bg-logo-yellow mt-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Interactive Background Accent --}}
+    <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-logo-yellow/10 to-transparent blur-3xl pointer-events-none"></div>
+</section>
+
 <style>
     @keyframes slide-up {
         from { opacity: 0; transform: translateY(40px); }
