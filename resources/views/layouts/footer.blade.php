@@ -19,8 +19,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             {{-- Brand --}}
             <div>
-                <div class="flex items-center gap-3 mb-4">
-                    <img src="{{ asset('images/logo.png') }}" alt="EYE MEK Logo" class="h-10 object-contain brightness-0 invert">
+                <div class="flex items-center gap-2.5 mb-6">
+                    <img src="{{ asset('images/logo-icon.png') }}" alt="EYE MEK Icon" class="h-10 object-contain brightness-0 invert">
+                    <img src="{{ asset('images/logo-text.png') }}" alt="EYE MEK Text" class="h-5 object-contain mt-0.5 brightness-0 invert">
                 </div>
                 <p class="text-sm leading-relaxed text-warm-400">Premium optical lens manufacturer with state-of-the-art facilities across India. Trusted by thousands of optical partners nationwide.</p>
                 <div class="flex gap-3 mt-6">

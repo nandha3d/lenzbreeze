@@ -2,8 +2,9 @@
     <div class="container-custom">
         <div class="flex items-center justify-between h-18">
             {{-- Logo --}}
-            <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <img src="{{ asset('images/logo.png') }}" alt="EYE MEK Logo" class="h-12 object-contain group-hover:scale-105 transition-transform duration-300">
+            <a href="{{ route('home') }}" class="flex items-center gap-2.5 lg:gap-4 group">
+                <img src="{{ asset('images/logo-icon.png') }}" alt="EYE MEK Icon" class="h-12 lg:h-14 object-contain group-hover:scale-105 transition-transform duration-300">
+                <img src="{{ asset('images/logo-text.png') }}" alt="EYE MEK Text" class="h-6 lg:h-8 object-contain mt-1 group-hover:scale-105 transition-transform duration-300">
             </a>
 
             {{-- Desktop Nav --}}
