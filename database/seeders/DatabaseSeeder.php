@@ -220,7 +220,7 @@ class DatabaseSeeder extends Seeder
             ],
             // Bifocals
             [
-                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'D Bifocal Lens',
+                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'D-Bifocal / Flat Top BF (DBF)',
                 'slug' => 'd-bifocal-lens', 'tagline' => 'Wide View. Sharp Focus.',
                 'image' => 'images/products/bifocal-lens.png',
                 'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">The D-Segment Advantage.</span> Wider reading area...',
@@ -240,7 +240,7 @@ class DatabaseSeeder extends Seeder
             ],
             // Kryptok
             [
-                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'Kryptok Bifocals',
+                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'Kryptok Bifocal (KBF)',
                 'slug' => 'kryptok-bifocals', 'tagline' => 'Classic Reading Clarity.',
                 'image' => 'images/products/bifocal-lens.png',
                 'description' => 'Reliable and affordable bifocal solution.',

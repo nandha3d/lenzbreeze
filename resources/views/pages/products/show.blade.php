@@ -349,12 +349,58 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-logo-yellow/10 to-transparent blur-3xl pointer-events-none"></div>
 </section>
 
+@elseif($product->slug === 'kryptok-bifocals')
+<section class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
+    {{-- Background Image (Round Segment) --}}
+    <div class="absolute inset-0 z-0">
+        <img src="{{ asset('images/products/bifocal-lens.png') }}" alt="Kryptok Bifocal" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+    </div>
+
+    <div class="relative z-20 h-full container-custom flex items-center">
+        <div class="max-w-2xl text-white">
+            <div class="relative inline-block px-12 py-24">
+                <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
+                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                    CLASSIC // ROUND_SEGMENT
+                </h2>
+                <div class="space-y-6">
+                    <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
+                        Kryptok Bifocal. <br/> Classic Clarity.
+                    </h1>
+                    <p class="text-lg text-warm-200 leading-relaxed max-w-lg">
+                        Reliable dual-focus vision with a traditional round segment. The time-tested solution for near and distance correction.
+                    </p>
+                    <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
+                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Round Segment Callout --}}
+        <div class="absolute bottom-[28%] right-[32%] hidden lg:block">
+            <div class="relative">
+                <div class="absolute -left-12 -top-12 w-24 h-24 border-2 border-logo-yellow/40 rounded-full animate-pulse"></div>
+                <div class="w-4 h-4 rounded-full bg-logo-yellow shadow-[0_0_15px_#f8b803]"></div>
+                <div class="absolute bottom-4 left-4 w-32 h-px bg-gradient-to-r from-logo-yellow to-transparent rotate-[35deg] origin-left"></div>
+                <div class="absolute -bottom-16 left-32 whitespace-nowrap">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-logo-yellow">Round Segment</span>
+                        <span class="text-2xl font-black text-white drop-shadow-lg">Bifocal Lens</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 @elseif($product->slug === 'd-bifocal-lens')
 <section class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
-    {{-- Background Image --}}
+    {{-- Background Image (Flat Top) --}}
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/products/bifocal-lens.png') }}" alt="Bifocal Lenses" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
-        <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
+        <img src="{{ asset('images/bifocal-lens.jpeg') }}" alt="D-Bifocal Flat Top" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent z-10"></div>
     </div>
 
     {{-- Sci-Fi Overlays --}}
@@ -364,22 +410,17 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     <div class="relative z-20 h-full container-custom flex items-center">
         <div class="max-w-2xl text-white">
             <div class="relative inline-block px-12 py-24">
-                {{-- HUD Accent: Top Left Corner --}}
                 <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
-                
                 <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                    PRECISION // DUAL_FOCUS
+                    ADVANCED // FLAT_TOP
                 </h2>
-                
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
-                        Dual Focus. <br/> Seamless Living.
+                        D-Bifocal. <br/> Flat Top Precision.
                     </h1>
-                    
                     <p class="text-lg text-warm-200 leading-relaxed max-w-lg">
-                        Classic visual correction meets modern manufacturing. Experience sharp clarity for both distance and reading in a single, trusted lens design.
+                        Enhanced reading zone with a clean, flat-top segment. Designed for superior comfort and minimal "image jump" during transition.
                     </p>
-
                     <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
                         <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
                     </div>
@@ -387,30 +428,22 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
             </div>
         </div>
 
-        {{-- Bifocal Segment Callout --}}
-        <div class="absolute bottom-[28%] right-[32%] hidden lg:block">
+        {{-- Flat Top Callout (Pointing to right lens closeup) --}}
+        <div class="absolute top-[55%] right-[22%] hidden lg:block">
             <div class="relative">
-                {{-- The "HUD" Pointer --}}
-                <div class="absolute -left-12 -top-12 w-24 h-24 border-2 border-logo-yellow/40 rounded-full animate-pulse"></div>
+                <div class="absolute inset-0 w-24 h-2 border-t-2 border-logo-yellow/60 -translate-y-8 -translate-x-10"></div>
                 <div class="w-4 h-4 rounded-full bg-logo-yellow shadow-[0_0_15px_#f8b803]"></div>
-                
-                {{-- Connecting Line --}}
-                <div class="absolute bottom-4 left-4 w-32 h-px bg-gradient-to-r from-logo-yellow to-transparent rotate-[35deg] origin-left"></div>
-                
-                {{-- Text --}}
-                <div class="absolute -bottom-16 left-32 whitespace-nowrap">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-logo-yellow">Segment</span>
-                        <span class="text-2xl font-black text-white drop-shadow-lg">Bifocal Lens</span>
+                <div class="absolute top-4 left-4 w-24 h-px bg-gradient-to-r from-logo-yellow to-transparent -rotate-[25deg] origin-left"></div>
+                <div class="absolute -top-16 left-28 whitespace-nowrap text-right">
+                    <div class="flex flex-col items-start text-left">
+                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-logo-yellow">Flat Top BF</span>
+                        <span class="text-2xl font-black text-white drop-shadow-lg">D-Bifocal Segment</span>
                         <div class="w-12 h-0.5 bg-logo-yellow mt-1"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    {{-- Interactive Background Accent --}}
-    <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-logo-yellow/10 to-transparent blur-3xl pointer-events-none"></div>
 </section>
 
 <style>
