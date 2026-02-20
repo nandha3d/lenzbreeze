@@ -349,11 +349,11 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-logo-yellow/10 to-transparent blur-3xl pointer-events-none"></div>
 </section>
 
-@elseif($product->slug === 'kryptok-bifocals')
+@elseif($product->slug === 'd-bifocal-lens')
 <section class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     {{-- Background Image (Round Segment) --}}
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/products/bifocal-lens.png') }}" alt="Kryptok Bifocal" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
+        <img src="{{ asset('images/products/bifocal-lens.png') }}" alt="D-Bifocal DBF" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
         <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
     </div>
 
@@ -362,14 +362,14 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
             <div class="relative inline-block px-12 py-24">
                 <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
                 <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                    CLASSIC // ROUND_SEGMENT
+                    ADVANCED // D_SEGMENT
                 </h2>
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
-                        Kryptok Bifocal. <br/> Classic Clarity.
+                        D-Bifocal. <br/> Flat Top BF (DBF).
                     </h1>
                     <p class="text-lg text-warm-200 leading-relaxed max-w-lg">
-                        Reliable dual-focus vision with a traditional round segment. The time-tested solution for near and distance correction.
+                        The D-Segment Advantage. Wider reading area with sharp distance vision and specialized flat-top design for comfort.
                     </p>
                     <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
                         <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
@@ -386,8 +386,8 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 <div class="absolute bottom-4 left-4 w-32 h-px bg-gradient-to-r from-logo-yellow to-transparent rotate-[35deg] origin-left"></div>
                 <div class="absolute -bottom-16 left-32 whitespace-nowrap">
                     <div class="flex flex-col">
-                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-logo-yellow">Round Segment</span>
-                        <span class="text-2xl font-black text-white drop-shadow-lg">Bifocal Lens</span>
+                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-logo-yellow">Segment Type</span>
+                        <span class="text-2xl font-black text-white drop-shadow-lg">Flat Top BF (DBF)</span>
                     </div>
                 </div>
             </div>
@@ -395,11 +395,11 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     </div>
 </section>
 
-@elseif($product->slug === 'd-bifocal-lens')
+@elseif($product->slug === 'kryptok-bifocals')
 <section class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     {{-- Background Image (Flat Top) --}}
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/bifocal-lens.jpeg') }}" alt="D-Bifocal Flat Top" class="w-full h-full object-cover">
+        <img src="{{ asset('images/bifocal-lens.jpeg') }}" alt="Kryptok Bifocal KBF" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent z-10"></div>
     </div>
 
@@ -415,14 +415,14 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 <div class="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-logo-yellow/40"></div>
                 
                 <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                    ADVANCED // FLAT_TOP
+                    PRECISION // SEAMLESS_TRANSITION
                 </h2>
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
-                        D-Bifocal. <br/> Flat Top Precision.
+                        Kryptok Bifocal. <br/> (KBF) Precision.
                     </h1>
                     <p class="text-lg text-warm-200 leading-relaxed max-w-xl mx-auto">
-                        Enhanced reading zone with a clean, flat-top segment. Designed for superior comfort and minimal "image jump" during transition.
+                        See the world clearly—from the book in your hand to the view on the horizon. The bifocal you know with the premium protection you deserve.
                     </p>
                     <div class="mt-8 p-4 bg-white/5 backdrop-blur-md inline-block border border-white/10">
                         <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
@@ -444,10 +444,10 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 {{-- Data Readout Box --}}
                 <div class="absolute -top-10 left-24 whitespace-nowrap bg-brand-900/60 backdrop-blur-xl px-5 py-3 border-l-2 border-logo-yellow shadow-2xl skew-x-[-12deg]">
                     <div class="flex flex-col items-start translate-x-[2px] skew-x-[12deg]">
-                        <span class="text-[9px] font-black uppercase tracking-[0.2em] text-logo-yellow/80">Segment Type</span>
-                        <span class="text-lg font-black text-white tracking-wide">D-BIFOCAL / FLAT TOP</span>
+                        <span class="text-[9px] font-black uppercase tracking-[0.2em] text-logo-yellow/80">Designation</span>
+                        <span class="text-lg font-black text-white tracking-wide">KRYPTOK BIFOCAL (KBF)</span>
                         <div class="w-full h-[1px] bg-logo-yellow/30 mt-1"></div>
-                        <span class="text-[8px] font-bold text-warm-300 uppercase mt-1">Optimal Near-Vision Width</span>
+                        <span class="text-[8px] font-bold text-warm-300 uppercase mt-1">Distinct Near-Far Focus Segments</span>
                     </div>
                 </div>
             </div>

@@ -228,11 +228,18 @@ class DatabaseSeeder extends Seeder
             ],
             // Bifocals
             [
-                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'D-Bifocal / Flat Top BF (DBF)',
-                'slug' => 'd-bifocal-lens', 'tagline' => 'Wide View. Sharp Focus.',
+                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'Kryptok Bifocal (KBF)',
+                'slug' => 'kryptok-bifocals', 'tagline' => 'The Bifocal You Know.',
                 'image' => 'images/products/bifocal-lens.png',
-                'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">The D-Segment Advantage.</span> Wider reading area...',
-                'features' => ['Wide Reading Area', 'Sharp Distance Vision', 'Photochromic Adaptation'],
+                'description' => 'See the world clearly—from the book in your hand to the view on the horizon. EYE MEK KBF lenses offer a seamless transition for your daily needs. Choose our Grey or Brown Photochromic options for effortless indoor-to-outdoor comfort. It’s the bifocal you know, with the premium protection you deserve.',
+                'features' => [
+                    'Kryptok Design: Distinct segments for instant near-and-far focus.',
+                    'Blue Cut: Essential shielding for the modern digital era.',
+                    'Photochromic: Smart light adaptation in Grey and Brown.',
+                    'HMC (2 Types): Green for natural clarity; Blue for a modern look.',
+                    'Lenticular KT: Specialized thin design for high-power prescriptions.',
+                    'Hard Coat: Industrial-grade scratch resistance for daily longevity.'
+                ],
                 'specifications' => [
                     'Material' => 'CR-39 White',
                     'variants' => [
@@ -246,13 +253,12 @@ class DatabaseSeeder extends Seeder
                 'technologies' => ['Bifocal', 'Photochromic', 'Anti-Glare'],
                 'is_featured' => true, 'display_order' => 3,
             ],
-            // Kryptok
             [
-                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'Kryptok Bifocal (KBF)',
-                'slug' => 'kryptok-bifocals', 'tagline' => 'Classic Reading Clarity.',
+                'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'D-Bifocal / Flat Top BF (DBF)',
+                'slug' => 'd-bifocal-lens', 'tagline' => 'Wide View. Sharp Focus.',
                 'image' => 'images/products/bifocal-lens.png',
-                'description' => 'Reliable and affordable bifocal solution.',
-                'features' => ['Distance Zone', 'Reading Zone'],
+                'description' => 'The D-Segment Advantage. Wider reading area with sharp distance vision.',
+                'features' => ['Wide Reading Area', 'Sharp Distance Vision', 'Flat Top Design'],
                 'specifications' => [
                     'variants' => [
                         ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
