@@ -407,10 +407,13 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     <div class="scifi-scan-line"></div>
     <div class="absolute inset-0 hud-grid-bg opacity-10"></div>
 
-    <div class="relative z-20 h-full container-custom flex items-center">
-        <div class="max-w-2xl text-white">
-            <div class="relative inline-block px-12 py-24">
-                <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
+    <div class="relative z-20 h-full container-custom flex items-center justify-center">
+        <div class="max-w-3xl text-center text-white">
+            <div class="relative inline-block px-12 py-12 lg:py-24">
+                {{-- HUD Accent: Corner bracket --}}
+                <div class="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-logo-yellow/40"></div>
+                <div class="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-logo-yellow/40"></div>
+                
                 <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
                     ADVANCED // FLAT_TOP
                 </h2>
@@ -418,27 +421,33 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
                         D-Bifocal. <br/> Flat Top Precision.
                     </h1>
-                    <p class="text-lg text-warm-200 leading-relaxed max-w-lg">
+                    <p class="text-lg text-warm-200 leading-relaxed max-w-xl mx-auto">
                         Enhanced reading zone with a clean, flat-top segment. Designed for superior comfort and minimal "image jump" during transition.
                     </p>
-                    <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
+                    <div class="mt-8 p-4 bg-white/5 backdrop-blur-md inline-block border border-white/10">
                         <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Flat Top Callout (Pointing to right lens closeup) --}}
-        <div class="absolute top-[55%] right-[22%] hidden lg:block">
+        {{-- Precision HUD Callout --}}
+        <div class="absolute top-[56%] right-[21.5%] hidden lg:block translate-y-1">
             <div class="relative">
-                <div class="absolute inset-0 w-24 h-2 border-t-2 border-logo-yellow/60 -translate-y-8 -translate-x-10"></div>
-                <div class="w-4 h-4 rounded-full bg-logo-yellow shadow-[0_0_15px_#f8b803]"></div>
-                <div class="absolute top-4 left-4 w-24 h-px bg-gradient-to-r from-logo-yellow to-transparent -rotate-[25deg] origin-left"></div>
-                <div class="absolute -top-16 left-28 whitespace-nowrap text-right">
-                    <div class="flex flex-col items-start text-left">
-                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-logo-yellow">Flat Top BF</span>
-                        <span class="text-2xl font-black text-white drop-shadow-lg">D-Bifocal Segment</span>
-                        <div class="w-12 h-0.5 bg-logo-yellow mt-1"></div>
+                {{-- Pulsing Target --}}
+                <div class="absolute -inset-4 border border-logo-yellow/50 rounded-full animate-ping opacity-75"></div>
+                <div class="w-3 h-3 rounded-full bg-logo-yellow shadow-[0_0_15px_#f8b803] z-10 relative"></div>
+                
+                {{-- HUD Leader Line --}}
+                <div class="absolute top-1/2 left-full w-20 h-px bg-gradient-to-r from-logo-yellow to-transparent ml-2"></div>
+                
+                {{-- Data Readout Box --}}
+                <div class="absolute -top-10 left-24 whitespace-nowrap bg-brand-900/60 backdrop-blur-xl px-5 py-3 border-l-2 border-logo-yellow shadow-2xl skew-x-[-12deg]">
+                    <div class="flex flex-col items-start translate-x-[2px] skew-x-[12deg]">
+                        <span class="text-[9px] font-black uppercase tracking-[0.2em] text-logo-yellow/80">Segment Type</span>
+                        <span class="text-lg font-black text-white tracking-wide">D-BIFOCAL / FLAT TOP</span>
+                        <div class="w-full h-[1px] bg-logo-yellow/30 mt-1"></div>
+                        <span class="text-[8px] font-bold text-warm-300 uppercase mt-1">Optimal Near-Vision Width</span>
                     </div>
                 </div>
             </div>
