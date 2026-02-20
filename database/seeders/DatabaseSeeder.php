@@ -172,8 +172,13 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'premium-progressive-rx', 'tagline' => 'Seamless Sight. Absolute Protection.',
                 'image' => 'images/products/premium-progressive-rx.png',
                 'gallery' => ['images/products/premium-progressive-rx.png', 'images/products/premium-progressive-rx-tech.jpg'],
-                'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">High-Performance Optics. 🚀</span> The EYE MEK Progressive line, powered by Drive X and HD Digital technology, defines the "High-Performance" category. While modern progressives often struggle with peripheral "swim" or glare while driving, EYE MEK is specifically engineered to solve these pain points, delivering absolute clarity and comfort in every zone.',
-                'features' => ['Seamless Multifocal: Distance, Mid, and Near vision', 'Rapid UV Activation', 'Blue Light Protection', '100% UV400 Protection'],
+                'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">High-Performance Optics. 🚀</span> EYE MEK Progressive line, the inclusion of Drive X and HD Digital technology moves this into the "High-Performance" category. Modern progressives often struggle with peripheral "swim" or glare while driving; EYE MEK highlights how these specific pain points are solved for a seamless experience.',
+                'features' => [
+                    'Drive X: Specialized filter to reduce night-time glare and sharpen road details.',
+                    'HD Digital: Wider corridors and reduced "swim effect" for faster adaptation.',
+                    'HMC: Choose Green for a natural look or Blue for a modern, tech-focused aesthetic.',
+                    'Photochromic: Rapid darkening in Grey or Brown for 2-in-1 indoor/outdoor use.'
+                ],
                 'specifications' => [
                     'Material' => 'CR-39 / High Index',
                     'variants' => [
