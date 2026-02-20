@@ -209,7 +209,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
 @elseif($product->slug === 'premium-progressive-rx')
 <section x-data="{ 
     activeSlide: 1, 
-    totalSlides: 3, 
+    totalSlides: 2, 
     interval: null,
     leaving: false,
     nextSlide() {
@@ -272,44 +272,9 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
         </div>
     </div>
 
-    {{-- Slide 2: Drive X Technology --}}
+    {{-- Slide 2: One Lens. Infinite Possibilities --}}
     <div x-show="activeSlide === 2" 
          :class="{'active-slide': activeSlide === 2, 'leaving-slide': leaving && activeSlide === 2}"
-         class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
-        <div class="stripe-container absolute inset-0">
-            @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/products/premium-progressive-rx-tech.jpg') }}');"></div>
-            @endfor
-        </div>
-        <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/60 to-black/20 z-[11]"></div>
-        
-        <div class="scifi-scan-line opacity-50"></div>
-
-        <div class="max-w-[1600px] mx-auto px-6 lg:px-12 relative h-full flex items-center z-20">
-            <div class="max-w-xl text-white relative group ml-4 lg:ml-12">
-                <div class="absolute -top-10 -left-10 w-24 h-24 border-t-2 border-l-2 border-logo-yellow/30"></div>
-                
-                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                    PRECISION IN MOTION
-                </h2>
-                <div class="space-y-6">
-                    <h1 class="font-display text-4xl md:text-5xl font-black leading-[1.1]">
-                        Reduce Fatigue. <br/> Sharpen Reactions.
-                    </h1>
-                    <p class="text-xl font-bold text-warm-100/90 leading-tight">
-                        Optimized for the road, reducing dashboard-to-distance fatigue and sharpening your reaction time.
-                    </p>
-                    <p class="text-lg text-warm-200/80 leading-relaxed max-w-xl">
-                        From the precision of <span class="text-logo-yellow">HD Digital surfacing</span> to glare-killing Polarized power.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Slide 3: One Lens. Infinite Possibilities --}}
-    <div x-show="activeSlide === 3" 
-         :class="{'active-slide': activeSlide === 3, 'leaving-slide': leaving && activeSlide === 3}"
          class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
@@ -375,7 +340,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 </template>
             </div>
             <div class="text-white/40 font-mono text-[10px] tracking-[0.3em] uppercase">
-                Slide <span class="text-logo-yellow font-black" x-text="activeSlide"></span> of 3
+                Slide <span class="text-logo-yellow font-black" x-text="activeSlide"></span> of 2
             </div>
         </div>
     </div>
