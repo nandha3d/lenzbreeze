@@ -422,7 +422,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                         D-Bifocal. <br/> (DBF) Precision.
                     </h1>
                     <p class="text-lg text-warm-200 leading-relaxed max-w-xl mx-auto">
-                        Tired of narrow reading zones? Step into the wide-angle view of EYE MEK DBF. The classic bifocal, perfected by EYE MEK.
+                        Tired of narrow reading zones? Step into the wide-angle view of EYE MEK DBF. Our Flat Top design provides an immediate, easy-to-find segment for near-vision, making it the perfect companion for everything from your morning newspaper to your evening hobbies. Lightweight, durable, and crystal clear—it’s the classic bifocal, perfected by EYE MEK.
                     </p>
                     <div class="mt-8 p-4 bg-white/5 backdrop-blur-md inline-block border border-white/10">
                         <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
