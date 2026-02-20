@@ -182,15 +182,15 @@ class DatabaseSeeder extends Seeder
                 'specifications' => [
                     'Material' => 'CR-39 / High Index',
                     'variants' => [
-                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
-                        ['name' => 'Uncoated', 'icon_type' => 'clear', 'details' => array_merge($data_cr39, ['summary' => 'Pure lens material without external treatments.', 'details' => ['specs' => [['label' => 'Coating', 'value' => 'None']]]])],
-                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'details' => $data_hard_coat],
-                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'details' => array_merge($data_photochromic, ['summary' => 'Rapid darkening in Grey or Brown for 2-in-1 indoor/outdoor use.']), 'sub_variants' => ['Photo Grey', 'Photo Brown']],
-                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'details' => $data_blue_cut],
-                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'details' => array_merge($data_hd_digital, ['summary' => 'Wider corridors and reduced "swim effect" for faster adaptation.'])],
-                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'details' => $data_polarized],
-                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'details' => array_merge($data_hmc, ['summary' => 'Choose Green for a natural look or Blue for a modern, tech-focused aesthetic.']), 'sub_variants' => ['Emerald Green ARC', 'Sapphire Blue ARC']],
-                        ['name' => 'Drive x', 'icon_type' => 'drive', 'details' => array_merge($data_hmc, ['name' => 'Drive x', 'summary' => 'Specialized filter to reduce night-time glare and sharpen road details.'])],
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.jpg', 'details' => $data_cr39],
+                        ['name' => 'Uncoated', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.jpg', 'details' => array_merge($data_cr39, ['summary' => 'Pure lens material without external treatments.', 'details' => ['specs' => [['label' => 'Coating', 'value' => 'None']]]])],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.jpg', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.jpg', 'details' => array_merge($data_photochromic, ['summary' => 'Rapid darkening in Grey or Brown for 2-in-1 indoor/outdoor use.']), 'sub_variants' => ['Photo Grey', 'Photo Brown']],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.jpg', 'details' => $data_blue_cut],
+                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'image' => 'images/variants/hd.jpg', 'details' => array_merge($data_hd_digital, ['summary' => 'Wider corridors and reduced "swim effect" for faster adaptation.'])],
+                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'image' => 'images/variants/polarized.jpg', 'details' => $data_polarized],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.jpg', 'details' => array_merge($data_hmc, ['summary' => 'Choose Green for a natural look or Blue for a modern, tech-focused aesthetic.']), 'sub_variants' => ['Emerald Green ARC', 'Sapphire Blue ARC']],
+                        ['name' => 'Drive x', 'icon_type' => 'drive', 'image' => 'images/variants/hmc.jpg', 'details' => array_merge($data_hmc, ['name' => 'Drive x', 'summary' => 'Specialized filter to reduce night-time glare and sharpen road details.'])],
                     ]
                 ],
                 'technologies' => ['Progressive', 'Photochromic', 'Blue Cut', 'Polarized', 'Anti-Glare'],
@@ -206,13 +206,13 @@ class DatabaseSeeder extends Seeder
                 'specifications' => [
                     'Material' => 'CR-39 / Polycarbonate',
                     'variants' => [
-                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
-                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'details' => $data_hard_coat],
-                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'details' => $data_photochromic, 'sub_variants' => ['Photo Grey', 'Photo Brown']],
-                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'details' => $data_blue_cut],
-                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'details' => $data_hd_digital],
-                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'details' => $data_polarized],
-                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'details' => $data_hmc],
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.jpg', 'details' => $data_cr39],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.jpg', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.jpg', 'details' => $data_photochromic, 'sub_variants' => ['Photo Grey', 'Photo Brown']],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.jpg', 'details' => $data_blue_cut],
+                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'image' => 'images/variants/hd.jpg', 'details' => $data_hd_digital],
+                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'image' => 'images/variants/polarized.jpg', 'details' => $data_polarized],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.jpg', 'details' => $data_hmc],
                     ]
                 ],
                 'technologies' => ['Anti-Glare', 'Blue Cut', 'Polarized', 'Photochromic'],
@@ -228,11 +228,11 @@ class DatabaseSeeder extends Seeder
                 'specifications' => [
                     'Material' => 'CR-39 White',
                     'variants' => [
-                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
-                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'details' => $data_hard_coat],
-                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'details' => $data_photochromic],
-                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'details' => $data_blue_cut],
-                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'details' => $data_hmc],
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.jpg', 'details' => $data_cr39],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.jpg', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.jpg', 'details' => $data_photochromic],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.jpg', 'details' => $data_blue_cut],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.jpg', 'details' => $data_hmc],
                     ]
                 ],
                 'technologies' => ['Bifocal', 'Photochromic', 'Anti-Glare'],
