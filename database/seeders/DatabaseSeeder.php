@@ -256,9 +256,13 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'D-Bifocal / Flat Top BF (DBF)',
                 'slug' => 'd-bifocal-lens', 'tagline' => 'Wide View. Sharp Focus.',
-                'image' => 'images/products/bifocal-lens.png',
-                'description' => 'The D-Segment Advantage. Wider reading area with sharp distance vision.',
-                'features' => ['Wide Reading Area', 'Sharp Distance Vision', 'Flat Top Design'],
+                'image' => 'images/bifocal-lens.jpeg',
+                'description' => 'Tired of narrow reading zones? Step into the wide-angle view of EYE MEK DBF. Our Flat Top design provides an immediate, easy-to-find segment for near-vision, making it the perfect companion for everything from your morning newspaper to your evening hobbies. Lightweight, durable, and crystal clear—it’s the classic bifocal, perfected by EYE MEK.',
+                'features' => [
+                    'The "Easy-Adapt" Segment: The flat top makes it incredibly easy for first-time bifocal wearers to find their "sweet spot" for reading.',
+                    'Edge-to-Edge Sharpness: By using premium CR-39, we ensure minimal chromatic aberration, meaning colors stay true and lines stay sharp.',
+                    'Feather-Light Comfort: Optimized for all-day wear, reducing the pressure on the bridge of the nose.'
+                ],
                 'specifications' => [
                     'variants' => [
                         ['name' => 'CR 39 white', 'icon_type' => 'clear', 'details' => $data_cr39],
