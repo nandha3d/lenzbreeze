@@ -202,7 +202,15 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'single-vision-rx', 'tagline' => 'Your Vision, Upgraded.',
                 'image' => 'images/products/single-vision-rx.png',
                 'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">Welcome to the next level of visual clarity.</span> EYE MEK isn\'t just a lens; it’s a premium vision solution tailored to your lifestyle. Whether you\'re navigating a digital workspace, driving under the sun, or looking for everyday durability, we have the perfect fit.<br><br>Here is a breakdown of the EYE MEK Single Vision (SV) collection, crafted for those who refuse to compromise on quality.',
-                'features' => ['Advanced Polarization', 'UV400 Protection', 'Impact Resistance'],
+                'features' => [
+                    'Ultra-lightweight & crystal clear.',
+                    'Enhanced durability & scratch resistance.',
+                    'Seamlessly tints to Grey or Brown.',
+                    'Filters harmful high-energy blue light.',
+                    'Precision-surfaced for edge-to-edge clarity.',
+                    'Eliminates blinding glare and reflections.',
+                    'Available in Emerald Green or Sapphire Blue.'
+                ],
                 'specifications' => [
                     'Material' => 'CR-39 / Polycarbonate',
                     'variants' => [
