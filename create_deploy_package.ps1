@@ -2,11 +2,11 @@ $exclude = @(
     ".git",
     ".vscode",
     "node_modules",
-    "vendor",
     "tests",
     "*.zip",
     ".env",
-    "package-lock.json"
+    "package-lock.json",
+    ".phpunit.result.cache"
 )
 
 $source = "d:\PROJECTS\WEBSITES\lenzbreeze"

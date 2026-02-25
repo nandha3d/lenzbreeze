@@ -99,9 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             window.addEventListener('mousemove', (e) => {
                 const rect = heroSection.getBoundingClientRect();
-                const BUFFER = 150;
 
-                if (e.clientY >= (rect.top - BUFFER) && e.clientY <= (rect.bottom + BUFFER)) {
+                // Check if cursor is within the hero section with a generous buffer
+                const isInside = (
+                    e.clientX >= (rect.left - 200) &&
+                    e.clientX <= (rect.right + 200) &&
+                    e.clientY >= (rect.top - 200) &&
+                    e.clientY <= (rect.bottom + 200)
+                );
+
+                if (isInside) {
                     requestAnimationFrame(() => updateLens(e.clientX, e.clientY));
                 } else {
                     resetLens();
