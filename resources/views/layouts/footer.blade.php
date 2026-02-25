@@ -5,7 +5,7 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div>
                     <h3 class="font-display text-xl font-bold text-white">Stay Updated</h3>
-                    <p class="text-sm text-warm-400 mt-1">Get the latest from Lenz Breeze — new products, technologies, and industry insights.</p>
+                    <p class="text-sm text-warm-400 mt-1">Get the latest from EYE MEK — new products, technologies, and industry insights.</p>
                 </div>
                 <div class="w-full md:w-auto">
                     <livewire:newsletter-form />
@@ -20,8 +20,8 @@
             {{-- Brand --}}
             <div>
                 <div class="flex items-center gap-2.5 mb-6">
-                    <img src="{{ asset('images/logo-icon.png') }}" alt="EYE MEK Icon" class="h-10 object-contain brightness-0 invert">
-                    <img src="{{ asset('images/logo-text.png') }}" alt="EYE MEK Text" class="h-5 object-contain mt-0.5 brightness-0 invert">
+                    <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze Icon" class="h-10 object-contain">
+                    <img src="{{ asset('images/logo-text.png') }}" alt="Lenz Breeze" class="h-5 object-contain mt-0.5">
                 </div>
                 <p class="text-sm leading-relaxed text-warm-400">Premium optical lens manufacturer with state-of-the-art facilities across India. Trusted by thousands of optical partners nationwide.</p>
                 <div class="flex gap-3 mt-6">
@@ -50,6 +50,7 @@
                     <li><a href="{{ route('facilities') }}" class="hover:text-accent-400 transition-colors">Facilities</a></li>
                     <li><a href="{{ route('partners') }}" class="hover:text-accent-400 transition-colors">Partners</a></li>
                     <li><a href="{{ route('warranty') }}" class="hover:text-accent-400 transition-colors">Product Warranty</a></li>
+                    <li><a href="{{ route('tinting-chart') }}" class="hover:text-accent-400 transition-colors">Tinting Chart</a></li>
                     <li><a href="{{ route('contact') }}" class="hover:text-accent-400 transition-colors">Contact</a></li>
                 </ul>
             </div>
@@ -59,7 +60,6 @@
                 <h4 class="font-display font-semibold text-white mb-4">Our Brands</h4>
                 <ul class="space-y-2.5 text-sm">
                     <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accent-400"></span>Lenz Breeze</li>
-                    <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-accent-400"></span>EYE MEK</li>
                 </ul>
                 <h4 class="font-display font-semibold text-white mb-3 mt-6">Technologies</h4>
                 <ul class="space-y-2.5 text-sm">
@@ -76,7 +76,7 @@
                 <div class="space-y-3 text-sm">
                     <div class="flex items-start gap-3">
                         <svg class="w-5 h-5 text-accent-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        <span>{{ App\Models\Setting::get('address_trivandrum', 'Trivandrum, Kerala') }}</span>
+                        <span>TC 81/781, Near Baba Tourist Home, Thiruvananthapuram - 695 001</span>
                     </div>
                     <div class="flex items-center gap-3">
                         <svg class="w-5 h-5 text-accent-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <svg class="w-5 h-5 text-accent-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                        <a href="tel:{{ App\Models\Setting::get('company_phone', '+91 471 234 5678') }}" class="hover:text-accent-400 transition-colors">{{ App\Models\Setting::get('company_phone', '+91 471 234 5678') }}</a>
+                        <a href="tel:+918921165871" class="hover:text-accent-400 transition-colors">+91 89211 65871</a>
                     </div>
                 </div>
             </div>

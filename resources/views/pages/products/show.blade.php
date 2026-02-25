@@ -1,8 +1,9 @@
 @extends('layouts.app')
-@section('title', $product->meta_title ?? $product->name . ' - Lenz Breeze')
+@section('title', $product->meta_title ?? $product->name . ' - EYE MEK')
 @section('meta_description', $product->meta_description ?? Str::limit($product->description, 160))
 
 @section('content')
+<div class="theme-product">
 {{-- Breadcrumb --}}
 <div class="bg-white border-b border-warm-200/50">
     <div class="container-custom py-4">
@@ -353,41 +354,26 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
 <section class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     {{-- Background Image (Round Segment) --}}
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/products/bifocal-lens.png') }}" alt="Kryptok Bifocal KBF" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
+        <img src="{{ asset('images/kryptok-bi-focal.jpg') }}" alt="Kryptok Bifocal KBF" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
         <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
     </div>
 
-    <div class="relative z-20 h-full container-custom flex items-center">
-        <div class="max-w-2xl text-white">
+    <div class="relative z-20 h-full container-custom flex items-center justify-end">
+        <div class="max-w-2xl text-white text-right">
             <div class="relative inline-block px-12 py-24">
-                <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
-                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                <div class="absolute -top-10 -right-10 w-20 h-20 border-t-2 border-r-2 border-logo-yellow/30"></div>
+                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-r-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
                     CLASSIC // ROUND_SEGMENT
                 </h2>
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
                         Kryptok Bifocal. <br/> (KBF) Clarity.
                     </h1>
-                    <p class="text-lg text-warm-200 leading-relaxed max-w-lg">
+                    <p class="text-lg text-warm-200 leading-relaxed max-w-lg ml-auto">
                         See the world clearly—from the book in your hand to the view on the horizon. The bifocal you know with the premium protection you deserve.
                     </p>
-                    <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
-                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Round Segment Callout --}}
-        <div class="absolute bottom-[28%] right-[32%] hidden lg:block">
-            <div class="relative">
-                <div class="absolute -left-12 -top-12 w-24 h-24 border-2 border-logo-yellow/40 rounded-full animate-pulse"></div>
-                <div class="w-4 h-4 rounded-full bg-logo-yellow shadow-[0_0_15px_#f8b803]"></div>
-                <div class="absolute bottom-4 left-4 w-32 h-px bg-gradient-to-r from-logo-yellow to-transparent rotate-[35deg] origin-left"></div>
-                <div class="absolute -bottom-16 left-32 whitespace-nowrap">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] font-black uppercase tracking-[0.3em] text-logo-yellow">Segment Type</span>
-                        <span class="text-2xl font-black text-white drop-shadow-lg">Round Segment (KBF)</span>
+                    <div class="mt-8 p-4 border-r-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
+                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">TWO ZONES. ONE SEAMLESS VIEW.</span>
                     </div>
                 </div>
             </div>
@@ -425,7 +411,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                         Tired of narrow reading zones? Step into the wide-angle view of EYE MEK DBF. Our Flat Top design provides an immediate, easy-to-find segment for near-vision, making it the perfect companion for everything from your morning newspaper to your evening hobbies. Lightweight, durable, and crystal clear—it’s the classic bifocal, perfected by EYE MEK.
                     </p>
                     <div class="mt-8 p-4 bg-white/5 backdrop-blur-md inline-block border border-white/10">
-                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
+                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">FLAT TOP. WIDER VIEW.</span>
                     </div>
                 </div>
             </div>
@@ -466,6 +452,45 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
 </style>
 @endif
 
+{{-- Interactive Lens Simulator (Before/After) --}}
+<section class="py-24 bg-white overflow-hidden">
+    <div class="container-custom">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-gold font-black uppercase text-xs tracking-[0.3em] mb-4">Precision Comparison</h2>
+            <h3 class="text-4xl md:text-6xl font-display font-black text-midnight leading-tight">See the EYE MEK Difference.</h3>
+            <p class="text-warm-500 mt-6 text-lg">Drag the slider to compare standard vision with the ultra-high definition clarity of our signature lenses.</p>
+        </div>
+
+        <div class="relative max-w-5xl mx-auto rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white" x-data="{ position: 50 }" @mousemove="if($event.buttons === 1) position = Math.max(0, Math.min(100, (($event.clientX - $el.getBoundingClientRect().left) / $el.offsetWidth) * 100))" @touchmove="position = Math.max(0, Math.min(100, (($event.touches[0].clientX - $el.getBoundingClientRect().left) / $el.offsetWidth) * 100))">
+            {{-- After Image (EYE MEK) --}}
+            <div class="relative aspect-[16/9] w-full">
+                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=1600&h=900&fit=crop&auto=format" alt="After EYE MEK" class="absolute inset-0 w-full h-full object-cover">
+                <div class="absolute bottom-10 right-10 glass-premium px-6 py-2 rounded-full text-midnight font-black uppercase text-xs tracking-widest z-20">EYE MEK HD Vision</div>
+            </div>
+
+            {{-- Before Image (Standard) --}}
+            <div class="absolute inset-0 w-full h-full overflow-hidden transition-all duration-100 ease-out" :style="'width: ' + position + '%'">
+                <div class="relative aspect-[16/9] w-[min(100vw-2rem,64rem)]">
+                    <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=1600&h=900&fit=crop&auto=format&blur=50" alt="Before EYE MEK" class="absolute inset-0 w-full h-full object-cover filter blur-sm grayscale-[0.3]">
+                    <div class="absolute bottom-10 left-10 glass-premium px-6 py-2 rounded-full text-midnight font-black uppercase text-xs tracking-widest z-20">Standard Vision</div>
+                </div>
+            </div>
+
+            {{-- Slider Handle --}}
+            <div class="absolute inset-y-0 z-30 flex items-center justify-center cursor-col-resize group" :style="'left: ' + position + '%'">
+                <div class="w-1 h-full bg-white relative">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-white rounded-full shadow-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <div class="flex gap-1">
+                            <svg class="w-4 h-4 text-midnight rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+                            <svg class="w-4 h-4 text-midnight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 {{-- Product Detail --}}
 <section class="theme-eyemek" id="variants">
 <section class="section-padding bg-white bg-geometric bg-geometric-circles">
@@ -486,7 +511,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 {{-- Main Image --}}
                 <div class="aspect-square rounded-3xl bg-gradient-to-br from-brand-50 via-accent-50 to-brand-100 flex items-center justify-center relative overflow-hidden group cursor-zoom-in border border-warm-200/50 shadow-xl" @click="lightboxOpen = true">
                     @if($product->image)
-                        <img :src="activeImage" alt="{{ $product->name }}" class="w-full h-full object-contain p-6 transition-transform duration-700 group-hover:scale-105">
+                        <img :src="activeImage" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     @else
                         {{-- Animated lens placeholder --}}
                         <div class="relative flex items-center justify-center">
@@ -499,7 +524,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
 
                     {{-- Brand badge --}}
                     <div class="absolute top-4 left-4 flex gap-2">
-                        <span class="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-md {{ $product->brand === 'Lenz Breeze' ? 'bg-brand-500 text-white' : 'bg-warm-900 text-white' }}">{{ $product->brand }}</span>
+                        <span class="px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-md bg-warm-900 text-white">{{ $product->brand }}</span>
                     </div>
 
                     {{-- Zoom hint --}}
@@ -579,7 +604,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 <div class="flex items-center gap-3 mb-3">
                     <span class="text-xs text-warm-400 font-bold uppercase tracking-widest">{{ $product->category?->name }}</span>
                     @if($product->is_featured)
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-accent-500 text-white shadow-sm">⭐ Premium Choice</span>
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-accent-500 text-white shadow-sm">⭐ Featured Choice</span>
                     @endif
                 </div>
 
@@ -837,26 +862,29 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 </div>
 
                 {{-- Care Package Highlights --}}
-                <div class="mt-8 p-5 rounded-2xl bg-accent-50/60 border border-accent-100">
-                    <h4 class="text-xs font-black text-accent-700 uppercase tracking-widest mb-3">✨ Professional Care Package Included</h4>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="flex flex-col items-center gap-1.5 text-center">
-                            <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-accent-600 shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                <div class="mt-8 p-6 rounded-[2rem] glass-premium border-gold/20 relative overflow-hidden group">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-gold/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                    <h4 class="text-xs font-black text-midnight uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <span class="text-gold">✨</span> Professional Care Package Included
+                    </h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="flex flex-col items-center gap-2 text-center">
+                            <div class="w-12 h-12 rounded-2xl bg-white/50 flex items-center justify-center text-midnight shadow-sm border border-white/50 group-hover:rotate-6 transition-transform">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                             </div>
-                            <span class="text-[10px] font-bold text-warm-700 leading-tight">1 Year<br>Warranty</span>
+                            <span class="text-[10px] font-black text-midnight/60 uppercase tracking-tighter leading-tight">1 Year<br>Warranty</span>
                         </div>
-                        <div class="flex flex-col items-center gap-1.5 text-center">
-                            <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-accent-600 shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                        <div class="flex flex-col items-center gap-2 text-center">
+                            <div class="w-12 h-12 rounded-2xl bg-white/50 flex items-center justify-center text-midnight shadow-sm border border-white/50 group-hover:-rotate-6 transition-transform delay-100">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
                             </div>
-                            <span class="text-[10px] font-bold text-warm-700 leading-tight">Microfiber<br>Cloth</span>
+                            <span class="text-[10px] font-black text-midnight/60 uppercase tracking-tighter leading-tight">Microfiber<br>Cloth</span>
                         </div>
-                        <div class="flex flex-col items-center gap-1.5 text-center">
-                            <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-accent-600 shadow-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a2 2 0 00-1.96 1.414l-.727 2.903a2 2 0 01-3.568 0l-.727-2.903a2 2 0 00-1.96-1.414l-2.387.477a2 2 0 00-1.022.547l-2.359 2.359a2 2 0 01-3.414-1.414V6.414a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-3.414 1.414l-2.359-2.359z"/></svg>
+                        <div class="flex flex-col items-center gap-2 text-center">
+                            <div class="w-12 h-12 rounded-2xl bg-white/50 flex items-center justify-center text-midnight shadow-sm border border-white/50 group-hover:rotate-6 transition-transform delay-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a2 2 0 00-1.96 1.414l-.727 2.903a2 2 0 01-3.568 0l-.727-2.903a2 2 0 00-1.96-1.414l-2.387.477a2 2 0 00-1.022.547l-2.359 2.359a2 2 0 01-3.414-1.414V6.414a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-3.414 1.414l-2.359-2.359z"/></svg>
                             </div>
-                            <span class="text-[10px] font-bold text-warm-700 leading-tight">Cleaning<br>Solution</span>
+                            <span class="text-[10px] font-black text-midnight/60 uppercase tracking-tighter leading-tight">Cleaning<br>Solution</span>
                         </div>
                     </div>
                 </div>
@@ -880,7 +908,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
         {{-- Features & Specifications --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16" data-animate>
             @if($product->features)
-                <div class="card p-8">
+                <div class="card card-accent-light p-8">
                     <h2 class="font-display text-xl font-bold text-brand-500 mb-5 flex items-center gap-2">
                         <span class="w-8 h-8 rounded-lg bg-accent-500 flex items-center justify-center text-white shadow-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -901,7 +929,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
             @endif
 
             @if($product->specifications)
-                <div class="card p-8">
+                <div class="card card-accent-light p-8">
                     <h2 class="font-display text-xl font-bold text-brand-500 mb-5 flex items-center gap-2">
                         <span class="w-8 h-8 rounded-lg bg-accent-500 flex items-center justify-center text-white shadow-sm">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
@@ -975,17 +1003,17 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 card-highlight">
                         Eye Mek Protection Plan
                     </div>
-                    <h2 class="font-display text-3xl font-bold mb-4">Limited Warranty & Care Package</h2>
-                    <p class="text-muted leading-relaxed mb-8 font-medium">At Eye Mek, we stand behind the precision and quality of our premium lens collection. Every pair is backed by our comprehensive protection plan and professional maintenance kit.</p>
+                    <h2 class="font-display text-3xl font-bold mb-4 text-brand-500">Limited Warranty & Care Package</h2>
+                    <p class="leading-relaxed mb-8 font-medium text-brand-500/80">At Eye Mek, we stand behind the precision and quality of our premium lens collection. Every pair is backed by our comprehensive protection plan and professional maintenance kit.</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
-                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-brand-500">
                                 <span class="w-8 h-8 rounded-lg bg-brand-500 text-white flex items-center justify-center text-sm shadow-sm">1</span>
                                 One-Year Warranty
                             </h3>
-                            <p class="text-muted text-sm mb-4 leading-relaxed">Guaranteed against manufacturing defects and specific coating failures from the date of purchase.</p>
-                            <ul class="space-y-2 text-sm font-semibold">
+                            <p class="text-brand-500/70 text-sm mb-4 leading-relaxed">Guaranteed against manufacturing defects and specific coating failures from the date of purchase.</p>
+                            <ul class="space-y-2 text-sm font-semibold text-brand-500">
                                 <li class="flex items-center gap-2">
                                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                                     Coating Integrity (ARC, Blue Cut)
@@ -1001,11 +1029,11 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                             </ul>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                            <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-brand-500">
                                 <span class="w-8 h-8 rounded-lg bg-brand-500 text-white flex items-center justify-center text-sm shadow-sm">2</span>
                                 Lens Care Best Practices
                             </h3>
-                            <ul class="space-y-3 text-sm text-muted font-medium">
+                            <ul class="space-y-3 text-sm text-brand-500/80 font-medium">
                                 <li class="flex gap-2"><span>•</span> <span>Always use the provided cleaning solution and microfiber cloth.</span></li>
                                 <li class="flex gap-2"><span>•</span> <span>Avoid household detergents or paper towels.</span></li>
                                 <li class="flex gap-2"><span>•</span> <span>Store in its protective case when not in use.</span></li>
@@ -1014,32 +1042,32 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                         </div>
                     </div>
                 </div>
-                <div class="p-8 lg:p-12 flex flex-col justify-center border-l border-default card-highlight">
-                    <div class="font-display font-bold text-sm mb-4 uppercase tracking-wider">Professional Maintenance Kit</div>
+                <div class="p-8 lg:p-12 flex flex-col justify-center border-l border-default card-highlight min-h-full">
+                    <div class="font-display font-bold text-sm mb-4 uppercase tracking-wider text-brand-500">Professional Maintenance Kit</div>
                     <div class="space-y-4">
-                        <div class="p-4 rounded-xl bg-white/20 border border-default flex items-center gap-4 shadow-sm">
+                        <div class="p-4 rounded-xl bg-white/20 border border-default flex items-center gap-4 shadow-sm backdrop-blur-sm">
                             <div class="text-2xl">✨</div>
                             <div>
-                                <div class="font-bold text-sm">1 Year Warranty</div>
-                                <div class="text-muted text-xs font-semibold">Full Coverage</div>
+                                <div class="font-bold text-sm text-brand-500">1 Year Warranty</div>
+                                <div class="text-brand-500/60 text-xs font-semibold">Full Coverage</div>
                             </div>
                         </div>
-                        <div class="p-4 rounded-xl bg-white/20 border border-default flex items-center gap-4 shadow-sm">
+                        <div class="p-4 rounded-xl bg-white/20 border border-default flex items-center gap-4 shadow-sm backdrop-blur-sm">
                             <div class="text-2xl">🧤</div>
                             <div>
-                                <div class="font-bold text-sm">Ultra-Soft Cloth</div>
-                                <div class="text-muted text-xs font-semibold">Anti-Scratch Microfiber</div>
+                                <div class="font-bold text-sm text-brand-500">Ultra-Soft Cloth</div>
+                                <div class="text-brand-500/60 text-xs font-semibold">Anti-Scratch Microfiber</div>
                             </div>
                         </div>
-                        <div class="p-4 rounded-xl bg-white/20 border border-default flex items-center gap-4 shadow-sm">
+                        <div class="p-4 rounded-xl bg-white/20 border border-default flex items-center gap-4 shadow-sm backdrop-blur-sm">
                             <div class="text-2xl">🧪</div>
                             <div>
-                                <div class="font-bold text-sm">Premium Solution</div>
-                                <div class="text-muted text-xs font-semibold">Lens-Safe Formula</div>
+                                <div class="font-bold text-sm text-brand-500">Premium Solution</div>
+                                <div class="text-brand-500/60 text-xs font-semibold">Lens-Safe Formula</div>
                             </div>
                         </div>
                     </div>
-                    <p class="mt-8 text-[11px] font-bold opacity-60 uppercase tracking-widest leading-relaxed">Note: Does not cover accidental damage, scratches from improper cleaning, or prescription changes.</p>
+                    <p class="mt-8 text-[11px] font-bold text-brand-500 opacity-60 uppercase tracking-widest leading-relaxed">Note: Does not cover accidental damage, scratches from improper cleaning, or prescription changes.</p>
                 </div>
             </div>
         </div>
@@ -1059,22 +1087,22 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 @php
                     $relatedVariantCount = count($related->specifications['variants'] ?? []);
                 @endphp
-                <a href="{{ route('products.show', $related->slug) }}" class="card group">
-                    <div class="aspect-[4/3] bg-gradient-to-br from-brand-50 to-accent-50 flex items-center justify-center relative overflow-hidden">
+                <a href="{{ route('products.show', $related->slug) }}" class="glass-premium p-4 rounded-[2.5rem] group hover:-translate-y-2 transition-all duration-500">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-brand-50 to-accent-50 rounded-[2rem] flex items-center justify-center relative overflow-hidden">
                         @if($related->image)
-                            <img src="{{ asset($related->image) }}" alt="{{ $related->name }}" class="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-110">
+                            <img src="{{ asset($related->image) }}" alt="{{ $related->name }}" class="w-full h-full object-contain p-4 transition-transform duration-700 group-hover:scale-110">
                         @else
                             <div class="text-6xl opacity-15 font-display font-bold text-brand-300">{{ substr($related->name, 0, 2) }}</div>
                         @endif
-                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-semibold {{ $related->brand === 'Lenz Breeze' ? 'bg-brand-500 text-white' : 'bg-warm-800 text-white' }}">{{ $related->brand }}</span>
+                        <span class="absolute top-4 left-4 glass-premium px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-midnight">{{ $related->brand }}</span>
                         @if($relatedVariantCount > 0)
-                            <span class="variant-count-badge">{{ $relatedVariantCount }} Variants</span>
+                            <span class="absolute bottom-4 left-4 glass-premium px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-midnight">{{ $relatedVariantCount }} Variants</span>
                         @endif
                     </div>
-                    <div class="p-5">
-                        <h3 class="font-display font-bold text-brand-500 group-hover:text-accent-600 transition-colors">{{ $related->name }}</h3>
-                        <p class="text-sm text-warm-400 mt-0.5">{{ $related->tagline }}</p>
-                        <div class="mt-3 flex items-center text-xs font-bold text-accent-600 group-hover:translate-x-1 transition-transform">
+                    <div class="p-4">
+                        <h3 class="font-display font-black text-midnight group-hover:text-gold transition-colors">{{ $related->name }}</h3>
+                        <p class="text-xs text-warm-500 mt-1 uppercase tracking-wider font-bold">{{ $related->tagline }}</p>
+                        <div class="mt-4 flex items-center text-[10px] font-black text-midnight/40 uppercase tracking-[0.2em] group-hover:text-gold transition-colors">
                             Explore Details
                             <svg class="w-3.5 h-3.5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </div>
@@ -1085,4 +1113,5 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     </div>
 </section>
 @endif
+</div>
 @endsection

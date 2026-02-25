@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Contact Us - Lenz Breeze')
-@section('meta_description', 'Get in touch with Lenz Breeze. Contact our team for product inquiries, partnership opportunities, or general questions. Multiple locations across India.')
+@section('title', 'Contact Us - EYE MEK')
+@section('meta_description', 'Get in touch with EYE MEK. Contact our team for product inquiries, partnership opportunities, or general questions. Multiple locations across India.')
 
 @section('content')
 {{-- Page Hero --}}
@@ -38,7 +38,10 @@
                             </div>
                             <div>
                                 <h3 class="font-semibold text-warm-700 text-sm">Phone</h3>
-                                <a href="tel:{{ App\Models\Setting::get('company_phone', '+914712345678') }}" class="text-accent-600 hover:text-accent-700 transition-colors">{{ App\Models\Setting::get('company_phone', '+91 471 234 5678') }}</a>
+                                <div class="space-y-1">
+                                    <a href="tel:+918921165871" class="text-accent-600 hover:text-accent-700 transition-colors block">+91 89211 65871</a>
+                                    <a href="tel:+918891218423" class="text-accent-600 hover:text-accent-700 transition-colors block">+91 88912 18423</a>
+                                </div>
                             </div>
                         </div>
                         <div class="flex items-start gap-4">
@@ -59,10 +62,8 @@
                     <div class="space-y-4 text-sm">
                         @php
                             $locations = [
-                                ['city' => 'Trivandrum', 'label' => 'HQ', 'address' => App\Models\Setting::get('address_trivandrum', 'Trivandrum, Kerala')],
-                                ['city' => 'Kochi', 'label' => '', 'address' => App\Models\Setting::get('address_kochi', 'Kochi, Kerala')],
-                                ['city' => 'Chennai', 'label' => '', 'address' => App\Models\Setting::get('address_chennai', 'Chennai, Tamil Nadu')],
-                                ['city' => 'Delhi NCR', 'label' => '', 'address' => App\Models\Setting::get('address_delhi', 'Noida, UP')],
+                                ['city' => 'Trivandrum', 'label' => 'Head Office', 'address' => 'TC 81/781, Near Baba Tourist Home, Thyvila Road, Thampanoor, Thiruvananthapuram - 695 001'],
+                                ['city' => 'Cochin', 'label' => 'Branch Office', 'address' => '34/1735(A1 & A2), Gokul Chambers, Kannanthodath Lane, Near Changampuzha Park, Edappally, Cochin - 682024'],
                             ];
                         @endphp
                         @foreach($locations as $loc)

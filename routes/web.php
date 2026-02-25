@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Route;
 
 // Public Pages
 Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/home-v1', [PageController::class, 'homeV1'])->name('home.v1');
+Route::get('/home-v2', [PageController::class, 'homeV2'])->name('home.v2');
+Route::get('/home-v3', [PageController::class, 'homeV3'])->name('home.v3');
+Route::get('/home-v4', [PageController::class, 'homeV4'])->name('home.v4');
+Route::get('/home-v5', [PageController::class, 'homeV5'])->name('home.v5');
 Route::get('/about', [PageController::class, 'about'])->name('about');
 Route::get('/products', [PageController::class, 'products'])->name('products');
 Route::get('/products/category/{slug}', [PageController::class, 'productsByCategory'])->name('products.category');
@@ -17,6 +22,7 @@ Route::get('/contact', [PageController::class, 'contact'])->name('contact');
 Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy');
 Route::get('/terms-conditions', [PageController::class, 'terms'])->name('terms');
 Route::get('/warranty', [PageController::class, 'warranty'])->name('warranty');
+Route::get('/tinting-chart', [PageController::class, 'tintingChart'])->name('tinting-chart');
 
 // Admin Routes
 Route::prefix('admin')->middleware('auth')->name('admin.')->group(function () {

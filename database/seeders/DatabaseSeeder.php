@@ -170,8 +170,8 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 2, 'brand' => 'EYE MEK', 'name' => 'Eye Mek Premium Progressive RX',
                 'slug' => 'premium-progressive-rx', 'tagline' => 'Seamless Sight. Absolute Protection.',
-                'image' => 'images/products/premium-progressive-rx.png',
-                'gallery' => ['images/products/premium-progressive-rx.png', 'images/products/premium-progressive-rx-tech.jpg'],
+                'image' => 'images/progressive-lens3.jpeg',
+                'gallery' => ['images/progressive-lens3.jpeg', 'images/products/premium-progressive-rx-tech.jpg'],
                 'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">High-Performance Optics. 🚀</span> EYE MEK Progressive line, the inclusion of Drive X and HD Digital technology moves this into the "High-Performance" category. Modern progressives often struggle with peripheral "swim" or glare while driving; EYE MEK highlights how these specific pain points are solved for a seamless experience.',
                 'features' => [
                     'Drive X: Specialized filter to reduce night-time glare and sharpen road details.',
@@ -200,7 +200,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 1, 'brand' => 'EYE MEK', 'name' => 'Eye Mek Single Vision',
                 'slug' => 'single-vision-rx', 'tagline' => 'Your Vision, Upgraded.',
-                'image' => 'images/products/single-vision-rx.png',
+                'image' => 'images/single-vision.jpeg',
                 'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">Welcome to the next level of visual clarity.</span> EYE MEK isn\'t just a lens; it’s a premium vision solution tailored to your lifestyle. Whether you\'re navigating a digital workspace, driving under the sun, or looking for everyday durability, we have the perfect fit.<br><br>Here is a breakdown of the EYE MEK Single Vision (SV) collection, crafted for those who refuse to compromise on quality.',
                 'features' => [
                     'Ultra-lightweight & crystal clear.',
@@ -230,7 +230,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'Kryptok Bifocal (KBF)',
                 'slug' => 'kryptok-bifocals', 'tagline' => 'The Bifocal You Know.',
-                'image' => 'images/products/bifocal-lens.png',
+                'image' => 'images/kryptok-bi-focal1.jpg',
                 'description' => 'See the world clearly—from the book in your hand to the view on the horizon. EYE MEK KBF lenses offer a seamless transition for your daily needs. Choose our Grey or Brown Photochromic options for effortless indoor-to-outdoor comfort. It’s the bifocal you know, with the premium protection you deserve.',
                 'features' => [
                     'Kryptok Design: Distinct segments for instant near-and-far focus.',
@@ -283,7 +283,9 @@ class DatabaseSeeder extends Seeder
         $settings = [
             'company_name' => 'Lenz Breeze Optical Pvt. Ltd.',
             'company_email' => 'info@lenzbreeze.com',
-            'company_phone' => '+91 471 234 5678',
+            'company_phone' => '+91 89211 65871',
+            'address_trivandrum' => 'TC 81/781, Near Baba Tourist Home, Thampanoor, Thiruvananthapuram - 695 001',
+            'address_kochi' => '34/1735(A1 & A2), Gokul Chambers, Kannanthodath Lane, Edappally, Cochin - 682024',
         ];
 
         foreach ($settings as $key => $value) {

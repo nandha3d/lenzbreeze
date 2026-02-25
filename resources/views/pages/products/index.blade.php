@@ -1,32 +1,197 @@
 @extends('layouts.app')
-@section('title', isset($category) ? $category->name . ' - Products - Lenz Breeze' : 'Products - Lenz Breeze')
-@section('meta_description', 'Explore our range of premium optical lenses. Blue Cut, Anti-Glare, Photochromic, Progressive, and Polarized lenses by Lenz Breeze and EYE MEK.')
+@section('title', isset($category) ? $category->name . ' - Products - EYE MEK' : 'Products - EYE MEK')
+@section('meta_description', 'Explore our range of premium optical lenses. Blue Cut, Anti-Glare, Photochromic, Progressive, and Polarized lenses by EYE MEK.')
 
 @section('content')
+<div class="theme-product">
 {{-- Page Hero --}}
-<section class="gradient-brand py-20 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-10 right-10 w-64 h-64 rounded-full bg-white/20 blur-3xl"></div>
-        <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-white/10 blur-3xl"></div>
-    </div>
-    {{-- Floating lens rings --}}
-    <div class="absolute top-8 right-32 w-20 h-20 rounded-full border border-white/20 animate-lens-float" style="animation-delay: 0s;"></div>
-    <div class="absolute top-16 right-48 w-10 h-10 rounded-full border border-white/15 animate-lens-float" style="animation-delay: 0.8s;"></div>
-    <div class="absolute bottom-8 right-20 w-14 h-14 rounded-full border border-white/10 animate-lens-float" style="animation-delay: 1.5s;"></div>
-    <div class="container-custom relative z-10">
-        <div class="max-w-2xl">
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 backdrop-blur-sm text-white/80 text-xs font-bold uppercase tracking-widest mb-4">
-                <span class="w-1.5 h-1.5 rounded-full bg-accent-300 animate-pulse"></span>
-                EYE MEK Premium Lenses
+{{-- Hero Slider --}}
+<section x-data="{ 
+    activeSlide: 1, 
+    totalSlides: 3, 
+    interval: null,
+    leaving: false,
+    nextSlide() {
+        if (this.leaving) return;
+        this.leaving = true;
+        setTimeout(() => {
+            this.activeSlide = this.activeSlide === this.totalSlides ? 1 : this.activeSlide + 1;
+            this.leaving = false;
+        }, 700);
+    },
+    startAutoScroll() {
+        this.interval = setInterval(() => this.nextSlide(), 8000);
+    },
+    stopAutoScroll() {
+        clearInterval(this.interval);
+    }
+}" x-init="startAutoScroll()" @mouseenter="stopAutoScroll()" @mouseleave="startAutoScroll()"
+class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
+    
+    {{-- Slide 1: Premium Progressive (Drive X) --}}
+    <div x-show="activeSlide === 1" 
+         :class="{'active-slide': activeSlide === 1, 'leaving-slide': leaving && activeSlide === 1}"
+         class="absolute inset-0 z-10 transition-opacity duration-1000">
+        {{-- Stripe Transition Background --}}
+        <div class="stripe-container absolute inset-0">
+            @for($i=0; $i<5; $i++)
+            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens1.jpeg') }}');"></div>
+            @endfor
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-950/40 to-transparent z-[11]"></div>
+        
+        <div class="scifi-scan-line"></div>
+        <div class="absolute inset-0 hud-grid-bg opacity-10"></div>
+
+        <div class="container-custom relative h-full flex items-center z-20">
+            <div class="max-w-2xl text-white relative">
+                <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
+                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8 animate-slide-up">
+                    EYE MEK PROGRESSIVE SERIES
+                </h2>
+                <div class="space-y-6">
+                    <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1] animate-slide-up" style="animation-delay: 0.2s">
+                        Master Every Distance. <br/> Conquer Every Drive.
+                    </h1>
+                    <p class="text-xl md:text-2xl font-bold text-warm-100/90 leading-tight animate-slide-up" style="animation-delay: 0.4s">
+                        Introducing EYE MEK Progressive—engineered for those who never slow down.
+                    </p>
+                    <div class="pt-4 animate-slide-up" style="animation-delay: 0.6s">
+                        <a href="{{ route('products.show', 'premium-progressive-rx') }}" class="btn-primary">Explore Details</a>
+                        <span class="ml-6 text-logo-yellow font-black uppercase tracking-[0.2em] text-xs">Drive X Technology</span>
+                    </div>
+                </div>
             </div>
-            <h1 class="font-display text-4xl md:text-5xl font-black text-white leading-tight">{{ isset($category) ? $category->name : 'Our Products' }}</h1>
-            <p class="text-white/70 text-lg mt-4 leading-relaxed">{{ isset($category) ? $category->description : 'Discover our comprehensive range of premium optical lenses designed for every vision need.' }}</p>
-            @if(!isset($category))
-                <p class="text-white/50 text-sm mt-3 font-semibold">{{ $products->count() }} Premium Lens Collections Available</p>
-            @endif
         </div>
     </div>
+
+    {{-- Slide 2: Single Vision (Precision) --}}
+    <div x-show="activeSlide === 2" 
+         :class="{'active-slide': activeSlide === 2, 'leaving-slide': leaving && activeSlide === 2}"
+         class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
+        {{-- Stripe Transition Background --}}
+        <div class="stripe-container absolute inset-0">
+            @for($i=0; $i<5; $i++)
+            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner1.jpeg') }}');"></div>
+            @endfor
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-950/40 to-transparent z-[11]"></div>
+        
+        <div class="scifi-scan-line"></div>
+        <div class="absolute inset-0 hud-grid-bg opacity-10"></div>
+
+        <div class="container-custom relative h-full flex items-center z-20">
+            <div class="max-w-2xl text-white relative">
+                <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
+                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                    EYE MEK SV Collection
+                </h2>
+                <div class="space-y-6">
+                    <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
+                        Precision in every pulse.
+                    </h1>
+                    <p class="text-xl md:text-2xl font-bold text-warm-100/90 leading-tight">
+                        Where advanced HD Digital technology meets premium protection.
+                    </p>
+                    <div class="pt-4">
+                        <a href="{{ route('products.show', 'single-vision-rx') }}" class="btn-primary">Explore Details</a>
+                        <span class="ml-6 text-logo-yellow font-black uppercase tracking-[0.2em] text-xs">HD Digital Clarity</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Slide 3: D-Bifocal (HUD Precision) --}}
+    <div x-show="activeSlide === 3" 
+         :class="{'active-slide': activeSlide === 3, 'leaving-slide': leaving && activeSlide === 3}"
+         class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
+        <div class="stripe-container absolute inset-0">
+            @for($i=0; $i<5; $i++)
+            <div class="stripe-item" style="background-image: url('{{ asset('images/bifocal-lens.jpeg') }}');"></div>
+            @endfor
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-950/20 to-transparent z-[11]"></div>
+        
+        <div class="scifi-scan-line"></div>
+        <div class="absolute inset-0 hud-grid-bg opacity-10"></div>
+
+        <div class="container-custom relative h-full flex items-center z-20">
+            <div class="max-w-2xl text-white relative group">
+                <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
+                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                    ADVANCED // DBF_FLAT_TOP
+                </h2>
+                <div class="space-y-6">
+                    <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
+                        D-Bifocal. <br/> (DBF) Precision.
+                    </h1>
+                    <p class="text-lg text-warm-200 leading-relaxed max-w-xl">
+                        Tired of narrow reading zones? Step into the wide-angle view of EYE MEK DBF. The classic bifocal, perfected by EYE MEK.
+                    </p>
+                    <div class="pt-4">
+                        <a href="{{ route('products.show', 'd-bifocal-lens') }}" class="btn-primary">Explore Details</a>
+                        <span class="ml-6 text-logo-yellow font-black uppercase tracking-[0.2em] text-xs italic">Flat Top. Wider View.</span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Precision HUD Callout --}}
+            <div class="absolute top-[56%] right-[21.5%] hidden lg:block translate-y-1">
+                <div class="relative">
+                    <div class="absolute -inset-4 border border-logo-yellow/50 rounded-full animate-ping opacity-75"></div>
+                    <div class="w-3 h-3 rounded-full bg-logo-yellow shadow-[0_0_15px_#f8b803] z-10 relative"></div>
+                    <div class="absolute top-1/2 left-full w-20 h-px bg-gradient-to-r from-logo-yellow to-transparent ml-2"></div>
+                    <div class="absolute -top-10 left-24 whitespace-nowrap bg-brand-900/60 backdrop-blur-xl px-5 py-3 border-l-2 border-logo-yellow shadow-2xl skew-x-[-12deg]">
+                        <div class="flex flex-col items-start translate-x-[2px] skew-x-[12deg]">
+                            <span class="text-[9px] font-black uppercase tracking-[0.2em] text-logo-yellow/80">Segment Type</span>
+                            <span class="text-lg font-black text-white tracking-wide">D-BIFOCAL (DBF)</span>
+                            <div class="w-full h-[1px] bg-logo-yellow/30 mt-1"></div>
+                            <span class="text-[8px] font-bold text-warm-300 uppercase mt-1">Wide-Angle Near Vision</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Slider Navigation Indicators (Yellow Theme with Progress) --}}
+    <div class="absolute bottom-12 left-0 w-full z-30 pointer-events-none">
+        <div class="container-custom flex justify-between items-end">
+            <div class="flex gap-3 pointer-events-auto">
+                <template x-for="i in totalSlides">
+                    <button @click="if(activeSlide !== i) { leaving = true; setTimeout(() => { activeSlide = i; leaving = false; }, 700); }"
+                            class="group relative h-1.5 transition-all duration-500 overflow-hidden rounded-full"
+                            :class="activeSlide === i ? 'w-12 bg-logo-yellow shadow-[0_0_15px_rgba(248,184,3,0.5)]' : 'w-6 bg-white/20 hover:bg-white/40'">
+                        <div x-show="activeSlide === i" 
+                             class="absolute inset-0 bg-transparent animate-[progress_8s_linear_infinite]"
+                             style="background: rgba(255,255,255,0.3)"></div>
+                    </button>
+                </template>
+            </div>
+            <div class="text-white/40 font-mono text-[10px] tracking-[0.3em] uppercase">
+                Collection <span class="text-logo-yellow font-black" x-text="activeSlide"></span> <span class="mx-1">/</span> <span x-text="totalSlides"></span>
+            </div>
+        </div>
+    </div>
+
+    {{-- Interactive Background Accent --}}
+    <div class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-logo-yellow/10 to-transparent blur-3xl pointer-events-none"></div>
 </section>
+
+<style>
+    @keyframes progress { 
+        from { width: 0; } 
+        to { width: 100%; } 
+    }
+    @keyframes slide-up {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-slide-up {
+        animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+</style>
 
 {{-- Category Filter --}}
 <section class="bg-white border-b border-warm-200/50 sticky top-18 z-30">
@@ -82,9 +247,9 @@
 
                             {{-- Top badges --}}
                             <div class="absolute top-3 left-3 flex gap-2">
-                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold shadow {{ $product->brand === 'Lenz Breeze' ? 'bg-brand-500 text-white' : 'bg-warm-900 text-white' }}">{{ $product->brand }}</span>
+                                <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold shadow bg-warm-900 text-white">{{ $product->brand }}</span>
                                 @if($product->is_featured)
-                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-accent-500 text-white shadow">⭐ Premium</span>
+                                    <span class="inline-block px-2.5 py-1 rounded-full text-xs font-bold bg-accent-500 text-white shadow">⭐ Featured</span>
                                 @endif
                             </div>
 
@@ -144,4 +309,5 @@
         @endif
     </div>
 </section>
+</div>
 @endsection

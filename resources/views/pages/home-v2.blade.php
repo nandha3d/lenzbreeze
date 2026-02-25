@@ -1,122 +1,43 @@
 @extends('layouts.app')
-@section('title', 'EYE MEK - Premium Optical Lenses | Home')
-@section('meta_description', 'EYE MEK - India\'s premier optical lens manufacturer. Premium quality lenses with cutting-edge technology including Blue Cut, Anti-Glare, Photochromic and Polarized lenses.')
+@section('title', 'Lenz Breeze - Premium Optical Lenses | Home')
+@section('meta_description', 'Lenz Breeze - India\'s premier optical lens manufacturer. Premium quality lenses with cutting-edge technology including Blue Cut, Anti-Glare, Photochromic and Polarized lenses.')
 
 @section('content')
-{{-- Hero Section --}}
-<section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden" 
-    x-data="{ 
-        activeSlide: 0, 
-        slides: [
-            { 
-                title: 'See the World with <span class=\'text-accent-300\'>Blue Cut Clarity</span>', 
-                tagline: 'Ultimate protection for the digital age. Our high-performance blue cut lenses shield your eyes from harmful digital strain.',
-                image: '{{ asset('images/bluecut.jpeg') }}',
-                badge: 'Digital Protection'
-            },
-            { 
-                title: 'Precision <span class=\'text-accent-300\'>D-Bifocal Vision</span>', 
-                tagline: 'Seamlessly transition between near and distant vision with our premium flat-top segment bifocals.',
-                image: '{{ asset('images/d-bifocal.jpeg') }}',
-                badge: 'Multi-Distance Vision'
-            },
-            { 
-                title: 'Refined <span class=\'text-accent-300\'>Single Vision</span>', 
-                tagline: 'Experience sharp, distortion-free vision tailored exactly to your prescription using advanced manufacturing.',
-                image: '{{ asset('images/single-vision.jpeg') }}',
-                badge: 'Custom Precision'
-            }
-        ],
-        next() { this.activeSlide = (this.activeSlide + 1) % this.slides.length },
-        init() { setInterval(() => this.next(), 7000) }
-    }">
+{{-- Hero Section - Minimal Variation --}}
+<section class="hero-section relative min-h-[70vh] flex items-center bg-white overflow-hidden py-16">
+    <div class="absolute inset-0">
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-warm-50/50 -skew-x-12 translate-x-1/4"></div>
+    </div>
     
-    {{-- Dynamic Background --}}
-    <div class="absolute inset-0 z-0">
-        <template x-for="(slide, index) in slides" :key="index">
-            <div x-show="activeSlide === index" 
-                x-transition:enter="transition duration-1000 ease-out"
-                x-transition:enter-start="opacity-0 scale-110"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transition duration-1000 ease-in absolute inset-0"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-95"
-                class="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                :style="`background-image: url('${slide.image}')`"
-            >
-                {{-- Lightened overlay for text readability --}}
-                <div class="absolute inset-0 bg-gradient-to-r from-brand-900/40 via-brand-900/10 to-transparent"></div>
-            </div>
-        </template>
-    </div>
-
-    {{-- Cinematic Elements --}}
-    <div class="absolute inset-0 z-10 pointer-events-none">
-        {{-- Circular Lens Mask Overlay --}}
-        <div class="hero-lens-overlay absolute inset-0 backdrop-blur-[12px] bg-black/10" 
-             style="mask-image: radial-gradient(circle var(--lens-radius, 500px) at var(--lens-x, 50%) var(--lens-y, 50%), transparent 0%, transparent 80%, black 100%); 
-                    -webkit-mask-image: radial-gradient(circle var(--lens-radius, 500px) at var(--lens-x, 50%) var(--lens-y, 50%), transparent 0%, transparent 80%, black 100%);">
-        </div>
-        
-        {{-- Lens Edge Detail --}}
-        <div class="hero-lens-cursor absolute border border-white/30 rounded-full shadow-[0_0_80px_rgba(255,255,255,0.15)]"
-             style="width: calc(var(--lens-radius, 500px) * 2); height: calc(var(--lens-radius, 500px) * 2); 
-                    left: var(--lens-x, 50%); top: var(--lens-y, 50%); transform: translate(-50%, -50%); opacity: 0;">
-            <div class="absolute inset-0 rounded-full border border-white/10"></div>
-        </div>
-    </div>
-
-    <div class="container-custom relative z-20">
-        <div class="max-w-3xl">
-            <template x-for="(slide, index) in slides" :key="index">
-                <div x-show="activeSlide === index" 
-                    x-transition:enter="transition ease-out duration-1000 delay-300"
-                    x-transition:enter-start="opacity-0 translate-x-12"
-                    x-transition:enter-end="opacity-100 translate-x-0"
-                    x-transition:leave="transition ease-in duration-500 absolute inset-y-0 flex flex-col justify-center"
-                    x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0 -translate-x-12"
-                    class="py-20"
-                >
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-400/20 backdrop-blur-md border border-accent-400/30 text-accent-100 text-sm mb-8">
-                        <span class="w-2 h-2 rounded-full bg-accent-400 animate-pulse"></span>
-                        <span x-text="slide.badge" class="font-bold uppercase tracking-wider"></span>
-                    </div>
-                    <h1 class="font-display text-5xl md:text-7xl font-bold text-white leading-tight drop-shadow-2xl" x-html="slide.title"></h1>
-                    <p class="text-xl md:text-2xl text-white/80 mt-8 max-w-2xl leading-relaxed drop-shadow-md" x-text="slide.tagline"></p>
-                    
-                    <div class="flex flex-wrap gap-6 mt-12">
-                        <a href="{{ route('products') }}" class="btn-primary shimmer-hover text-lg !px-10 !py-5 shadow-2xl">
-                            Explore Collections
-                            <svg class="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                        </a>
-                        <a href="{{ route('contact') }}" class="btn-outline-white shimmer-hover text-lg !px-10 !py-5 backdrop-blur-md">Contact Sales</a>
-                    </div>
+    <div class="container-custom relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-50 text-brand-600 text-xs font-bold uppercase tracking-wider mb-6">
+                    Precision Manufacturing
                 </div>
-            </template>
-        </div>
-
-        {{-- Cinematic Navigation Indicators --}}
-        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex items-center justify-center gap-6 z-50">
-            <template x-for="(slide, index) in slides" :key="index">
-                <button @click="activeSlide = index" 
-                    class="group flex items-center gap-3 transition-all duration-500"
-                >
-                    <div class="h-[2px] rounded-full transition-all duration-500"
-                        :class="activeSlide === index ? 'w-16 bg-accent-400' : 'w-8 bg-white/20 group-hover:bg-white/40'"></div>
-                    <span class="text-[10px] font-bold uppercase tracking-widest transition-colors duration-500"
-                        :class="activeSlide === index ? 'text-accent-300' : 'text-white/40 group-hover:text-white/60'"
-                        x-text="`0${index + 1}`"></span>
-                </button>
-            </template>
-        </div>
-    </div>
-
-    {{-- Floating Decorative Elements --}}
-    <div class="absolute top-1/2 right-0 -translate-y-1/2 hidden xl:block z-30 pointer-events-none opacity-20">
-        <div class="w-[600px] h-[600px] rounded-full border border-white/10 animate-[spin_60s_linear_infinite]"></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-[400px] h-[400px] rounded-full border border-white/5 animate-[spin_40s_linear_infinite_reverse]"></div>
+                <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-warm-900 leading-[1.1]">
+                    The Gold Standard in <br>
+                    <span class="text-brand-500">Optical Lenses</span>
+                </h1>
+                <p class="text-lg text-warm-500 mt-6 max-w-lg leading-relaxed">
+                    Delivering crystal-clear vision through advanced technology and meticulous craftsmanship. Trusted by thousands of optical partners across India.
+                </p>
+                <div class="flex flex-wrap gap-4 mt-10">
+                    <a href="{{ route('products') }}" class="px-8 py-4 bg-brand-500 text-white font-bold rounded-lg hover:bg-brand-600 transition-all shadow-lg shadow-brand-500/20">
+                        View Collections
+                    </a>
+                    <a href="{{ route('about') }}" class="px-8 py-4 bg-white text-warm-700 font-bold border border-warm-200 rounded-lg hover:bg-warm-50 transition-all">
+                        Our Story
+                    </a>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=800&h=600&fit=crop&auto=format" alt="Premium Lenses" class="w-full h-auto">
+                </div>
+                <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-accent-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
+                <div class="absolute -top-6 -right-6 w-32 h-32 bg-brand-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20"></div>
+            </div>
         </div>
     </div>
 </section>
@@ -126,17 +47,20 @@
     <div class="container-custom py-8">
         <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="EYE MEK Logo" class="h-12 w-auto object-contain">
-                <div class="pl-3 border-l border-warm-200">
-                    <span class="font-display font-bold text-xl text-brand-500 uppercase tracking-tight">EYE MEK</span>
-                    <span class="block text-xs text-warm-400">Premium Optical Lenses</span>
+                <img src="{{ asset('images/logo-icon.png') }}" alt="EYE MEK icon" class="w-14 h-14 object-contain">
+                <div>
+                    <span class="font-display font-bold text-lg text-brand-500 uppercase tracking-tight">EYE MEK Premium</span>
+                    <span class="block text-xs text-warm-400">High-Performance Range</span>
                 </div>
             </div>
             <div class="w-px h-10 bg-warm-200 hidden sm:block"></div>
             <div class="flex items-center gap-3">
-                <div class="flex flex-col">
-                    <span class="font-display font-bold text-xl text-warm-800 uppercase tracking-tight">Quality & Precision</span>
-                    <span class="block text-xs text-warm-400">Everyday Vision Solutions</span>
+                <div class="w-12 h-12 rounded-xl bg-warm-800 flex items-center justify-center">
+                    <span class="text-white font-bold text-xl font-display">EM</span>
+                </div>
+                <div>
+                    <span class="font-display font-bold text-lg text-warm-800 uppercase tracking-tight">EYE MEK Value</span>
+                    <span class="block text-xs text-warm-400">Everyday Quality Range</span>
                 </div>
             </div>
         </div>
@@ -148,15 +72,15 @@
     <div class="container-custom">
         <div class="text-center mb-14">
             <h2 class="section-title">Why Choose Lenz Breeze?</h2>
-            <p class="section-subtitle mx-auto">Excellence in optical manufacturing, driven by cutting-edge technology and an unwavering commitment to quality vision for everyone.</p>
+            <p class="section-subtitle mx-auto">Two decades of excellence in optical manufacturing, backed by cutting-edge technology and an unwavering commitment to quality.</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @php
                 $highlights = [
-                    ['icon' => '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>', 'number' => '5000+', 'label' => 'Happy Customers', 'desc' => 'Across India and worldwide'],
-                    ['icon' => '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>', 'number' => '2', 'label' => 'Branches', 'desc' => 'Cochin & Trivandrum'],
+                    ['icon' => '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>', 'number' => '4', 'label' => 'Facilities', 'desc' => 'Manufacturing units across India'],
+                    ['icon' => '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>', 'number' => '500+', 'label' => 'Partners', 'desc' => 'Trusted optical partners nationwide'],
                     ['icon' => '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>', 'number' => 'ISO', 'label' => 'Certified', 'desc' => 'International quality standards'],
-                    ['icon' => '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>', 'number' => '2024', 'label' => 'Established', 'desc' => 'Optical manufacturing excellence'],
+                    ['icon' => '<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>', 'number' => '20+', 'label' => 'Years', 'desc' => 'Of optical manufacturing excellence'],
                 ];
             @endphp
             @foreach($highlights as $item)

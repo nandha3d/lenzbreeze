@@ -11,7 +11,7 @@
     <div class="container-custom relative z-10">
         <div class="max-w-2xl">
             <h1 class="font-display text-4xl md:text-5xl font-bold text-white">About Lenz Breeze</h1>
-            <p class="text-white/70 text-lg mt-4">Two decades of passion, precision, and innovation in optical lens manufacturing.</p>
+            <p class="text-white/70 text-lg mt-4">A passion for precision, and innovation in optical lens manufacturing.</p>
         </div>
     </div>
 </section>
@@ -22,28 +22,28 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
                 <span class="text-accent-600 font-semibold text-sm tracking-wider uppercase">Our Story</span>
-                <h2 class="section-title mt-2">Crafting Vision Since 2005</h2>
+                <h2 class="section-title mt-2">Crafting Vision Since 2024</h2>
                 <p class="text-warm-600 mt-6 leading-relaxed">
-                    Founded in Trivandrum, Kerala, Lenz Breeze began with a simple mission — to make premium optical lenses accessible to everyone. What started as a small workshop has grown into one of India's most trusted lens manufacturers.
+                    Founded on 1st February 2024 in Trivandrum, Kerala, Lenz Breeze began with a simple mission — to make premium optical lenses accessible to everyone. What started as an ambitious vision has rapidly grown into a trusted name in lens manufacturing.
                 </p>
                 <p class="text-warm-600 mt-4 leading-relaxed">
-                    Today, with four state-of-the-art manufacturing facilities across India, we produce millions of lenses annually under two brands: <strong>Lenz Breeze</strong> (our premium line) and <strong>EYE MEK</strong> (our value-focused range). Our lenses reach over 500 partner optical stores nationwide.
+                    In a significant milestone, we expanded our reach by opening a branch in Ernakulam on 1st November 2024. Today, with specialized facilities in Trivandrum and Cochin, we produce high-quality lenses under our premier brand: <strong>EYE MEK</strong>, offering both high-performance premium and value-focused collections.
                 </p>
                 <p class="text-warm-600 mt-4 leading-relaxed">
-                    Every lens we craft reflects our commitment to precision engineering, innovative technology, and uncompromising quality. We believe everyone deserves crystal-clear vision.
+                    Every lens we craft reflects our commitment to precision engineering, innovative technology, and uncompromising quality. We believe everyone deserves crystal-clear vision, delivered with care and accuracy.
                 </p>
             </div>
             <div class="relative">
                 <div class="aspect-[4/3] rounded-2xl bg-gradient-to-br from-brand-100 to-accent-100 flex items-center justify-center">
                     <div class="text-center">
                         <div class="text-6xl font-display font-bold text-brand-300">LB</div>
-                        <div class="text-sm text-brand-400 mt-2">Est. 2005</div>
+                        <div class="text-sm text-brand-400 mt-2">Est. 2024</div>
                     </div>
                 </div>
                 <div class="absolute -bottom-6 -left-6 w-32 h-32 rounded-2xl gradient-accent flex items-center justify-center text-white shadow-lg">
                     <div class="text-center">
-                        <div class="text-2xl font-bold">20+</div>
-                        <div class="text-xs mt-0.5">Years</div>
+                        <div class="text-2xl font-bold">5000+</div>
+                        <div class="text-xs mt-0.5">Customers</div>
                     </div>
                 </div>
             </div>

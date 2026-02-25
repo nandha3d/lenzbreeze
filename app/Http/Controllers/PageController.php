@@ -13,9 +13,40 @@ class PageController extends Controller
 {
     public function home()
     {
+        return $this->renderHome('pages.home');
+    }
+
+    public function homeV1()
+    {
+        return $this->renderHome('pages.home-v1');
+    }
+
+    public function homeV2()
+    {
+        return $this->renderHome('pages.home-v2');
+    }
+
+    public function homeV3()
+    {
+        return $this->renderHome('pages.home-v3');
+    }
+
+    public function homeV4()
+    {
+        return $this->renderHome('pages.home-v4');
+    }
+
+    public function homeV5()
+    {
+        return $this->renderHome('pages.home-v5');
+    }
+
+    protected function renderHome($view)
+    {
         $featuredProducts = Product::featured()->active()->orderBy('display_order')->take(4)->get();
         $categories = ProductCategory::active()->orderBy('display_order')->get();
-        return view('pages.home', compact('featuredProducts', 'categories'));
+        $promoProduct = Product::where('slug', 'premium-progressive-rx')->first();
+        return view($view, compact('featuredProducts', 'categories', 'promoProduct'));
     }
 
     public function about()
@@ -87,5 +118,10 @@ class PageController extends Controller
             }
         }
         return view('pages.warranty', compact('warranty'));
+    }
+
+    public function tintingChart()
+    {
+        return view('pages.tinting-chart');
     }
 }

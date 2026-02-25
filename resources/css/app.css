@@ -55,6 +55,13 @@
     --color-logo-bg: var(--color-accent-500);
     --color-logo-text: #ffffff;
 
+    /* Premium Design Tokens */
+    --color-midnight: #1a1a2e;
+    --color-gold: #d4af37;
+    --color-tech-cyan: #00d4ff;
+    --glass-blur: 20px;
+    --glass-opacity: 0.7;
+
     /* Section Theme Variables */
     --color-section-featured-bg: var(--color-brand-900);
     --color-section-featured-text: #ffffff;
@@ -65,6 +72,22 @@
     /* Logo Yellow Theme */
     --color-logo-yellow: #f8b803;
     --shadow-yellow: rgba(248, 184, 3, 0.3);
+}
+
+.glass-premium {
+    background: rgba(255, 255, 255, var(--glass-opacity));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+.glass-dark {
+    background: rgba(26, 26, 46, var(--glass-opacity));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 }
 
 /* ===== Utility Overrides ===== */
@@ -185,25 +208,25 @@ body {
 
 /* ===== EYE MEK Theme (Localized) ===== */
 .theme-eyemek {
-    --color-accent-50: #fff9e6;
-    --color-accent-100: #ffefc1;
-    --color-accent-200: #ffde8a;
-    --color-accent-300: #fcc952;
-    --color-accent-400: #f7af29;
-    --color-accent-500: #f1b51c;
-    --color-accent-600: #d69e16;
-    --color-accent-700: #bb8813;
-    --color-accent-800: #a07410;
-    --color-accent-900: #85610d;
+    --color-accent-50: #fef9e7;
+    --color-accent-100: #fdefc3;
+    --color-accent-200: #fce09a;
+    --color-accent-300: #f8cc5e;
+    --color-accent-400: #f4b830;
+    --color-accent-500: #f0b61a;
+    --color-accent-600: #d6a017;
+    --color-accent-700: #bb8a14;
+    --color-accent-800: #9f7411;
+    --color-accent-900: #845f0e;
 
     /* Logo Override for Eye Mek Theme */
-    --color-logo-bg: #f1b51c;
+    --color-logo-bg: #f0b61a;
     /* Sharp gold/yellow */
     --color-logo-text: #0e3558;
     /* readable brand-500 navy */
 
     /* Section Theme Override for Eye Mek (Yellow Box) */
-    --color-section-featured-bg: #f1b51c;
+    --color-section-featured-bg: #f0b61a;
     --color-section-featured-text: #0e3558;
     /* brand-500 navy */
     --color-section-featured-muted: rgba(14, 53, 88, 0.85);
@@ -212,8 +235,8 @@ body {
     /* More visible borders */
     --color-section-featured-card: rgba(14, 53, 88, 0.08);
 
-    --shadow-accent: rgba(241, 181, 28, 0.3);
-    --shadow-accent-hover: rgba(241, 181, 28, 0.45);
+    --shadow-accent: rgba(240, 182, 26, 0.3);
+    --shadow-accent-hover: rgba(240, 182, 26, 0.45);
 }
 
 .theme-eyemek .bg-geometric {
@@ -259,6 +282,32 @@ body {
     border-radius: 50%;
     opacity: 0.1;
     pointer-events: none;
+}
+
+/* ===== Product Page Theme ===== */
+.theme-product {
+    --color-accent-50: #fef9e7;
+    --color-accent-100: #fdefc3;
+    --color-accent-200: #fce09a;
+    --color-accent-300: #f8cc5e;
+    --color-accent-400: #f4b830;
+    --color-accent-500: #f0b61a;
+    --color-accent-600: #d6a017;
+    --color-accent-700: #bb8a14;
+    --color-accent-800: #9f7411;
+    --color-accent-900: #845f0e;
+
+    --color-logo-bg: #f0b61a;
+    --color-logo-text: #0e3558;
+
+    --color-section-featured-bg: #f0b61a;
+    --color-section-featured-text: #0e3558;
+    --color-section-featured-muted: rgba(14, 53, 88, 0.85);
+    --color-section-featured-border: rgba(14, 53, 88, 0.25);
+    --color-section-featured-card: rgba(14, 53, 88, 0.08);
+
+    --shadow-accent: rgba(240, 182, 26, 0.3);
+    --shadow-accent-hover: rgba(240, 182, 26, 0.45);
 }
 
 /* ===== Section Headers ===== */
@@ -324,6 +373,26 @@ body {
     animation: fadeIn 0.6s ease-out forwards;
 }
 
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+.animate-shake {
+    animation: shake 0.4s ease-in-out 0s 1;
+}
+
 .animate-slide-in-left {
     animation: slideInLeft 0.6s ease-out forwards;
 }
@@ -370,6 +439,64 @@ body {
     50% {
         transform: translateY(-20px) rotate(2deg);
     }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: scale(1.05);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 8s ease-in-out infinite;
+}
+
+@keyframes progress {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes wave {
+    0% {
+        transform: translateX(-100%) skewX(-15deg);
+    }
+
+    100% {
+        transform: translateX(100%) skewX(-15deg);
+    }
+}
+
+.animate-marquee {
+    animation: marquee 30s linear infinite;
+    display: flex;
+    width: max-content;
 }
 
 @keyframes float-delayed {
@@ -475,10 +602,63 @@ body {
     opacity: 1;
 }
 
-.leaving-slide .stripe-item {
-    transform: scaleY(0);
-    opacity: 0;
-    transition-delay: 0s !important;
+/* ---- Reflective Ray Animations ---- */
+@keyframes ray-in {
+    0% {
+        transform: translate(-100%, -100%);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes ray-reflect {
+    0% {
+        transform: translate(0, 0);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 0.3;
+    }
+
+    100% {
+        transform: translate(-80%, 40%);
+        opacity: 0;
+    }
+}
+
+@keyframes glare-flash {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(1.5);
+    }
+}
+
+.animate-ray-in {
+    animation: ray-in 1.5s linear infinite;
+}
+
+.animate-ray-reflect {
+    animation: ray-reflect 1.5s ease-out infinite;
+}
+
+.animate-glare-flash {
+    animation: glare-flash 1.5s ease-out infinite;
 }
 
 .hud-grid-bg {
@@ -505,52 +685,27 @@ body {
     @apply w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-500 font-bold text-xs border-2 border-brand-500;
 }
 
-.hero-blur-pane {
+.hero-lens-overlay {
     position: absolute;
-    left: 0;
-    right: 0;
-    z-index: 50;
-    /* Locked from inline success */
+    inset: 0;
+    z-index: 10;
     pointer-events: none;
-    backdrop-filter: blur(20px);
-    /* Locked from inline success */
-    -webkit-backdrop-filter: blur(20px);
-    background: rgba(0, 0, 0, 0.5);
-    /* Locked from inline success */
-    will-change: height, top;
+    transition: mask-image 0.1s ease-out;
 }
 
-#lens-pane-top {
-    top: 0;
-    height: 50%;
-}
-
-#lens-pane-bottom {
-    bottom: 0;
-    top: 50%;
+.hero-lens-cursor {
+    position: absolute;
+    z-index: 11;
+    pointer-events: none;
+    transition: opacity 0.4s ease-out;
+    will-change: left, top, opacity;
 }
 
 .hero-section {
     position: relative;
-}
-
-/* Full-width horizontal boxed lens indicator */
-.hero-lens-cursor {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 300px;
-    pointer-events: none;
-    z-index: 31;
-    box-shadow: 0 0 60px rgba(0, 175, 176, 0.05);
-    opacity: 0;
-    transition: opacity 0.4s ease-out;
-    transform: translateY(-50%);
-    /* Positioned via JS --lens-y */
-}
-
-.hero-section:hover .hero-lens-cursor {
-    opacity: 1;
+    --lens-x: 50%;
+    --lens-y: 50%;
+    --lens-radius: 500px;
 }
 
 /* Product Page Refactor Enhancements */
@@ -839,4 +994,35 @@ body {
 /* ---- Scroll Area Wrapping ---- */
 .variant-scroll-wrap {
     @apply relative;
+}
+
+/* ---- Light Accent Card (Yellow for Products) ---- */
+.card-accent-light {
+    background: var(--color-accent-50);
+    border: 1px solid var(--color-accent-100);
+}
+
+/* ---- Featured Section Wrapper (Dynamic) ---- */
+.featured-section-card {
+    background: var(--color-section-featured-bg);
+    color: var(--color-section-featured-text);
+    border-radius: 2rem;
+    overflow: hidden;
+    border: 1px solid var(--color-section-featured-border);
+}
+
+.featured-section-card .text-muted {
+    color: var(--color-section-featured-muted);
+}
+
+.featured-section-card .card-highlight {
+    background: var(--color-section-featured-card);
+}
+
+.featured-section-card .border-default {
+    border-color: var(--color-section-featured-border);
+}
+
+.featured-section-card .bg-brand-500 {
+    background: var(--color-brand-500);
 }

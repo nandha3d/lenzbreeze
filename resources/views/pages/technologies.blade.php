@@ -23,9 +23,29 @@
             'gradient' => 'from-blue-500 to-indigo-600',
             'bg' => 'bg-blue-50',
             'demo_type' => 'blue-cut',
-            'description' => 'In today\'s digital world, our eyes are exposed to harmful blue-violet light (380-455nm) from screens, LED lighting, and sunlight. Blue Cut lenses filter this high-energy visible light while allowing beneficial blue-turquoise light to pass through.',
-            'benefits' => ['Reduces digital eye strain and fatigue', 'Improves sleep quality by filtering sleep-disrupting blue light', 'Maintains true color perception (no yellow tint)', 'Protects retinal cells from long-term HEV damage', 'Available in all lens types: SV, Progressive, Bifocal'],
-            'specs' => ['Blue Light Block' => '38-42%', 'Wavelength Range' => '380-455nm', 'Color Distortion' => 'Less than 3%', 'Base Coating' => 'Multi-Layer AR'],
+            'description' => 'In today\'s digital world, our eyes are exposed to harmful high-energy visible (HEV) blue light (380-455nm) from screens, LED lighting, and sunlight. EYE MEK Blue Cut lenses use advanced molecular filtering to shield your eyes, helping to maintain natural melatonin production for better sleep and protecting against long-term retinal conditions like cataracts and macular degeneration.',
+            'benefits' => [
+                'Cuts 99% of harmful HEV Blue Light while allowing beneficial turquoise light.',
+                'Boosts melatonin production to help you fall asleep faster and wake up fresher.',
+                'Reduces digital eye strain, puffiness, and screen-induced headaches.',
+                'Super Hydrophobic Multi-Coating (SHMC) repels moisture, stains, and smudges.',
+                'Protects the cornea from tissue growth (Eye Webs) caused by UV and HEV exposure.'
+            ],
+            'specs' => [
+                'HEV Filtration' => 'Up to 99%',
+                'Wavelength Range' => '380-455nm (Digital Focus)',
+                'Melatonin Support' => 'Optimized (Zero Disruption)',
+                'Surface Treatment' => 'Super Hydrophobic (SHMC)',
+                'Impact Grade' => 'High-Durability Polymer',
+            ],
+            'detailed_symptoms' => [
+                ['name' => 'Eye Strain', 'icon' => '👁️'],
+                ['name' => 'Headaches', 'icon' => '🤕'],
+                ['name' => 'Exhaustion', 'icon' => '😴'],
+                ['name' => 'Puffiness', 'icon' => '🎈'],
+                ['name' => 'Dizziness', 'icon' => '💫'],
+                ['name' => 'Sleep Issues', 'icon' => '🌙'],
+            ]
         ],
         [
             'name' => 'Anti-Glare Coating', 'emoji' => '✨',
@@ -33,9 +53,21 @@
             'gradient' => 'from-teal-500 to-emerald-600',
             'bg' => 'bg-teal-50',
             'demo_type' => 'anti-glare',
-            'description' => 'Our multi-layer anti-reflective (AR) coating system eliminates surface reflections that cause glare, ghost images, and halos. Using vacuum deposition technology, we apply 7+ layers of precision-engineered coatings for maximum clarity.',
-            'benefits' => ['Eliminates up to 99.5% of lens surface reflections', 'Reduces halos and ghost images while driving at night', 'Makes lenses virtually invisible for better cosmetic appearance', 'Hydrophobic and oleophobic top coat repels water and smudges', 'Enhanced durability with DuraGuard hardcoat protection'],
-            'specs' => ['AR Layers' => '7+ Layers', 'Residual Reflection' => 'Less than 0.5%', 'Hardcoat Level' => '5H Pencil Test', 'Water Contact Angle' => '110°+'],
+            'description' => 'Uncoated lenses reflect up to 10% of light, leading to ghost images and reduced clarity. EYE MEK Anti-Reflective (AR) coatings utilize advanced vacuum deposition technology to apply 7+ microscopic layers that neutralize reflections, allowing up to 99.9% of light to reach your eyes for maximum visual brilliance.',
+            'benefits' => [
+                'Transmits 99.9% of light for significantly sharper, more natural vision.',
+                'Eliminates starbursts and halos from headlights during night driving.',
+                'Reduces office-induced eye fatigue caused by overhead false lighting.',
+                'Makes your lenses virtually invisible, allowing for direct, natural eye contact.',
+                'Multi-layered structure provides superior scratch resistance and durability.'
+            ],
+            'specs' => [
+                'Light Transmission' => '99.9% (Crystal Grade)',
+                'Surface Reflection' => '< 0.5% (Non-Disturbing)',
+                'Coating Process' => '7-Layer Vacuum Deposition',
+                'Night Safety' => 'Halogen/LED Peak Reduction',
+                'Lens Appearance' => 'Cosmetic Invisi-Shield',
+            ],
         ],
         [
             'name' => 'Photochromic Lenses', 'emoji' => '🌤️',
@@ -73,18 +105,40 @@
                 <p class="text-lg text-accent-600 font-medium mt-1">{{ $tech['tagline'] }}</p>
                 <p class="text-warm-600 mt-4 leading-relaxed">{{ $tech['description'] }}</p>
 
-                <div class="mt-6">
-                    <h3 class="font-semibold text-warm-700 text-sm uppercase tracking-wider mb-3">Key Benefits</h3>
-                    <ul class="space-y-2">
+                <div class="mt-6 font-display">
+                    <h3 class="font-bold text-midnight text-sm uppercase tracking-widest mb-4">Key Benefits</h3>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3">
                         @foreach($tech['benefits'] as $benefit)
-                            <li class="flex items-start gap-2 text-sm text-warm-600">
-                                <svg class="w-4 h-4 text-accent-500 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                {{ $benefit }}
+                            <li class="flex items-start gap-3 text-sm text-warm-600 group">
+                                <span class="w-5 h-5 rounded-full bg-accent-50 flex items-center justify-center mt-0.5 shrink-0 group-hover:bg-accent-500 transition-colors">
+                                    <svg class="w-3 h-3 text-accent-500 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                </span>
+                                <span class="font-medium">{{ $benefit }}</span>
                             </li>
                         @endforeach
                     </ul>
                 </div>
+
+                @if(isset($tech['detailed_symptoms']))
+                <div class="mt-10 p-8 rounded-[2rem] bg-midnight text-white relative overflow-hidden group">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-gold/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                    <h3 class="font-bold text-gold text-[10px] uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
+                        <span class="animate-pulse">⚠️</span> Symptoms of Harmful Blue Light Exposure
+                    </h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-6 relative z-10">
+                        @foreach($tech['detailed_symptoms'] as $symptom)
+                        <div class="flex flex-col items-center gap-3 text-center">
+                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-2xl backdrop-blur-sm border border-white/10 group-hover:border-gold/30 transition-all">
+                                {{ $symptom['icon'] }}
+                            </div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-white/60 group-hover:text-white transition-colors">{{ $symptom['name'] }}</span>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             </div>
+
             <div class="{{ $index % 2 !== 0 ? 'lg:order-1' : '' }}">
                 {{-- Interactive Demo Slider --}}
                 <div x-data="{ position: 50, dragging: false }" 
@@ -139,6 +193,137 @@
                     </div>
                 </div>
 
+                @if($tech['demo_type'] === 'blue-cut')
+                {{-- How It Works Visual Diagram --}}
+                <div class="mt-8 p-10 rounded-[2.5rem] glass-premium border-white relative overflow-hidden group">
+                    <div class="absolute inset-0 hud-grid-bg opacity-5"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-8">
+                            <h4 class="text-xs font-black text-midnight uppercase tracking-widest">How Blue Cut Works</h4>
+                            <span class="text-[9px] font-bold px-3 py-1 bg-midnight text-white rounded-full">LAB SIMULATION // v2.4</span>
+                        </div>
+                        
+                        <div class="aspect-[21/9] bg-white/50 rounded-2xl relative flex items-center justify-center overflow-hidden border border-white/50">
+                            {{-- Incoming Light Waves --}}
+                            <div class="absolute left-0 top-0 bottom-0 w-1/2 flex flex-col justify-around py-8 px-8 overflow-hidden">
+                                @foreach([1,2,3] as $i)
+                                <div class="relative w-full h-8 animate-wave" style="animation-duration: {{ 2 + $i }}s; animation-delay: {{ $i * -0.5 }}s">
+                                    <svg class="w-full h-full text-blue-500/30" viewBox="0 0 100 20" preserveAspectRatio="none">
+                                        <path d="M0 10 Q 5 0, 10 10 T 20 10 T 30 10 T 40 10 T 50 10 T 60 10 T 70 10 T 80 10 T 90 10 T 100 10" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+                                    </svg>
+                                </div>
+                                @endforeach
+                                <span class="absolute top-4 left-8 text-[8px] font-black text-blue-600 uppercase tracking-widest">HEV Blue Light (380-455nm)</span>
+                            </div>
+
+                            {{-- Lens Cross-Section --}}
+                            <div class="w-12 h-4/5 bg-gradient-to-b from-blue-100 via-white to-blue-50 rounded-full border-4 border-white shadow-2xl relative z-20 flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
+                                <div class="absolute inset-0 bg-blue-400/5 animate-pulse-slow rounded-full"></div>
+                                <div class="text-[8px] font-black text-midnight/40 -rotate-90 whitespace-nowrap uppercase tracking-[0.2em]">Blue Shield Monomer</div>
+                                
+                                {{-- SHMC Coating Highlight --}}
+                                <div class="absolute -right-1 top-10 bottom-10 w-1 bg-gold/50 rounded-full blur-[2px] animate-pulse"></div>
+                            </div>
+
+                            {{-- Beneficial Light Passing Through --}}
+                            <div class="absolute right-0 top-0 bottom-0 w-5/12 flex flex-col justify-around py-8 px-8 overflow-hidden bg-gradient-to-r from-blue-500/5 to-transparent">
+                                @foreach([1,2] as $i)
+                                <div class="relative w-full h-8 animate-wave" style="animation-duration: 4s; animation-delay: {{ $i * -1 }}s">
+                                    <svg class="w-full h-full text-tech-cyan/30" viewBox="0 0 100 20" preserveAspectRatio="none">
+                                        <path d="M0 10 Q 25 5, 50 10 T 100 10" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+                                    </svg>
+                                </div>
+                                @endforeach
+                                <span class="absolute bottom-4 left-8 text-[8px] font-black text-tech-cyan/60 uppercase tracking-widest">Beneficial Turquoise Light</span>
+                            </div>
+
+                            {{-- SHMC Repel Visual (Droplets) --}}
+                            <div class="absolute right-12 top-1/4 w-2 h-2 bg-white rounded-full shadow-md animate-bounce"></div>
+                            <div class="absolute right-16 bottom-1/4 w-1.5 h-1.5 bg-white/80 rounded-full shadow-md animate-ping"></div>
+                            <div class="absolute right-8 top-1/3 text-[7px] font-bold text-midnight/40 uppercase">SHMC REPEL</div>
+                        </div>
+
+                        <p class="mt-6 text-[10px] text-midnight/60 font-medium leading-relaxed italic text-center">
+                            Our molecular framework filters high-frequency energy while preserving natural color transmittance.
+                        </p>
+                    </div>
+                </div>
+                @endif
+
+                @if($tech['demo_type'] === 'anti-glare')
+                {{-- Anti-Glare How It Works Visual --}}
+                <div class="mt-8 p-10 rounded-[2.5rem] glass-premium border-white relative overflow-hidden group">
+                    <div class="absolute inset-0 hud-grid-bg opacity-5"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-8">
+                            <h4 class="text-xs font-black text-midnight uppercase tracking-widest">AR Coating Simulation</h4>
+                            <span class="text-[9px] font-bold px-3 py-1 bg-emerald-600 text-white rounded-full">CLARITY TEST // v1.2</span>
+                        </div>
+                        
+                        <div class="aspect-[21/9] bg-warm-900 rounded-2xl relative flex items-center justify-center overflow-hidden border border-white/10">
+                            {{-- SVG Simulation Layer --}}
+                            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 400 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                {{-- HUD Grid Lines --}}
+                                <defs>
+                                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5" stroke-opacity="0.05"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+
+                                {{-- Central Lens Surface --}}
+                                <g transform="translate(195, 20)">
+                                    <rect width="10" height="140" rx="5" fill="white" fill-opacity="0.1" stroke="white" stroke-opacity="0.2" stroke-width="1" />
+                                    <rect x="0" y="20" width="2" height="100" rx="1" fill="#34D399" fill-opacity="0.6" class="animate-pulse" />
+                                </g>
+
+                                {{-- Simulation Rays --}}
+                                @foreach([0, 1, 2] as $i)
+                                <g style="animation-delay: {{ $i * 0.8 }}s">
+                                    {{-- Incident Ray --}}
+                                    <path d="M 40 40 L 195 90" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" stroke-dasharray="200" stroke-dashoffset="200" class="animate-[dash_1.5s_linear_infinite]" style="animation-delay: {{ $i * 0.8 }}s" />
+                                    
+                                    {{-- Reflected Ray (Glare) --}}
+                                    <path d="M 195 90 L 80 150" stroke="#F87171" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="150" stroke-dashoffset="150" opacity="0.4" class="animate-[dash_1.5s_linear_infinite]" style="animation-delay: {{ $i * 0.8 + 0.6 }}s" />
+                                    
+                                    {{-- Transmitted Ray --}}
+                                    <path d="M 205 90 L 360 90" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="160" stroke-dashoffset="160" class="animate-[dash_1.5s_linear_infinite]" style="animation-delay: {{ $i * 0.8 + 0.6 }}s" />
+                                    
+                                    {{-- Impact Point Glare --}}
+                                    <circle cx="195" cy="90" r="4" fill="white" fill-opacity="0" class="animate-[ping_1.5s_linear_infinite]" style="animation-delay: {{ $i * 0.8 + 0.6 }}s" />
+                                    <circle cx="195" cy="90" r="2" fill="white" fill-opacity="0" class="animate-[pulse_1.5s_linear_infinite]" style="animation-delay: {{ $i * 0.8 + 0.6 }}s" />
+                                </g>
+                                @endforeach
+
+                                {{-- Annotations --}}
+                                <text x="50" y="30" fill="white" fill-opacity="0.5" font-size="8" font-weight="900" class="uppercase tracking-widest">Incident Light</text>
+                                <text x="70" y="160" fill="#F87171" fill-opacity="0.7" font-size="8" font-weight="900" class="uppercase tracking-widest">Reflected Glare < 0.1%</text>
+                                <text x="250" y="80" fill="#34D399" font-size="8" font-weight="900" class="uppercase tracking-widest">99.9% Transmitted</text>
+                            </svg>
+
+                            <style>
+                                @keyframes dash {
+                                    0% { stroke-dashoffset: 200; opacity: 0; }
+                                    10% { opacity: 1; }
+                                    90% { opacity: 1; }
+                                    100% { stroke-dashoffset: 0; opacity: 0; }
+                                }
+                            </style>
+
+                            {{-- Aesthetic Badge --}}
+                            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4">
+                                <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[8px] font-bold text-white uppercase">Crystal Clarity</div>
+                                <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[8px] font-bold text-white uppercase">Glare Suppression</div>
+                            </div>
+                        </div>
+
+                        <p class="mt-6 text-[10px] text-midnight/60 font-medium leading-relaxed italic text-center">
+                            Our AR system uses destructive interference to cancel out light reflections across the visible spectrum.
+                        </p>
+                    </div>
+                </div>
+                @endif
+
                 <div class="card p-8 {{ $tech['bg'] }}">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-display font-bold text-brand-500">Technical Specifications</h3>
@@ -158,7 +343,106 @@
                 </div>
             </div>
         </div>
+
+        {{-- Expanded Blue Light Eye Impact Section (Full Width) --}}
+        @if($tech['demo_type'] === 'blue-cut')
+        <div class="mt-16 p-12 rounded-[3rem] bg-white border border-warm-200/60 shadow-2xl relative overflow-hidden group">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-4">
+                    <h2 class="text-gold font-black uppercase text-xs tracking-[0.3em] mb-4">The Truth About HEV</h2>
+                    <h3 class="text-3xl md:text-5xl font-display font-black text-midnight leading-tight mb-6">
+                        Silent Threats to <br>
+                        <span class="text-red-500">Your Retina.</span>
+                    </h3>
+                    <p class="text-warm-600 text-lg leading-relaxed mb-8">
+                        Unlike other wavelengths, High-Energy Visible (HEV) blue light lacks the mechanical filtering in our eyes, passing directly through the cornea to the delicate retinal surface.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-4 p-4 rounded-2xl bg-red-50 border-l-4 border-red-500">
+                            <span class="text-2xl">🚨</span>
+                            <span class="font-bold text-midnight text-sm uppercase tracking-wide">Macular Degeneration Risk</span>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 rounded-2xl bg-brand-50 border-l-4 border-brand-500">
+                            <span class="text-2xl">🔬</span>
+                            <span class="font-bold text-midnight text-sm uppercase tracking-wide">Oxidative Retinal Stress</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-8 relative rounded-[2rem] overflow-hidden shadow-inner bg-warm-50">
+                    <img src="{{ asset('images/bluelight.png') }}" alt="Blue Light Effect on Eye Detailed" class="w-full h-auto object-cover filter brightness-95 contrast-105 transition-transform duration-1000 group-hover:scale-110">
+                    <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-warm-100 flex flex-wrap justify-between items-center gap-6">
+                <p class="text-xs text-warm-400 font-medium italic max-w-2xl">
+                    *Exposure to wavelengths between 415nm and 455nm is considered the most hazardous to RPE (Retinal Pigment Epithelium) cells, requiring advanced molecular shielding.
+                </p>
+                <div class="flex gap-4">
+                    <div class="px-4 py-2 rounded-full glass-premium border-warm-200 text-[10px] font-black uppercase text-midnight tracking-widest">UV420 Filter</div>
+                    <div class="px-4 py-2 rounded-full glass-premium border-warm-200 text-[10px] font-black uppercase text-midnight tracking-widest">Digital HD Optic</div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- Expanded Anti-Glare Impact Section (Full Width) --}}
+        @if($tech['demo_type'] === 'anti-glare')
+        <div class="mt-16 p-12 rounded-[3rem] bg-white border border-warm-200/60 shadow-2xl relative overflow-hidden group">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-4">
+                    <h2 class="text-emerald-600 font-black uppercase text-xs tracking-[0.3em] mb-4">Precision Optics</h2>
+                    <h3 class="text-3xl md:text-5xl font-display font-black text-midnight leading-tight mb-6">
+                        See Through <br>
+                        <span class="text-emerald-500">The Glare.</span>
+                    </h3>
+                    <p class="text-warm-600 text-lg leading-relaxed mb-8">
+                        Traditional lenses act like a mirror, bouncing light away from your eyes. Our vacuum-sealed AR coating ensures that light goes where it belongs—into your eyes for perfect clarity.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <div class="flex items-center gap-4 p-4 rounded-2xl bg-emerald-50 border-l-4 border-emerald-500">
+                            <span class="text-2xl">🚗</span>
+                            <span class="font-bold text-midnight text-sm uppercase tracking-wide">Safer Night Driving</span>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 rounded-2xl bg-teal-50 border-l-4 border-teal-500">
+                            <span class="text-2xl">💻</span>
+                            <span class="font-bold text-midnight text-sm uppercase tracking-wide">Digital Fatigue Shield</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-8 relative rounded-[2rem] overflow-hidden shadow-inner bg-warm-50 p-4">
+                    {{-- Visual Comparison Placeholder/Mockup --}}
+                    <div class="aspect-video bg-white rounded-xl shadow-2xl overflow-hidden relative border-8 border-white">
+                         <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=1600&h=900&fit=crop" alt="Night Driving Glare Comparison" class="w-full h-full object-cover">
+                         <div class="absolute inset-0 flex">
+                             <div class="w-1/2 h-full bg-white/10 backdrop-blur-[1px] relative">
+                                 <div class="absolute inset-0 flex flex-col items-center justify-center p-12">
+                                     <div class="w-24 h-24 bg-white/60 rounded-full blur-2xl animate-pulse"></div>
+                                     <span class="mt-4 text-[10px] font-black uppercase bg-white/50 px-4 py-2 rounded-full">Standard Reflection</span>
+                                 </div>
+                             </div>
+                             <div class="w-1/2 h-full relative border-l-2 border-white/50">
+                                 <div class="absolute inset-0 flex flex-col items-center justify-center p-12">
+                                     <div class="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_15px_rgba(52,211,153,0.8)]"></div>
+                                     <span class="mt-4 text-[10px] font-black uppercase bg-emerald-500 text-white px-4 py-2 rounded-full">AR Enhanced</span>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-warm-100 flex flex-wrap justify-between items-center gap-6">
+                <p class="text-xs text-warm-400 font-medium italic max-w-2xl">
+                    *Our AR coating system transmits 99.9% of light, reaching the physical limit of optical performance for ophthalmic lenses.
+                </p>
+                <div class="flex gap-4">
+                    <div class="px-4 py-2 rounded-full glass-premium border-warm-200 text-[10px] font-black uppercase text-midnight tracking-widest">7-Layer AR Stack</div>
+                    <div class="px-4 py-2 rounded-full glass-premium border-warm-200 text-[10px] font-black uppercase text-midnight tracking-widest">Ultra-Durable</div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
+</section>
 </section>
 @endforeach
 

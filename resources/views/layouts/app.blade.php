@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="@yield('meta_description', 'Lenz Breeze - Premium optical lenses manufacturer. Experience crystal-clear vision with our advanced lens technologies including Blue Cut, Anti-Glare, Photochromic and Polarized lenses.')">
-    <meta property="og:title" content="@yield('title', 'Lenz Breeze - Premium Optical Lenses')">
-    <meta property="og:description" content="@yield('meta_description', 'Premium optical lenses by Lenz Breeze and EYE MEK. Advanced technologies for crystal-clear vision.')">
+    <meta name="description" content="@yield('meta_description', 'EYE MEK - India\'s premier optical lens manufacturer. Premium quality lenses with cutting-edge technology.')">
+    <meta property="og:title" content="@yield('title', 'EYE MEK - Premium Optical Lenses')">
+    <meta property="og:description" content="@yield('meta_description', 'Premium optical lenses by EYE MEK. Advanced technologies for crystal-clear vision.')">
     <meta property="og:type" content="website">
-    <title>@yield('title', 'Lenz Breeze - Premium Optical Lenses')</title>
+    <title>@yield('title', 'EYE MEK - Premium Optical Lenses')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">

@@ -99,17 +99,4 @@
     </div>
 </div>
 
-<style>
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
-    }
-    .animate-shake { animation: shake 0.4s ease-in-out 0s 1; }
-    .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-</style>
 @endsection
