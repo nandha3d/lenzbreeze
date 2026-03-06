@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
+use App\Models\WebProduct;
 use App\Models\ProductCategory;
 use App\Models\Inquiry;
 use App\Models\Subscriber;
 use App\Models\Page;
 use App\Models\Warranty;
+use App\Models\Retailer;
+use App\Models\QrCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -16,98 +18,19 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $productCount = Product::count();
-        $newInquiries = Inquiry::where('status', 'new')->count();
-        $subscriberCount = Subscriber::where('status', 'active')->count();
-        $pageCount = Page::count();
-        $warrantyCount = Warranty::count();
-        
-        $recentInquiries = Inquiry::latest()->take(5)->get();
-        $recentSubscribers = Subscriber::latest()->take(5)->get();
-        $recentWarranties = Warranty::latest()->take(5)->get();
-
-        return view('admin.dashboard', compact(
-            'productCount', 
-            'newInquiries', 
-            'subscriberCount', 
-            'pageCount', 
-            'warrantyCount',
-            'recentInquiries', 
-            'recentSubscribers',
-            'recentWarranties'
-        ));
-    }
-
-    // Warranties
-    public function warranties(Request $request)
-    {
-        $query = Warranty::latest();
-        if ($request->filled('search')) {
-            $query->where('serial_number', 'like', '%' . $request->search . '%')
-                  ->orWhere('customer_name', 'like', '%' . $request->search . '%');
-        }
-        $warranties = $query->paginate(20);
-        return view('admin.warranties.index', compact('warranties'));
-    }
-
-    public function createWarranty()
-    {
-        return view('admin.warranties.form');
-    }
-
-    public function storeWarranty(Request $request)
-    {
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'customer_name' => 'required|string|max:255',
-            'retailer_name' => 'nullable|string|max:255',
-            'purchase_date' => 'required|date',
-            'expiry_date' => 'required|date|after:purchase_date',
-            'status' => 'required|in:active,expired,void',
-            'notes' => 'nullable|string',
-        ]);
-
-        Warranty::create($validated);
-        return redirect()->route('admin.warranties')->with('success', 'Warranty generated successfully.');
-    }
-
-    public function editWarranty(Warranty $warranty)
-    {
-        return view('admin.warranties.form', compact('warranty'));
-    }
-
-    public function updateWarranty(Request $request, Warranty $warranty)
-    {
-        $validated = $request->validate([
-            'product_name' => 'required|string|max:255',
-            'customer_name' => 'required|string|max:255',
-            'retailer_name' => 'nullable|string|max:255',
-            'purchase_date' => 'required|date',
-            'expiry_date' => 'required|date|after:purchase_date',
-            'status' => 'required|in:active,expired,void',
-            'notes' => 'nullable|string',
-        ]);
-
-        $warranty->update($validated);
-        return redirect()->route('admin.warranties')->with('success', 'Warranty updated successfully.');
-    }
-
-    public function deleteWarranty(Warranty $warranty)
-    {
-        $warranty->delete();
-        return redirect()->route('admin.warranties')->with('success', 'Warranty deleted successfully.');
+        return redirect('/admin/dashboard');
     }
 
     // Products
     public function products()
     {
-        $products = Product::with('category')->orderBy('display_order')->paginate(15);
+        $products = WebProduct::with('category')->latest()->paginate(15);
         return view('admin.products.index', compact('products'));
     }
 
     public function createProduct()
     {
-        $categories = ProductCategory::active()->orderBy('display_order')->get();
+        $categories = ProductCategory::active()->latest()->get();
         return view('admin.products.form', compact('categories'));
     }
 
@@ -131,17 +54,17 @@ class AdminController extends Controller
             $validated['image'] = $request->file('image')->store('products', 'public');
         }
 
-        Product::create($validated);
-        return redirect()->route('admin.products')->with('success', 'Product created successfully.');
+        WebProduct::create($validated);
+        return redirect()->route('admin.web_products')->with('success', 'Product created successfully.');
     }
 
-    public function editProduct(Product $product)
+    public function editProduct(WebProduct $product)
     {
         $categories = ProductCategory::active()->orderBy('display_order')->get();
         return view('admin.products.form', compact('product', 'categories'));
     }
 
-    public function updateProduct(Request $request, Product $product)
+    public function updateProduct(Request $request, WebProduct $product)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -162,13 +85,13 @@ class AdminController extends Controller
         }
 
         $product->update($validated);
-        return redirect()->route('admin.products')->with('success', 'Product updated successfully.');
+        return redirect()->route('admin.web_products')->with('success', 'Product updated successfully.');
     }
 
-    public function deleteProduct(Product $product)
+    public function deleteProduct(WebProduct $product)
     {
         $product->delete();
-        return redirect()->route('admin.products')->with('success', 'Product deleted successfully.');
+        return redirect()->route('admin.web_products')->with('success', 'Product deleted successfully.');
     }
 
     // Inquiries
@@ -227,5 +150,68 @@ class AdminController extends Controller
         ]);
         $page->update($validated);
         return redirect()->route('admin.pages')->with('success', 'Page updated successfully.');
+    }
+
+    // ─── QR Codes ────────────────────────────────────────────────────────────
+
+    public function qrCodes(Request $request)
+    {
+        $query = QrCode::latest();
+        if ($request->filled('search')) {
+            $query->where('label', 'like', '%' . $request->search . '%')
+                  ->orWhere('content', 'like', '%' . $request->search . '%');
+        }
+        $qrCodes = $query->paginate(24);
+        return view('admin.qrcodes.index', compact('qrCodes'));
+    }
+
+    public function createQrCode()
+    {
+        return view('admin.qrcodes.create');
+    }
+
+    public function storeQrCode(Request $request)
+    {
+        $validated = $request->validate([
+            'label'    => 'required|string|max:255',
+            'content'  => 'required|string|max:2048',
+            'fg_color' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',
+            'size'     => 'required|in:256,512,1024,2048',
+        ]);
+
+        $qrCode = QrCode::create($validated);
+        return redirect()->route('admin.qrcodes.show', $qrCode)
+                         ->with('success', 'QR Code created successfully.');
+    }
+
+    public function showQrCode(QrCode $qrCode)
+    {
+        return view('admin.qrcodes.show', compact('qrCode'));
+    }
+
+    public function editQrCode(QrCode $qrCode)
+    {
+        return view('admin.qrcodes.edit', compact('qrCode'));
+    }
+
+    public function updateQrCode(Request $request, QrCode $qrCode)
+    {
+        $validated = $request->validate([
+            'label'    => 'required|string|max:255',
+            'content'  => 'required|string|max:2048',
+            'fg_color' => 'required|regex:/^#[0-9A-Fa-f]{6}$/',
+            'size'     => 'required|in:256,512,1024,2048',
+        ]);
+
+        $qrCode->update($validated);
+        return redirect()->route('admin.qrcodes.show', $qrCode)
+                         ->with('success', 'QR Code updated successfully.');
+    }
+
+    public function destroyQrCode(QrCode $qrCode)
+    {
+        $qrCode->delete();
+        return redirect()->route('admin.qrcodes')
+                         ->with('success', 'QR Code deleted.');
     }
 }

@@ -3,15 +3,28 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "chillerlan/php-qrcode": "^5.0",
+        "doctrine/dbal": "^4.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "intervention/image": "^3",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "livewire/livewire": "^4.1"
+        "laravel/ui": "^4.6",
+        "livewire/livewire": "^4.1",
+        "nwidart/laravel-modules": "^11.0",
+        "picqer/php-barcode-generator": "^3.2",
+        "spatie/laravel-permission": "^6.0",
+        "stripe/stripe-php": "^16.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.14",
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
@@ -23,6 +36,9 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "Modules\\": "Modules/",
+            "Collective\\Html\\": "packages/laravel-collective-html/src/",
+            "Illuminate\\Foundation\\Auth\\": "vendor/laravel/ui/auth-backend/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
@@ -79,9 +95,18 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true
-        }
+            "php-http/discovery": true,
+            "wikimedia/composer-merge-plugin": true
+        },
+        "secure-http": false
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "name": "laravel-collective-html",
+            "type": "path",
+            "url": "packages/laravel-collective-html"
+        }
+    ]
 }

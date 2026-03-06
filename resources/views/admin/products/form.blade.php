@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="max-w-3xl">
-    <form action="{{ isset($product) ? route('admin.products.update', $product) : route('admin.products.store') }}" method="POST" class="space-y-6">
+    <form action="{{ isset($product) ? route('admin.web_products.update', $product) : route('admin.web_products.store') }}" method="POST" class="space-y-6">
         @csrf
         @if(isset($product)) @method('PUT') @endif
 
@@ -95,7 +95,7 @@
 
         <div class="flex items-center gap-4">
             <button type="submit" class="btn-primary">{{ isset($product) ? 'Update Product' : 'Create Product' }}</button>
-            <a href="{{ route('admin.products') }}" class="btn-secondary">Cancel</a>
+            <a href="{{ route('admin.web_products') }}" class="btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

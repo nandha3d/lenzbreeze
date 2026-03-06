@@ -7,44 +7,90 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    {{-- Dripicons for unified sidebar --}}
+    <link rel="stylesheet" href="{{ asset('vendor/dripicons/webfont.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Unified sidebar styles for LenzBreeze Tailwind layout */
+        .unified-sidebar-nav { list-style: none; padding: 8px 12px; margin: 0; }
+        .unified-sidebar-nav .nav-section-header {
+            color: rgba(255,255,255,0.35);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 16px 12px 6px;
+            margin-top: 4px;
+        }
+        .unified-sidebar-nav .nav-item > a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: rgba(255,255,255,0.55);
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+        .unified-sidebar-nav .nav-item > a i {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+        .unified-sidebar-nav .nav-item > a:hover {
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+        }
+        .unified-sidebar-nav .nav-item.active > a {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .unified-sidebar-nav .submenu {
+            list-style: none;
+            padding: 2px 0 4px 32px;
+            margin: 0;
+        }
+        .unified-sidebar-nav .submenu li a {
+            display: block;
+            padding: 5px 12px;
+            color: rgba(255,255,255,0.45);
+            font-size: 12.5px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+        }
+        .unified-sidebar-nav .submenu li a:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.04);
+        }
+        /* Submenu collapse/expand via JS */
+        .unified-sidebar-nav .submenu { display: none; }
+        .unified-sidebar-nav .submenu.show { display: block; }
+    </style>
 </head>
 <body class="min-h-screen bg-warm-100 font-sans" x-data="{ sidebarOpen: true }">
     <div class="flex">
         {{-- Sidebar --}}
-        <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="fixed inset-y-0 left-0 z-30 bg-brand-900 text-white transition-all duration-300 flex flex-col">
+        <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="fixed inset-y-0 left-0 z-30 bg-brand-900 text-white transition-all duration-300 flex flex-col overflow-y-auto">
             {{-- Logo --}}
-            <div class="h-16 flex items-center px-5 border-b border-white/10 theme-eyemek">
+            <div class="h-16 flex items-center px-5 border-b border-white/10 shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background-color: var(--color-logo-bg)">
-                        <span class="font-bold text-sm font-display" style="color: var(--color-logo-text)">EM</span>
+                        <span class="font-bold text-sm font-display" style="color: var(--color-logo-text)">LB</span>
                     </div>
                     <span x-show="sidebarOpen" x-cloak class="font-display font-bold text-lg">Admin</span>
                 </a>
             </div>
 
-            {{-- Nav --}}
-            <nav class="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-                @php
-                    $nav = [
-                        ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>'],
-                        ['route' => 'admin.products', 'label' => 'Products', 'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>'],
-                        ['route' => 'admin.inquiries', 'label' => 'Inquiries', 'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>'],
-                        ['route' => 'admin.subscribers', 'label' => 'Subscribers', 'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>'],
-                        ['route' => 'admin.warranties', 'label' => 'Warranties', 'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>'],
-                        ['route' => 'admin.pages', 'label' => 'Pages', 'icon' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>'],
-                    ];
-                @endphp
-                @foreach($nav as $item)
-                    <a href="{{ route($item['route']) }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors {{ request()->routeIs($item['route'] . '*') ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white' }}">
-                        {!! $item['icon'] !!}
-                        <span x-show="sidebarOpen" x-cloak>{{ $item['label'] }}</span>
-                    </a>
-                @endforeach
+            {{-- Unified Nav --}}
+            <nav class="flex-1 overflow-y-auto">
+                @include('partials.unified-sidebar')
             </nav>
 
             {{-- Bottom --}}
-            <div class="border-t border-white/10 p-3">
+            <div class="border-t border-white/10 p-3 shrink-0">
                 <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:bg-white/5 hover:text-white transition-colors">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                     <span x-show="sidebarOpen" x-cloak>View Website</span>
@@ -93,5 +139,23 @@
             </main>
         </div>
     </div>
+    @stack('scripts')
+    <script>
+        // Unified sidebar submenu toggle (no Bootstrap JS available in Tailwind layout)
+        document.querySelectorAll('.unified-sidebar-nav [data-toggle="collapse"]').forEach(function(trigger) {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                var target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.classList.toggle('show');
+                    this.setAttribute('aria-expanded', target.classList.contains('show'));
+                }
+            });
+        });
+        // Auto-expand active submenus
+        document.querySelectorAll('.unified-sidebar-nav .nav-item.active .submenu').forEach(function(sub) {
+            sub.classList.add('show');
+        });
+    </script>
 </body>
 </html>

@@ -3,6 +3,8 @@
 @section('meta_description', 'EYE MEK - India\'s premier optical lens manufacturer. Premium quality lenses with cutting-edge technology including Blue Cut, Anti-Glare, Photochromic and Polarized lenses.')
 
 @section('content')
+<div class="lb-emergency-recovery-test flex lg:block text-brand-500"></div>
+
 {{-- Hero Section --}}
 <section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden" 
     x-data="{ 

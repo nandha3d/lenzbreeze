@@ -7,10 +7,11 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     @php
         $stats = [
+        $stats = [
             ['label' => 'Total Products', 'value' => $productCount, 'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>', 'color' => 'text-blue-600 bg-blue-50'],
             ['label' => 'New Inquiries', 'value' => $newInquiries, 'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>', 'color' => 'text-amber-600 bg-amber-50'],
-            ['label' => 'Subscribers', 'value' => $subscriberCount, 'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>', 'color' => 'text-green-600 bg-green-50'],
-            ['label' => 'Active Warranties', 'value' => $warrantyCount, 'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>', 'color' => 'text-accent-600 bg-accent-50'],
+            ['label' => 'Total Orders', 'value' => $saleCount, 'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.35 5.4A2 2 0 007.6 21h8.8a2 2 0 001.95-1.56L17 13M9 21h6"/></svg>', 'color' => 'text-accent-600 bg-accent-50'],
+            ['label' => 'Total Revenue', 'value' => "$".number_format($revenue, 2), 'icon' => '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>', 'color' => 'text-green-600 bg-green-50'],
         ];
     @endphp
     @foreach($stats as $stat)
@@ -55,26 +56,7 @@
         </div>
     </div>
 
-    {{-- Recent Subscribers --}}
-    <div class="card">
-        <div class="px-6 py-4 border-b border-warm-200/50 flex items-center justify-between">
-            <h2 class="font-display font-semibold text-warm-700">Recent Subscribers</h2>
-            <a href="{{ route('admin.subscribers') }}" class="text-sm text-accent-600 hover:text-accent-700">View All →</a>
-        </div>
-        <div class="divide-y divide-warm-100">
-            @forelse($recentSubscribers as $sub)
-                <div class="px-6 py-4 flex items-center justify-between">
-                    <div>
-                        <p class="font-medium text-warm-700 text-sm">{{ $sub->email }}</p>
-                        <p class="text-xs text-warm-300">{{ $sub->subscribed_at?->diffForHumans() ?? 'N/A' }}</p>
-                    </div>
-                    <span class="px-2 py-0.5 rounded-full text-xs font-medium {{ $sub->status === 'active' ? 'bg-green-100 text-green-700' : 'bg-warm-100 text-warm-500' }}">{{ ucfirst($sub->status) }}</span>
-                </div>
-            @empty
-                <div class="px-6 py-8 text-center text-warm-400 text-sm">No subscribers yet.</div>
-            @endforelse
-        </div>
-    </div>
+
 
     {{-- Recent Warranties --}}
     <div class="card lg:col-span-2">

@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        ini_set('memory_limit', '512M');
+        class_alias(\App\Helpers\DNS1D::class, 'DNS1D');
+        class_alias(\App\Helpers\DNS2D::class, 'DNS2D');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\WebProduct;
 use App\Models\ProductCategory;
 use App\Models\Page;
 use App\Models\Setting;
@@ -43,9 +43,10 @@ class PageController extends Controller
 
     protected function renderHome($view)
     {
-        $featuredProducts = Product::featured()->active()->orderBy('display_order')->take(4)->get();
-        $categories = ProductCategory::active()->orderBy('display_order')->get();
-        $promoProduct = Product::where('slug', 'premium-progressive-rx')->first();
+        $featuredProducts = WebProduct::activeFeatured()->take(4)->get();
+        $categories = ProductCategory::active()->get();
+        $promoProduct = WebProduct::find(1);
+
         return view($view, compact('featuredProducts', 'categories', 'promoProduct'));
     }
 
@@ -56,23 +57,24 @@ class PageController extends Controller
 
     public function products()
     {
-        $categories = ProductCategory::active()->withCount(['products' => fn($q) => $q->active()])->orderBy('display_order')->get();
-        $products = Product::active()->with('category')->orderBy('display_order')->get();
+        $categories = ProductCategory::active()->withCount('products')->get();
+        $products = WebProduct::activeStandard()->with('category')->get();
+
         return view('pages.products.index', compact('categories', 'products'));
     }
 
     public function productsByCategory(string $slug)
     {
         $category = ProductCategory::where('slug', $slug)->firstOrFail();
-        $products = Product::active()->where('category_id', $category->id)->orderBy('display_order')->get();
-        $categories = ProductCategory::active()->orderBy('display_order')->get();
+        $products = WebProduct::activeStandard()->where('category_id', $category->id)->get();
+        $categories = ProductCategory::active()->get();
         return view('pages.products.index', compact('category', 'products', 'categories'));
     }
 
     public function productShow(string $slug)
     {
-        $product = Product::where('slug', $slug)->active()->firstOrFail();
-        $relatedProducts = Product::active()->where('category_id', $product->category_id)->where('id', '!=', $product->id)->take(3)->get();
+        $product = WebProduct::activeStandard()->where('slug', $slug)->firstOrFail();
+        $relatedProducts = WebProduct::activeStandard()->where('category_id', $product->category_id)->where('id', '!=', $product->id)->take(3)->get();
         return view('pages.products.show', compact('product', 'relatedProducts'));
     }
 
@@ -112,9 +114,9 @@ class PageController extends Controller
     {
         $warranty = null;
         if ($request->filled('serial')) {
-            $warranty = Warranty::where('serial_number', $request->serial)->first();
+            $warranty = Warranty::with('retailer')->where('serial_number', $request->serial)->first();
             if (!$warranty) {
-                return back()->with('error', 'Invalid Serial Number.');
+                return back()->with('error', 'No warranty found for this serial number. Please check and try again.');
             }
         }
         return view('pages.warranty', compact('warranty'));

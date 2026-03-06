@@ -5,7 +5,7 @@
 @section('content')
 <div class="flex items-center justify-between mb-6">
     <p class="text-warm-400 text-sm">Manage your product catalog</p>
-    <a href="{{ route('admin.products.create') }}" class="btn-primary text-sm">
+    <a href="{{ route('admin.web_products.create') }}" class="btn-primary text-sm">
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         Add Product
     </a>
@@ -38,9 +38,12 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="px-2 py-0.5 rounded-full text-xs font-medium {{ $product->brand === 'Lenz Breeze' ? 'bg-brand-100 text-brand-700' : 'bg-warm-200 text-warm-700' }}">{{ $product->brand }}</span>
+                        @php
+                            $brandName = is_string($product->brand) ? $product->brand : ($product->brand->name ?? $product->brand->title ?? '—');
+                        @endphp
+                        <span class="px-2 py-0.5 rounded-full text-xs font-medium {{ $brandName === 'Lenz Breeze' ? 'bg-brand-100 text-brand-700' : 'bg-warm-200 text-warm-700' }}">{{ $brandName }}</span>
                     </td>
-                    <td class="px-6 py-4 text-warm-500">{{ $product->category?->name ?? '—' }}</td>
+                    <td class="px-6 py-4 text-warm-500">{{ is_string($product->category) ? $product->category : ($product->category->name ?? $product->category->title ?? '—') }}</td>
                     <td class="px-6 py-4">
                         @if($product->is_featured)
                             <span class="text-accent-500">★</span>
@@ -53,10 +56,10 @@
                     </td>
                     <td class="px-6 py-4 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <a href="{{ route('admin.products.edit', $product) }}" class="p-1.5 rounded-lg text-warm-400 hover:text-brand-500 hover:bg-brand-50 transition-colors">
+                            <a href="{{ route('admin.web_products.edit', $product) }}" class="p-1.5 rounded-lg text-warm-400 hover:text-brand-500 hover:bg-brand-50 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                             </a>
-                            <form action="{{ route('admin.products.delete', $product) }}" method="POST" onsubmit="return confirm('Delete this product?')">
+                            <form action="{{ route('admin.web_products.delete', $product) }}" method="POST" onsubmit="return confirm('Delete this product?')">
                                 @csrf @method('DELETE')
                                 <button class="p-1.5 rounded-lg text-warm-400 hover:text-red-500 hover:bg-red-50 transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
@@ -69,7 +72,7 @@
         </tbody>
     </table>
     @if($products->isEmpty())
-        <div class="py-12 text-center text-warm-400">No products yet. <a href="{{ route('admin.products.create') }}" class="text-accent-600 hover:underline">Add your first product</a>.</div>
+        <div class="py-12 text-center text-warm-400">No products yet. <a href="{{ route('admin.web_products.create') }}" class="text-accent-600 hover:underline">Add your first product</a>.</div>
     @endif
 </div>
 @endsection

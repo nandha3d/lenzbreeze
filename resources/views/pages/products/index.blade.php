@@ -236,7 +236,7 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
                         ];
                         $tags = $lifestyleTags[$product->slug] ?? [];
                     @endphp
-                    <a href="{{ route('products.show', $product->slug) }}" class="card group shimmer-hover flex flex-col h-full border border-warm-200/50">
+                    <a href="{{ $product->slug ? route('products.show', $product->slug) : '#' }}" class="card group shimmer-hover flex flex-col h-full border border-warm-200/50">
                         {{-- Image Area --}}
                         <div class="aspect-[4/3] bg-gradient-to-br from-brand-50 to-accent-50 flex items-center justify-center relative overflow-hidden shrink-0">
                             @if($product->image)

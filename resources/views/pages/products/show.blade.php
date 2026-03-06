@@ -320,7 +320,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                     </div>
 
                     <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
-                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-xs">EYE MEK: PREMIUM OPTICS FOR THE MODERN VISIONARY.</span>
+                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-xs">PREMIUM OPTICS FOR THE MODERN VISIONARY.</span>
                     </div>
                 </div>
             </div>
@@ -452,47 +452,10 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
 </style>
 @endif
 
-{{-- Interactive Lens Simulator (Before/After) --}}
-<section class="py-24 bg-white overflow-hidden">
-    <div class="container-custom">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-gold font-black uppercase text-xs tracking-[0.3em] mb-4">Precision Comparison</h2>
-            <h3 class="text-4xl md:text-6xl font-display font-black text-midnight leading-tight">See the EYE MEK Difference.</h3>
-            <p class="text-warm-500 mt-6 text-lg">Drag the slider to compare standard vision with the ultra-high definition clarity of our signature lenses.</p>
-        </div>
 
-        <div class="relative max-w-5xl mx-auto rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white" x-data="{ position: 50 }" @mousemove="if($event.buttons === 1) position = Math.max(0, Math.min(100, (($event.clientX - $el.getBoundingClientRect().left) / $el.offsetWidth) * 100))" @touchmove="position = Math.max(0, Math.min(100, (($event.touches[0].clientX - $el.getBoundingClientRect().left) / $el.offsetWidth) * 100))">
-            {{-- After Image (EYE MEK) --}}
-            <div class="relative aspect-[16/9] w-full">
-                <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=1600&h=900&fit=crop&auto=format" alt="After EYE MEK" class="absolute inset-0 w-full h-full object-cover">
-                <div class="absolute bottom-10 right-10 glass-premium px-6 py-2 rounded-full text-midnight font-black uppercase text-xs tracking-widest z-20">EYE MEK HD Vision</div>
-            </div>
-
-            {{-- Before Image (Standard) --}}
-            <div class="absolute inset-0 w-full h-full overflow-hidden transition-all duration-100 ease-out" :style="'width: ' + position + '%'">
-                <div class="relative aspect-[16/9] w-[min(100vw-2rem,64rem)]">
-                    <img src="https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=1600&h=900&fit=crop&auto=format&blur=50" alt="Before EYE MEK" class="absolute inset-0 w-full h-full object-cover filter blur-sm grayscale-[0.3]">
-                    <div class="absolute bottom-10 left-10 glass-premium px-6 py-2 rounded-full text-midnight font-black uppercase text-xs tracking-widest z-20">Standard Vision</div>
-                </div>
-            </div>
-
-            {{-- Slider Handle --}}
-            <div class="absolute inset-y-0 z-30 flex items-center justify-center cursor-col-resize group" :style="'left: ' + position + '%'">
-                <div class="w-1 h-full bg-white relative">
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-white rounded-full shadow-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <div class="flex gap-1">
-                            <svg class="w-4 h-4 text-midnight rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
-                            <svg class="w-4 h-4 text-midnight" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"/></svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 {{-- Product Detail --}}
-<section class="theme-eyemek" id="variants">
+<section id="variants">
 <section class="section-padding bg-white bg-geometric bg-geometric-circles">
     <div class="container-custom">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">

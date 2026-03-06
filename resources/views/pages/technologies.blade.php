@@ -441,6 +441,120 @@
             </div>
         </div>
         @endif
+
+        {{-- Polarized Tint Color Showcase --}}
+        @if($tech['demo_type'] === 'polarized')
+        <div class="mt-16 p-8 md:p-12 rounded-[3rem] bg-white border border-warm-200/60 shadow-2xl relative overflow-hidden"
+             x-data="{
+                activeColor: 'black',
+                colors: [
+                    { id: 'black', name: 'Gray / Black', swatch: '#1a1a1a', desc: 'Natural color perception with maximum glare reduction. Ideal for bright sunlight and driving.' },
+                    { id: 'brown', name: 'Brown / Amber', swatch: '#7B4B2A', desc: 'Enhances contrast and depth perception. Perfect for variable light conditions and outdoor sports.' },
+                    { id: 'green', name: 'Green', swatch: '#2D5A27', desc: 'Balances color accuracy with glare reduction. Classic choice for all-day outdoor comfort.' }
+                ]
+             }">
+            {{-- Decorative background --}}
+            <div class="absolute -top-20 -right-20 w-72 h-72 bg-purple-200/15 blur-[100px] rounded-full pointer-events-none"></div>
+            <div class="absolute -bottom-16 -left-16 w-56 h-56 bg-violet-200/15 blur-[80px] rounded-full pointer-events-none"></div>
+
+            <div class="relative z-10">
+                {{-- Header --}}
+                <div class="text-center mb-10">
+                    <h2 class="text-purple-600 font-black uppercase text-xs tracking-[0.3em] mb-3">Available Tint Options</h2>
+                    <h3 class="text-3xl md:text-5xl font-display font-black text-midnight leading-tight">
+                        Choose Your <span class="text-purple-500">Tint.</span>
+                    </h3>
+                    <p class="text-warm-500 mt-3 text-lg max-w-xl mx-auto">See how each polarized tint looks on our lenses. Click a color to preview.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    {{-- Spectacles Display --}}
+                    <div class="lg:col-span-7">
+                        <div class="relative aspect-[4/3] max-w-2xl mx-auto bg-gradient-to-br from-warm-50 via-white to-purple-50/30 rounded-[2rem] border border-warm-100/50 shadow-xl overflow-hidden flex items-center justify-center p-8">
+                            {{-- Glass shimmer --}}
+                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-60 pointer-events-none"></div>
+
+                            {{-- Spectacles images with crossfade --}}
+                            <img src="{{ asset('images/spectacles-black.png') }}"
+                                 alt="Black tinted polarized spectacles"
+                                 class="absolute inset-0 w-full h-full object-contain p-6 md:p-10 transition-opacity duration-700 ease-in-out"
+                                 :class="activeColor === 'black' ? 'opacity-100' : 'opacity-0'">
+                            <img src="{{ asset('images/spectacles-brown.png') }}"
+                                 alt="Brown tinted polarized spectacles"
+                                 class="absolute inset-0 w-full h-full object-contain p-6 md:p-10 transition-opacity duration-700 ease-in-out"
+                                 :class="activeColor === 'brown' ? 'opacity-100' : 'opacity-0'">
+                            <img src="{{ asset('images/spectacles-green.png') }}"
+                                 alt="Green tinted polarized spectacles"
+                                 class="absolute inset-0 w-full h-full object-contain p-6 md:p-10 transition-opacity duration-700 ease-in-out"
+                                 :class="activeColor === 'green' ? 'opacity-100' : 'opacity-0'">
+
+                            {{-- Active color label badge --}}
+                            <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20">
+                                <div class="px-5 py-2 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-warm-100 flex items-center gap-2.5">
+                                    <div class="w-3 h-3 rounded-full shadow-inner border border-black/10 transition-colors duration-500"
+                                         :style="'background-color: ' + colors.find(c => c.id === activeColor).swatch"></div>
+                                    <span class="text-xs font-black uppercase tracking-widest text-midnight" x-text="colors.find(c => c.id === activeColor).name"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Color selector + description --}}
+                    <div class="lg:col-span-5 flex flex-col gap-6">
+                        <div class="space-y-3">
+                            <template x-for="color in colors" :key="color.id">
+                                <button @click="activeColor = color.id"
+                                        class="w-full flex items-center gap-4 p-5 rounded-2xl border-2 transition-all duration-300 text-left group"
+                                        :class="activeColor === color.id
+                                            ? 'border-purple-400 bg-purple-50/70 shadow-lg shadow-purple-100/50 scale-[1.02]'
+                                            : 'border-warm-100 bg-white hover:border-purple-200 hover:bg-purple-50/30'">
+                                    {{-- Swatch --}}
+                                    <div class="w-12 h-12 rounded-xl shadow-md border-2 border-white shrink-0 transition-transform duration-300 group-hover:scale-110"
+                                         :style="'background-color: ' + color.swatch"></div>
+                                    {{-- Info --}}
+                                    <div class="flex-1 min-w-0">
+                                        <p class="font-display font-black text-midnight text-sm uppercase tracking-wider" x-text="color.name"></p>
+                                        <p class="text-warm-500 text-xs mt-1 leading-relaxed line-clamp-2" x-text="color.desc"></p>
+                                    </div>
+                                    {{-- Active indicator --}}
+                                    <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-300"
+                                         :class="activeColor === color.id ? 'bg-purple-500' : 'bg-warm-100'">
+                                        <svg x-show="activeColor === color.id" class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </div>
+                                </button>
+                            </template>
+                        </div>
+
+                        {{-- Extra info --}}
+                        <div class="p-5 rounded-2xl bg-midnight text-white relative overflow-hidden">
+                            <div class="absolute -top-6 -right-6 w-20 h-20 bg-purple-500/20 rounded-full blur-2xl"></div>
+                            <p class="text-purple-300 text-[10px] font-black uppercase tracking-[0.2em] mb-2">All Tints Include</p>
+                            <div class="grid grid-cols-2 gap-2 relative z-10">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                    <span class="text-[11px] font-bold text-white/80">99.9% Polarized</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                    <span class="text-[11px] font-bold text-white/80">UV400 Protection</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                    <span class="text-[11px] font-bold text-white/80">ANSI Z87.1</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                    <span class="text-[11px] font-bold text-white/80">SV & Progressive</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </section>
 </section>

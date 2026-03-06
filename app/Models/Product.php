@@ -3,43 +3,54 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
-    protected $fillable = [
-        'category_id', 'brand', 'name', 'slug', 'tagline', 'description',
-        'features', 'specifications', 'technologies', 'image', 'gallery',
-        'brochure_pdf', 'is_featured', 'display_order', 'is_active',
-        'meta_title', 'meta_description',
+    protected $connection = 'salepro';
+    protected $fillable =[
+        "name", "code", "type", "slug", "barcode_symbology", "brand_id", "type_id", "category_id", "unit_id", "purchase_unit_id", "sale_unit_id", "cost", "price", "wholesale_price", "qty", "alert_quantity", "daily_sale_objective", "promotion", "promotion_price", "starting_date", "last_date", "tax_id", "tax_method", "image", "file", "is_embeded", "is_batch", "is_variant", "is_diffPrice", "is_imei", "featured", "product_list", "variant_list", "qty_list", "price_list", "product_details", "short_description", "specification", "related_products", "variant_option", "variant_value", "is_active", "is_online", "in_stock", "track_inventory", "is_sync_disable", "woocommerce_product_id","woocommerce_media_id","tags","meta_title","meta_description"
+        ,"base", "addition", "lr", 'product_type_id'
     ];
 
-    protected $casts = [
-        'features' => 'array',
-        'specifications' => 'array',
-        'technologies' => 'array',
-        'gallery' => 'array',
-        'is_featured' => 'boolean',
-        'is_active' => 'boolean',
-    ];
-
-    public function category(): BelongsTo
+    public function category()
     {
-        return $this->belongsTo(ProductCategory::class, 'category_id');
+    	return $this->belongsTo('App\Models\Category');
     }
 
-    public function scopeActive($query)
+    public function productType()
     {
-        return $query->where('is_active', true);
+    	return $this->belongsTo('App\Models\ProductType');
     }
 
-    public function scopeFeatured($query)
+    public function brand()
     {
-        return $query->where('is_featured', true);
+    	return $this->belongsTo('App\Models\Brand');
     }
 
-    public function scopeByBrand($query, string $brand)
+    public function unit()
     {
-        return $query->where('brand', $brand);
+        return $this->belongsTo('App\Models\Unit');
+    }
+
+    public function variant()
+    {
+        return $this->belongsToMany('App\Models\Variant', 'product_variants')->withPivot('id', 'item_code', 'additional_cost', 'additional_price');
+    }
+
+    public function scopeActiveStandard($query)
+    {
+        return $query->where([
+            ['is_active', true],
+            ['type', 'standard']
+        ]);
+    }
+
+    public function scopeActiveFeatured($query)
+    {
+        return $query->where([
+            ['is_active', true],
+            ['featured', 1]
+        ]);
     }
 }
+

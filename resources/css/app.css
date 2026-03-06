@@ -1,209 +1,404 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+@layer base {
+    :root {
+        --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
 
-@theme {
-    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-    --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+        /* Brand Colors — deep navy family */
+        --color-brand-50: #e8f0f8;
+        --color-brand-100: #c5d9ed;
+        --color-brand-200: #9fbfe0;
+        --color-brand-300: #7aa5d3;
+        --color-brand-400: #5b8ec7;
+        --color-brand-500: #0e3558;
+        --color-brand-600: #0c2d4c;
+        --color-brand-700: #0a243d;
+        --color-brand-800: #071a2e;
+        --color-brand-900: #04101d;
 
-    /* Brand Colors — deep navy family */
-    --color-brand-50: #e8f0f8;
-    --color-brand-100: #c5d9ed;
-    --color-brand-200: #9fbfe0;
-    --color-brand-300: #7aa5d3;
-    --color-brand-400: #5b8ec7;
-    --color-brand-500: #0e3558;
-    --color-brand-600: #0c2d4c;
-    --color-brand-700: #0a243d;
-    --color-brand-800: #071a2e;
-    --color-brand-900: #04101d;
+        /* Accent — teal family derived from #00afb0 */
+        --color-accent-50: #e6fafa;
+        --color-accent-100: #b3f0f0;
+        --color-accent-200: #80e6e6;
+        --color-accent-300: #4ddbdc;
+        --color-accent-400: #26d1d2;
+        --color-accent-500: #00afb0;
+        --color-accent-600: #009494;
+        --color-accent-700: #007a7a;
+        --color-accent-800: #005f60;
+        --color-accent-900: #003d3d;
 
-    /* Accent — teal family derived from #00afb0 */
-    /* Accent — teal family derived from #00afb0 */
-    --color-accent-50: #e6fafa;
-    --color-accent-100: #b3f0f0;
-    --color-accent-200: #80e6e6;
-    --color-accent-300: #4ddbdc;
-    --color-accent-400: #26d1d2;
-    --color-accent-500: #00afb0;
-    --color-accent-600: #009494;
-    --color-accent-700: #007a7a;
-    --color-accent-800: #005f60;
-    --color-accent-900: #003d3d;
+        /* Warm Gray */
+        --color-warm-50: #fafaf9;
+        --color-warm-100: #f5f5f4;
+        --color-warm-200: #e7e5e4;
+        --color-warm-300: #d6d3d1;
+        --color-warm-400: #a8a29e;
+        --color-warm-500: #78716c;
+        --color-warm-600: #57534e;
+        --color-warm-700: #44403c;
+        --color-warm-800: #292524;
+        --color-warm-900: #1c1917;
 
-    /* Warm Gray */
-    --color-warm-50: #fafaf9;
-    --color-warm-100: #f5f5f4;
-    --color-warm-200: #e7e5e4;
-    --color-warm-300: #d6d3d1;
-    --color-warm-400: #a8a29e;
-    --color-warm-500: #78716c;
-    --color-warm-600: #57534e;
-    --color-warm-700: #44403c;
-    --color-warm-800: #292524;
-    --color-warm-900: #1c1917;
+        /* Shadow colors — used in buttons & cards */
+        --shadow-accent: rgba(0, 175, 176, 0.3);
+        --shadow-accent-hover: rgba(0, 175, 176, 0.45);
 
-    /* Shadow colors — used in buttons & cards */
-    --shadow-accent: rgba(0, 175, 176, 0.3);
-    --shadow-accent-hover: rgba(0, 175, 176, 0.45);
+        /* Dynamic Logo Variables */
+        --color-logo-bg: var(--color-accent-500);
+        --color-logo-text: #ffffff;
 
-    /* Dynamic Logo Variables */
-    --color-logo-bg: var(--color-accent-500);
-    --color-logo-text: #ffffff;
+        /* Premium Design Tokens */
+        --color-midnight: #1a1a2e;
+        --color-gold: #d4af37;
+        --color-tech-cyan: #00d4ff;
+        --glass-blur: 20px;
+        --glass-opacity: 0.7;
 
-    /* Premium Design Tokens */
-    --color-midnight: #1a1a2e;
-    --color-gold: #d4af37;
-    --color-tech-cyan: #00d4ff;
-    --glass-blur: 20px;
-    --glass-opacity: 0.7;
+        /* Section Theme Variables */
+        --color-section-featured-bg: var(--color-brand-900);
+        --color-section-featured-text: #ffffff;
+        --color-section-featured-muted: rgba(255, 255, 255, 0.7);
+        --color-section-featured-border: rgba(255, 255, 255, 0.1);
+        --color-section-featured-card: rgba(255, 255, 255, 0.05);
 
-    /* Section Theme Variables */
-    --color-section-featured-bg: var(--color-brand-900);
-    --color-section-featured-text: #ffffff;
-    --color-section-featured-muted: rgba(255, 255, 255, 0.7);
-    --color-section-featured-border: rgba(255, 255, 255, 0.1);
-    --color-section-featured-card: rgba(255, 255, 255, 0.05);
+        /* Logo Yellow Theme */
+        --color-logo-yellow: #f8b803;
+        --shadow-yellow: rgba(248, 184, 3, 0.3);
+    }
 
-    /* Logo Yellow Theme */
-    --color-logo-yellow: #f8b803;
-    --shadow-yellow: rgba(248, 184, 3, 0.3);
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply font-sans text-warm-800 antialiased;
+    }
 }
 
-.glass-premium {
-    background: rgba(255, 255, 255, var(--glass-opacity));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-}
+@layer components {
+    .container-custom {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    }
 
-.glass-dark {
-    background: rgba(26, 26, 46, var(--glass-opacity));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-}
+    .glass-premium {
+        background: rgba(255, 255, 255, var(--glass-opacity));
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    }
 
-/* ===== Utility Overrides ===== */
-[x-cloak] {
-    display: none !important;
-}
+    .glass-dark {
+        background: rgba(26, 26, 46, var(--glass-opacity));
+        backdrop-filter: blur(var(--glass-blur));
+        -webkit-backdrop-filter: blur(var(--glass-blur));
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+    }
 
-.h-18 {
-    height: 4.5rem;
-}
+    /* ===== Section Spacing ===== */
+    .section-padding {
+        @apply py-16 md:py-24;
+    }
 
-.top-18 {
-    top: 4.5rem;
-}
+    /* ===== Gradient Utilities ===== */
+    .gradient-brand {
+        background: linear-gradient(135deg, var(--color-brand-500) 0%, var(--color-brand-700) 100%);
+    }
 
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
+    .gradient-accent {
+        background: linear-gradient(135deg, var(--color-accent-500) 0%, var(--color-accent-700) 100%);
+    }
 
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
+    .gradient-hero {
+        background: linear-gradient(135deg, var(--color-brand-500) 0%, var(--color-accent-600) 50%, var(--color-brand-700) 100%);
+    }
 
-.line-clamp-1 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-}
+    /* ===== Button Styles ===== */
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-white rounded-lg transition-all duration-300 ease-out;
+        background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-600));
+        box-shadow: 0 4px 14px var(--shadow-accent);
+    }
 
-.line-clamp-2 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-}
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px var(--shadow-accent-hover);
+    }
 
-/* ===== Global Styles ===== */
-html {
-    scroll-behavior: smooth;
-}
+    .btn-secondary {
+        @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-brand-500 bg-white border-2 border-brand-500 rounded-lg transition-all duration-300 ease-out;
+    }
 
-body {
-    @apply font-sans text-warm-800 antialiased;
-}
+    .btn-secondary:hover {
+        @apply text-white;
+        background: var(--color-brand-500);
+        transform: translateY(-2px);
+    }
 
-/* ===== Section Spacing ===== */
-.section-padding {
-    @apply py-16 md:py-24;
-}
+    .btn-outline-white {
+        @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-white border-2 border-white/40 rounded-lg transition-all duration-300 ease-out;
+        backdrop-filter: blur(4px);
+    }
 
-.container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-}
+    .btn-outline-white:hover {
+        @apply bg-white/10 border-white/70;
+        transform: translateY(-2px);
+    }
 
-/* ===== Gradient Utilities ===== */
-.gradient-brand {
-    background: linear-gradient(135deg, var(--color-brand-500) 0%, var(--color-brand-700) 100%);
-}
+    /* ===== Card Styles ===== */
+    .card {
+        @apply bg-white rounded-2xl shadow-lg transition-all duration-300 overflow-hidden;
+    }
 
-.gradient-accent {
-    background: linear-gradient(135deg, var(--color-accent-500) 0%, var(--color-accent-700) 100%);
-}
+    .card:hover {
+        @apply shadow-xl;
+        transform: translateY(-4px);
+    }
 
-.gradient-hero {
-    background: linear-gradient(135deg, var(--color-brand-500) 0%, var(--color-accent-600) 50%, var(--color-brand-700) 100%);
-}
+    .card-glass {
+        @apply rounded-2xl shadow-lg transition-all duration-300 overflow-hidden;
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
 
-/* ===== Button Styles ===== */
-.btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-white rounded-lg transition-all duration-300 ease-out;
-    background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-600));
-    box-shadow: 0 4px 14px var(--shadow-accent);
-}
+    /* ===== Section Headers ===== */
+    .section-title {
+        @apply font-display text-2xl md:text-3xl font-black text-brand-500;
+    }
 
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px var(--shadow-accent-hover);
-}
+    .section-subtitle {
+        @apply text-lg text-warm-500 mt-4 max-w-2xl;
+    }
 
-.btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-brand-500 bg-white border-2 border-brand-500 rounded-lg transition-all duration-300 ease-out;
-}
+    /* ===== WhatsApp Floating Button ===== */
+    .whatsapp-float {
+        @apply fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300;
+        background: #25D366;
+    }
 
-.btn-secondary:hover {
-    @apply text-white;
-    background: var(--color-brand-500);
-    transform: translateY(-2px);
-}
+    .whatsapp-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+    }
 
-.btn-outline-white {
-    @apply inline-flex items-center justify-center px-6 py-3 font-semibold text-white border-2 border-white/40 rounded-lg transition-all duration-300 ease-out;
-    backdrop-filter: blur(4px);
-}
+    /* ===== Admin Panel ===== */
+    .admin-sidebar {
+        @apply bg-brand-900 text-white min-h-screen w-64 transition-all duration-300;
+    }
 
-.btn-outline-white:hover {
-    @apply bg-white/10 border-white/70;
-    transform: translateY(-2px);
-}
+    .admin-sidebar a {
+        @apply flex items-center gap-3 px-6 py-3 text-warm-300 transition-colors duration-200;
+    }
 
-/* ===== Card Styles ===== */
-.card {
-    @apply bg-white rounded-2xl shadow-lg transition-all duration-300 overflow-hidden;
-}
+    .admin-sidebar a:hover,
+    .admin-sidebar a.active {
+        @apply bg-brand-700 text-white;
+    }
 
-.card:hover {
-    @apply shadow-xl;
-    transform: translateY(-4px);
-}
+    /* ===== Before/After Slider ===== */
+    .slider-container {
+        @apply relative w-full overflow-hidden rounded-2xl select-none;
+        aspect-ratio: 16/9;
+    }
 
-.card-glass {
-    @apply rounded-2xl shadow-lg transition-all duration-300 overflow-hidden;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    .slider-image {
+        @apply absolute top-0 left-0 w-full h-full object-cover;
+    }
+
+    .slider-handle {
+        @apply absolute top-0 bottom-0 w-1 bg-white cursor-col-resize z-20 flex items-center justify-center;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .slider-circle {
+        @apply w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-500 font-bold text-xs border-2 border-brand-500;
+    }
+
+    /* ===== Product Page Enhancements ===== */
+    .product-card-focus {
+        @apply relative overflow-hidden rounded-3xl transition-all duration-500 bg-white border border-warm-200;
+    }
+
+    .product-card-focus:hover {
+        @apply shadow-2xl;
+        transform: translateY(-8px) scale(1.02);
+    }
+
+    .variant-badge {
+        @apply inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold cursor-pointer transition-all duration-300;
+        background: var(--color-warm-100);
+        color: var(--color-brand-600);
+        border: 1px solid var(--color-warm-200);
+    }
+
+    .variant-badge:hover {
+        @apply bg-brand-500 text-white shadow-lg;
+        transform: translateY(-2px);
+    }
+
+    .variant-badge.active {
+        @apply bg-brand-500 text-white shadow-md;
+    }
+
+    .info-popup {
+        @apply fixed inset-0 z-[110] flex items-start justify-center p-4 pt-20 lg:pt-24 bg-brand-900/40 backdrop-blur-sm transition-all duration-500 overflow-y-auto;
+    }
+
+    .info-popup-content {
+        @apply bg-white rounded-3xl shadow-2xl relative transform transition-all duration-500;
+    }
+
+    .variant-image-item {
+        @apply relative flex flex-col items-center gap-3 p-4 rounded-2xl bg-white border border-warm-200 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-brand-300;
+    }
+
+    .variant-image-box {
+        @apply w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 overflow-hidden bg-warm-50 relative;
+    }
+
+    .variant-image-item:hover .variant-image-box {
+        @apply scale-110 -translate-y-1 shadow-md;
+    }
+
+    .variant-label {
+        @apply text-[10px] font-bold text-center text-warm-600 transition-colors uppercase tracking-widest leading-none;
+    }
+
+    .group:hover .variant-label {
+        @apply text-brand-600;
+    }
+
+    /* ---- Variant Card (redesigned) ---- */
+    .variant-card {
+        @apply relative flex flex-col items-center text-center gap-0 p-4 rounded-2xl bg-white border border-warm-200 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-brand-300 hover:-translate-y-0.5;
+    }
+
+    .variant-card-name {
+        @apply text-xs font-black text-warm-700 transition-colors uppercase tracking-wide leading-tight;
+    }
+
+    .variant-card:hover .variant-card-name {
+        @apply text-brand-600;
+    }
+
+    .variant-card-benefit {
+        @apply text-[10px] font-semibold text-warm-400 mt-0.5 leading-tight line-clamp-1;
+    }
+
+    .variant-card-cta {
+        @apply inline-flex items-center text-[10px] font-black text-accent-600 mt-2 uppercase tracking-wider opacity-0 transition-opacity duration-200;
+    }
+
+    .variant-card:hover .variant-card-cta {
+        @apply opacity-100;
+    }
+
+    /* ---- Sub-variant Toggle Buttons ---- */
+    .variant-sub-btn {
+        @apply px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 border cursor-pointer;
+    }
+
+    .variant-sub-btn.active {
+        @apply bg-brand-500 text-white border-brand-500 shadow-sm;
+    }
+
+    .variant-sub-btn:not(.active) {
+        @apply bg-white text-warm-500 border-warm-200 hover:border-brand-300 hover:text-brand-500;
+    }
+
+    /* ---- Lifestyle / Best For Tags ---- */
+    .lifestyle-tag {
+        @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-600 border border-brand-100;
+    }
+
+    /* ---- Variant Count Badge ---- */
+    .variant-count-badge {
+        @apply absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black bg-white/90 text-brand-500 shadow-sm backdrop-blur-sm border border-white/50 uppercase tracking-wider;
+    }
+
+    /* ---- Horizontal Variant Scroll Row ---- */
+    .variant-scroll-row {
+        @apply flex gap-4 overflow-x-auto pb-4 -mx-2 px-2;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-warm-200) transparent;
+    }
+
+    .variant-scroll-card {
+        @apply relative flex-shrink-0 flex flex-col items-center text-center p-3 rounded-2xl bg-white border border-warm-200 transition-all duration-300 cursor-pointer hover:shadow-xl hover:border-brand-300 hover:-translate-y-1;
+        width: 140px;
+        scroll-snap-align: start;
+    }
+
+    .variant-scroll-card .variant-img {
+        @apply w-20 h-20 rounded-xl overflow-hidden mb-2 transition-transform duration-300;
+    }
+
+    .variant-scroll-card:hover .variant-img {
+        @apply scale-110 -translate-y-0.5;
+    }
+
+    .variant-scroll-card .variant-img img {
+        @apply w-full h-full object-cover;
+    }
+
+    .variant-scroll-card-name {
+        @apply text-[10px] font-black text-warm-700 transition-colors uppercase tracking-wide leading-tight mt-1;
+    }
+
+    .variant-scroll-card:hover .variant-scroll-card-name {
+        @apply text-brand-600;
+    }
+
+    .variant-scroll-card-cta {
+        @apply inline-flex items-center text-[9px] font-black text-accent-600 mt-1.5 uppercase tracking-wider opacity-0 transition-opacity duration-200;
+    }
+
+    .variant-scroll-card:hover .variant-scroll-card-cta {
+        @apply opacity-100;
+    }
+
+    .variant-scroll-wrap {
+        @apply relative;
+    }
+
+    /* ---- Featured Section Wrapper (Dynamic) ---- */
+    .featured-section-card {
+        background: var(--color-section-featured-bg);
+        color: var(--color-section-featured-text);
+        border-radius: 2rem;
+        overflow: hidden;
+        border: 1px solid var(--color-section-featured-border);
+    }
+
+    .featured-section-card .text-muted {
+        color: var(--color-section-featured-muted);
+    }
+
+    .featured-section-card .card-highlight {
+        background: var(--color-section-featured-card);
+    }
+
+    .featured-section-card .border-default {
+        border-color: var(--color-section-featured-border);
+    }
+
+    .featured-section-card .bg-brand-500 {
+        background: var(--color-brand-500);
+    }
+
+    /* ---- Light Accent Card ---- */
+    .card-accent-light {
+        background: var(--color-accent-50);
+        border: 1px solid var(--color-accent-100);
+    }
 }
 
 /* ===== EYE MEK Theme (Localized) ===== */
@@ -219,20 +414,13 @@ body {
     --color-accent-800: #9f7411;
     --color-accent-900: #845f0e;
 
-    /* Logo Override for Eye Mek Theme */
     --color-logo-bg: #f0b61a;
-    /* Sharp gold/yellow */
     --color-logo-text: #0e3558;
-    /* readable brand-500 navy */
 
-    /* Section Theme Override for Eye Mek (Yellow Box) */
     --color-section-featured-bg: #f0b61a;
     --color-section-featured-text: #0e3558;
-    /* brand-500 navy */
     --color-section-featured-muted: rgba(14, 53, 88, 0.85);
-    /* Increased opacity for better contrast */
     --color-section-featured-border: rgba(14, 53, 88, 0.25);
-    /* More visible borders */
     --color-section-featured-card: rgba(14, 53, 88, 0.08);
 
     --shadow-accent: rgba(240, 182, 26, 0.3);
@@ -310,24 +498,40 @@ body {
     --shadow-accent-hover: rgba(240, 182, 26, 0.45);
 }
 
-/* ===== Section Headers ===== */
-.section-title {
-    @apply text-3xl md:text-4xl font-bold font-display text-brand-500;
+/* ===== Custom Utilities ===== */
+[x-cloak] {
+    display: none !important;
 }
 
-.section-subtitle {
-    @apply text-lg text-warm-500 mt-4 max-w-2xl;
+.h-18 {
+    height: 4.5rem;
 }
 
-/* ===== WhatsApp Floating Button ===== */
-.whatsapp-float {
-    @apply fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-all duration-300;
-    background: #25D366;
+.top-18 {
+    top: 4.5rem;
 }
 
-.whatsapp-float:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
 }
 
 /* ===== Animations ===== */
@@ -412,20 +616,6 @@ body {
 
 .delay-400 {
     animation-delay: 0.4s;
-}
-
-/* ===== Admin Panel ===== */
-.admin-sidebar {
-    @apply bg-brand-900 text-white min-h-screen w-64 transition-all duration-300;
-}
-
-.admin-sidebar a {
-    @apply flex items-center gap-3 px-6 py-3 text-warm-300 transition-colors duration-200;
-}
-
-.admin-sidebar a:hover,
-.admin-sidebar a.active {
-    @apply bg-brand-700 text-white;
 }
 
 /* ===== Advanced Animations ===== */
@@ -547,7 +737,7 @@ body {
     background-size: 30px 30px;
 }
 
-/* ---- Stripe-Reveal Transition Effect (Precision Clip-Path) ---- */
+/* ---- Stripe-Reveal Transition Effect ---- */
 .stripe-container {
     position: absolute;
     inset: 0;
@@ -570,7 +760,6 @@ body {
     pointer-events: none;
 }
 
-/* Precise Clip-Path Slices for 5 segments */
 .stripe-item:nth-child(1) {
     clip-path: inset(0 80% 0 0);
     transition-delay: 0.1s;
@@ -596,7 +785,6 @@ body {
     transition-delay: 0.5s;
 }
 
-/* Active & Leaving States */
 .active-slide .stripe-item {
     transform: scaleY(1);
     opacity: 1;
@@ -661,30 +849,7 @@ body {
     animation: glare-flash 1.5s ease-out infinite;
 }
 
-.hud-grid-bg {
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 30px 30px;
-}
-
-/* Before/After Slider */
-.slider-container {
-    @apply relative w-full overflow-hidden rounded-2xl select-none;
-    aspect-ratio: 16/9;
-}
-
-.slider-image {
-    @apply absolute top-0 left-0 w-full h-full object-cover;
-}
-
-.slider-handle {
-    @apply absolute top-0 bottom-0 w-1 bg-white cursor-col-resize z-20 flex items-center justify-center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.slider-circle {
-    @apply w-8 h-8 bg-white rounded-full shadow-lg flex items-center justify-center text-brand-500 font-bold text-xs border-2 border-brand-500;
-}
-
+/* ---- Hero Lens Effect ---- */
 .hero-lens-overlay {
     position: absolute;
     inset: 0;
@@ -708,40 +873,6 @@ body {
     --lens-radius: 500px;
 }
 
-/* Product Page Refactor Enhancements */
-.product-card-focus {
-    @apply relative overflow-hidden rounded-3xl transition-all duration-500 bg-white border border-warm-200;
-}
-
-.product-card-focus:hover {
-    @apply shadow-2xl;
-    transform: translateY(-8px) scale(1.02);
-}
-
-.variant-badge {
-    @apply inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold cursor-pointer transition-all duration-300;
-    background: var(--color-warm-100);
-    color: var(--color-brand-600);
-    border: 1px solid var(--color-warm-200);
-}
-
-.variant-badge:hover {
-    @apply bg-brand-500 text-white shadow-lg;
-    transform: translateY(-2px);
-}
-
-.variant-badge.active {
-    @apply bg-brand-500 text-white shadow-md;
-}
-
-.info-popup {
-    @apply fixed inset-0 z-[110] flex items-start justify-center p-4 pt-20 lg:pt-24 bg-brand-900/40 backdrop-blur-sm transition-all duration-500 overflow-y-auto;
-}
-
-.info-popup-content {
-    @apply bg-white rounded-3xl shadow-2xl relative transform transition-all duration-500;
-}
-
 .info-popup-enter {
     opacity: 0;
     transform: scale(0.9) translateY(20px);
@@ -752,7 +883,7 @@ body {
     transform: scale(1) translateY(0);
 }
 
-/* Moving gradient background for creative look */
+/* Moving gradient background */
 .animated-gradient-text {
     background: linear-gradient(90deg, var(--color-brand-500), var(--color-accent-500), var(--color-brand-500));
     background-size: 200% auto;
@@ -768,20 +899,7 @@ body {
     }
 }
 
-/* Variant Image Selector Styles */
-.variant-image-item {
-    @apply relative flex flex-col items-center gap-3 p-4 rounded-2xl bg-white border border-warm-200 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-brand-300;
-}
-
-.variant-image-box {
-    @apply w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 overflow-hidden bg-warm-50 relative;
-}
-
-.variant-image-item:hover .variant-image-box {
-    @apply scale-110 -translate-y-1 shadow-md;
-}
-
-/* Specific Variant Icon Styles (Glassmorphism / Premium gradients) */
+/* ---- Variant Icon Styles ---- */
 .icon-clear {
     background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 1), rgba(200, 230, 255, 0.4));
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -804,85 +922,29 @@ body {
     opacity: 0.9;
 }
 
-.icon-drive {
-    background: linear-gradient(45deg, rgba(251, 191, 36, 1) 0%, rgba(217, 119, 6, 1) 100%);
-}
-
-.variant-label {
-    @apply text-[10px] font-bold text-center text-warm-600 transition-colors uppercase tracking-widest leading-none;
-}
-
-.group:hover .variant-label {
-    @apply text-brand-600;
-}
-
-.variant-image-box::after {
-    content: '';
-    @apply absolute inset-0 opacity-20 pointer-events-none;
-    background: radial-gradient(circle at top left, white, transparent);
-}
-
-/* ============================================================
-   PRODUCT PAGE ADDITIONS — paste into app.css
-   ============================================================ */
-
-/* ---- Antiglare Blue Variant Icon ---- */
 .icon-antiglare_blue {
     background: radial-gradient(circle at 30% 30%, rgba(196, 221, 255, 1) 0%, rgba(59, 130, 246, 1) 100%);
     opacity: 0.9;
 }
 
-/* ---- Variant Card (redesigned) ---- */
-.variant-card {
-    @apply relative flex flex-col items-center text-center gap-0 p-4 rounded-2xl bg-white border border-warm-200 transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-brand-300 hover:-translate-y-0.5;
+.icon-drive {
+    background: linear-gradient(45deg, rgba(251, 191, 36, 1) 0%, rgba(217, 119, 6, 1) 100%);
 }
 
-.variant-card-name {
-    @apply text-xs font-black text-warm-700 transition-colors uppercase tracking-wide leading-tight;
-}
-
-.variant-card:hover .variant-card-name {
-    @apply text-brand-600;
-}
-
-.variant-card-benefit {
-    @apply text-[10px] font-semibold text-warm-400 mt-0.5 leading-tight line-clamp-1;
-}
-
-.variant-card-cta {
-    @apply inline-flex items-center text-[10px] font-black text-accent-600 mt-2 uppercase tracking-wider opacity-0 transition-opacity duration-200;
-}
-
-.variant-card:hover .variant-card-cta {
-    @apply opacity-100;
-}
-
-/* ---- Sub-variant Toggle Buttons ---- */
-.variant-sub-btn {
-    @apply px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 border cursor-pointer;
-}
-
-.variant-sub-btn.active {
-    @apply bg-brand-500 text-white border-brand-500 shadow-sm;
-}
-
-.variant-sub-btn:not(.active) {
-    @apply bg-white text-warm-500 border-warm-200 hover:border-brand-300 hover:text-brand-500;
-}
-
-/* ---- Lifestyle / Best For Tags ---- */
-.lifestyle-tag {
-    @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-brand-50 text-brand-600 border border-brand-100;
-}
-
-/* ---- Variant Count Badge (on cards) ---- */
-.variant-count-badge {
-    @apply absolute bottom-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-black bg-white/90 text-brand-500 shadow-sm backdrop-blur-sm border border-white/50 uppercase tracking-wider;
+.variant-image-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.2;
+    pointer-events: none;
+    background: radial-gradient(circle at top left, white, transparent);
 }
 
 /* ---- Animated Lens Placeholder ---- */
 .lens-placeholder {
-    @apply w-44 h-44 rounded-full;
+    width: 11rem;
+    height: 11rem;
+    border-radius: 50%;
     background: radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.9), rgba(0, 175, 176, 0.15) 50%, rgba(14, 53, 88, 0.1));
     border: 2px solid rgba(0, 175, 176, 0.3);
     box-shadow: 0 0 60px rgba(0, 175, 176, 0.12), inset 0 0 40px rgba(255, 255, 255, 0.5);
@@ -921,25 +983,11 @@ body {
     }
 }
 
-/* ---- Floating lens rings in hero ---- */
 .animate-lens-float {
     animation: lensFloat 5s ease-in-out infinite;
 }
 
-/* ---- Section title override ---- */
-.section-title {
-    @apply font-display text-2xl md:text-3xl font-black text-brand-500;
-}
-
-/* ---- Horizontal Variant Scroll Row ---- */
-.variant-scroll-row {
-    @apply flex gap-4 overflow-x-auto pb-4 -mx-2 px-2;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-warm-200) transparent;
-}
-
+/* ---- Scrollbar Styles ---- */
 .variant-scroll-row::-webkit-scrollbar {
     height: 4px;
 }
@@ -955,74 +1003,4 @@ body {
 
 .variant-scroll-row::-webkit-scrollbar-thumb:hover {
     background: var(--color-warm-300);
-}
-
-.variant-scroll-card {
-    @apply relative flex-shrink-0 flex flex-col items-center text-center p-3 rounded-2xl bg-white border border-warm-200 transition-all duration-300 cursor-pointer hover:shadow-xl hover:border-brand-300 hover:-translate-y-1;
-    width: 140px;
-    scroll-snap-align: start;
-}
-
-.variant-scroll-card .variant-img {
-    @apply w-20 h-20 rounded-xl overflow-hidden mb-2 transition-transform duration-300;
-}
-
-.variant-scroll-card:hover .variant-img {
-    @apply scale-110 -translate-y-0.5;
-}
-
-.variant-scroll-card .variant-img img {
-    @apply w-full h-full object-cover;
-}
-
-.variant-scroll-card-name {
-    @apply text-[10px] font-black text-warm-700 transition-colors uppercase tracking-wide leading-tight mt-1;
-}
-
-.variant-scroll-card:hover .variant-scroll-card-name {
-    @apply text-brand-600;
-}
-
-.variant-scroll-card-cta {
-    @apply inline-flex items-center text-[9px] font-black text-accent-600 mt-1.5 uppercase tracking-wider opacity-0 transition-opacity duration-200;
-}
-
-.variant-scroll-card:hover .variant-scroll-card-cta {
-    @apply opacity-100;
-}
-
-/* ---- Scroll Area Wrapping ---- */
-.variant-scroll-wrap {
-    @apply relative;
-}
-
-/* ---- Light Accent Card (Yellow for Products) ---- */
-.card-accent-light {
-    background: var(--color-accent-50);
-    border: 1px solid var(--color-accent-100);
-}
-
-/* ---- Featured Section Wrapper (Dynamic) ---- */
-.featured-section-card {
-    background: var(--color-section-featured-bg);
-    color: var(--color-section-featured-text);
-    border-radius: 2rem;
-    overflow: hidden;
-    border: 1px solid var(--color-section-featured-border);
-}
-
-.featured-section-card .text-muted {
-    color: var(--color-section-featured-muted);
-}
-
-.featured-section-card .card-highlight {
-    background: var(--color-section-featured-card);
-}
-
-.featured-section-card .border-default {
-    border-color: var(--color-section-featured-border);
-}
-
-.featured-section-card .bg-brand-500 {
-    background: var(--color-brand-500);
 }
