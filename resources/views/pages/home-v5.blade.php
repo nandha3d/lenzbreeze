@@ -53,13 +53,13 @@
                 <div x-show="slide === 1" x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-400" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 -translate-x-8">
                     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-500/20 border border-accent-400/30 text-accent-300 text-xs font-bold tracking-widest uppercase mb-6">
                         <span class="w-2 h-2 rounded-full bg-accent-400"></span>
-                        EYE MEK Progressive Series
+                        Eye Mek Progressive Series
                     </div>
                     <h1 class="font-display text-5xl md:text-6xl lg:text-[4.5rem] font-bold text-white leading-[1.1] mb-6">
                         No Lines. <br><span class="text-accent-300">No Limits.</span><br>Just Perfect Vision.
                     </h1>
                     <p class="text-lg text-white/65 max-w-lg leading-relaxed mb-8">
-                        Our EYE MEK Progressive RX lenses offer seamless transitions from distance to near — engineered with HD Digital technology for uncompromising clarity.
+                        Our Eye Mek Progressive RX lenses offer seamless transitions from distance to near — engineered with HD Digital technology for uncompromising clarity.
                     </p>
                     <div class="flex flex-wrap gap-4">
                         <a href="{{ route('products.show', 'premium-progressive-rx') }}" class="btn-primary shimmer-hover text-base !px-8 !py-4">
@@ -121,8 +121,8 @@
                     {{-- Floating badge --}}
                     <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-xl p-4 z-20 max-w-[180px]">
                         <div class="flex items-center gap-2 mb-1">
-                            <img src="{{ asset('images/logo-icon.png') }}" class="w-7 h-7 object-contain" alt="EYE MEK">
-                            <span class="font-display font-bold text-brand-500 text-sm">EYE MEK</span>
+                            <img src="{{ asset('images/logo-icon.png') }}" class="w-7 h-7 object-contain" alt="Lenz Breeze">
+                            <span class="font-display font-bold text-brand-500 text-sm">Eye Mek</span>
                         </div>
                         <div class="text-[10px] text-warm-400 font-semibold uppercase tracking-wider">Premium Collections · Est. 2005</div>
                     </div>
@@ -132,7 +132,7 @@
                 <div x-show="slide === 1" x-transition:enter="transition ease-out duration-700 delay-200" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" class="relative">
                     <img src="{{ asset('images/products/premium-progressive-rx.png') }}" alt="Progressive RX" class="w-[380px] h-[380px] object-contain drop-shadow-2xl relative z-10" onerror="this.src='https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&h=600&fit=crop&auto=format';this.classList.add('rounded-full','object-cover')">
                     <div class="absolute -top-6 -left-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 z-20">
-                        <div class="text-white/50 text-[10px] font-bold uppercase tracking-widest">EYE MEK</div>
+                        <div class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Eye Mek</div>
                         <div class="text-white font-display font-bold text-sm">Premium Progressive RX</div>
                         <div class="flex gap-1 mt-2">
                             <span class="px-2 py-0.5 rounded-md bg-accent-500/20 text-accent-300 text-[10px] font-semibold">Progressive</span>
@@ -220,19 +220,19 @@
         <div class="text-center mb-14">
             <span class="inline-block px-4 py-1 rounded-full bg-accent-50 text-accent-700 text-xs font-bold uppercase tracking-widest mb-4">Our Collections</span>
             <h2 class="section-title">One Brand. One Standard of Excellence.</h2>
-            <p class="section-subtitle mx-auto">EYE MEK precision engineering across all segments — from our flagship premium range to our accessible value line.</p>
+            <p class="section-subtitle mx-auto">Eye Mek precision engineering across all segments — from our flagship premium range to our accessible value line.</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            {{-- EYE MEK Premium Card --}}
+            {{-- Lenz Breeze Premium Card --}}
             <div class="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900 p-8 md:p-10 min-h-[380px] flex flex-col justify-between cursor-pointer transition-all duration-500 hover:shadow-2xl" style="box-shadow: 0 20px 60px rgba(14,53,88,0.25);">
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
                 <div class="absolute -bottom-20 -right-20 w-72 h-72 rounded-full bg-accent-500/10 blur-3xl group-hover:bg-accent-500/20 transition-all duration-700"></div>
                 <div class="absolute top-8 right-8">
-                    <img src="{{ asset('images/logo-icon.png') }}" alt="EYE MEK" class="w-12 h-12 object-contain opacity-60 group-hover:opacity-90 transition-opacity group-hover:scale-110 transition-transform duration-500">
+                    <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze" class="w-12 h-12 object-contain opacity-60 group-hover:opacity-90 transition-opacity group-hover:scale-110 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
-                    <div class="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/20 text-accent-300 text-xs font-bold uppercase tracking-widest mb-6">EYE MEK Premium Range</div>
+                    <div class="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/20 text-accent-300 text-xs font-bold uppercase tracking-widest mb-6">Eye Mek Premium Range</div>
                     <h3 class="font-display text-4xl font-bold text-white mb-3">High Performance</h3>
                     <p class="text-white/60 text-sm leading-relaxed max-w-sm">Advanced free-form digital surfacing and multi-layer AR coatings for discerning optical professionals who demand nothing but the best.</p>
                 </div>
@@ -249,7 +249,7 @@
                 </div>
             </div>
 
-            {{-- EYE MEK Value Card --}}
+            {{-- Lenz Breeze Value Card --}}
             <div class="group relative overflow-hidden rounded-3xl p-8 md:p-10 min-h-[380px] flex flex-col justify-between cursor-pointer transition-all duration-500 hover:shadow-2xl" style="background: linear-gradient(135deg, #2D2D2D 0%, #1A1A1A 50%, #111111 100%); box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500" style="background: linear-gradient(135deg, #f0b61a22, transparent)"></div>
                 <div class="absolute -bottom-20 -right-20 w-72 h-72 rounded-full blur-3xl transition-all duration-700" style="background: rgba(240,182,26,0.08); group-hover:background: rgba(240,182,26,0.18)"></div>
@@ -257,7 +257,7 @@
                     <div class="w-12 h-12 rounded-xl flex items-center justify-center font-display font-black text-xl opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" style="background: #f0b61a; color: #0e3558;">EM</div>
                 </div>
                 <div class="relative z-10">
-                    <div class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border" style="background: rgba(240,182,26,0.15); border-color: rgba(240,182,26,0.3); color: #f0b61a;">EYE MEK Value Range</div>
+                    <div class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 border" style="background: rgba(240,182,26,0.15); border-color: rgba(240,182,26,0.3); color: #f0b61a;">Eye Mek Value Range</div>
                     <h3 class="font-display text-4xl font-bold text-white mb-3">Everyday Quality</h3>
                     <p class="text-white/60 text-sm leading-relaxed max-w-sm">Quality optical lenses engineered for everyday value without compromise. The trusted choice for high-volume optical retailers across India.</p>
                 </div>
@@ -379,7 +379,7 @@
                     <div class="glass-card overflow-hidden ring-1 ring-white/20 shadow-2xl rounded-2xl relative">
                         <img src="https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=800&h=800&fit=crop&auto=format" alt="Premium Optical Lenses" class="w-full h-[340px] object-cover grayscale hover:grayscale-0 transition-all duration-700">
                         <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                            <div class="text-white/50 text-[10px] font-bold uppercase tracking-widest">{{ $promoProduct->brand ?? 'EYE MEK' }}</div>
+                            <div class="text-white/50 text-[10px] font-bold uppercase tracking-widest">{{ $promoProduct->brand ?? 'Eye Mek' }}</div>
                             <div class="text-white font-display text-xl font-bold">{{ $promoProduct->name ?? 'Premium Progressive RX' }}</div>
                             <a href="{{ route('products.show', $promoProduct->slug ?? 'premium-progressive-rx') }}" class="inline-flex items-center gap-1 text-accent-300 text-sm font-semibold mt-2 hover:gap-2 transition-all">
                                 View Product Details
@@ -407,9 +407,9 @@
 
         @php
         $techs = [
-            ['name'=>'Blue Cut','short'=>'Digital Eye Strain Protection','icon'=>'🛡️','color'=>'from-blue-500 to-blue-700','desc'=>'Our proprietary Blue Cut technology filters harmful high-energy blue light emitted from digital screens — reducing eye strain, preventing retinal damage, and improving sleep quality for the modern professional.','benefits'=>['Reduces digital eye strain by up to 40%','Improves contrast and visual comfort','Enhances sleep quality','Available in all Lenz Breeze and EYE MEK ranges']],
+            ['name'=>'Blue Cut','short'=>'Digital Eye Strain Protection','icon'=>'🛡️','color'=>'from-blue-500 to-blue-700','desc'=>'Our proprietary Blue Cut technology filters harmful high-energy blue light emitted from digital screens — reducing eye strain, preventing retinal damage, and improving sleep quality for the modern professional.','benefits'=>['Reduces digital eye strain by up to 40%','Improves contrast and visual comfort','Enhances sleep quality','Available in all Eye Mek Premium and Eye Mek Value ranges']],
             ['name'=>'Anti-Glare','short'=>'Multi-Layer Reflection Control','icon'=>'✨','color'=>'from-teal-500 to-teal-700','desc'=>'Our 7-layer anti-reflective coating eliminates distracting reflections from both sides of the lens. Crystal-clear vision in all lighting conditions — indoors, outdoors, and while driving at night.','benefits'=>['7+ vacuum-deposited AR layers','Reduces reflections by up to 99%','Water and dust repellent top coat','Scratch-resistant hard coating']],
-            ['name'=>'Photochromic','short'=>'Intelligent Light-Adaptive Lenses','icon'=>'🌤️','color'=>'from-amber-500 to-orange-600','desc'=>'Lenz Breeze Photochromic lenses automatically darken in sunlight and return to clear indoors. One pair for every environment — no switching between glasses needed.','benefits'=>['Full clear to dark in 60 seconds','100% UV-A and UV-B protection','Temperature-stable performance','Compatible with all frame styles']],
+            ['name'=>'Photochromic','short'=>'Intelligent Light-Adaptive Lenses','icon'=>'🌤️','color'=>'from-amber-500 to-orange-600','desc'=>'Eye Mek Photochromic lenses automatically darken in sunlight and return to clear indoors. One pair for every environment — no switching between glasses needed.','benefits'=>['Full clear to dark in 60 seconds','100% UV-A and UV-B protection','Temperature-stable performance','Compatible with all frame styles']],
             ['name'=>'Polarized','short'=>'Superior Glare Elimination','icon'=>'🕶️','color'=>'from-purple-500 to-purple-700','desc'=>'Polarized lenses eliminate blinding horizontal glare from roads, water, and reflective surfaces. Engineered for drivers, outdoor enthusiasts, and anyone who demands maximum visual precision.','benefits'=>['Eliminates horizontal glare 100%','Enhanced contrast and depth perception','Reduces driver fatigue significantly','Premium optical clarity in all conditions']],
         ];
         @endphp

@@ -47,9 +47,9 @@
     <div class="container-custom py-8">
         <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/logo-icon.png') }}" alt="EYE MEK icon" class="w-14 h-14 object-contain">
+                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="Eye Mek icon" class="w-14 h-14 object-contain">
                 <div>
-                    <span class="font-display font-bold text-lg text-brand-500 uppercase tracking-tight">EYE MEK Premium</span>
+                    <span class="font-display font-bold text-lg text-brand-500 uppercase tracking-tight">Eye Mek Premium</span>
                     <span class="block text-xs text-warm-400">High-Performance Range</span>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                     <span class="text-white font-bold text-xl font-display">EM</span>
                 </div>
                 <div>
-                    <span class="font-display font-bold text-lg text-warm-800 uppercase tracking-tight">EYE MEK Value</span>
+                    <span class="font-display font-bold text-lg text-warm-800 uppercase tracking-tight">Eye Mek Value</span>
                     <span class="block text-xs text-warm-400">Everyday Quality Range</span>
                 </div>
             </div>
@@ -156,7 +156,7 @@
                     <div class="glass-card overflow-hidden ring-1 ring-white/20 shadow-2xl rounded-2xl">
                         <img src="https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=800&h=800&fit=crop&auto=format" alt="Premium Optical Lenses" class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700">
                         <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                            <div class="text-white/50 text-xs font-bold uppercase tracking-widest">{{ $promoProduct->brand ?? 'Eye Mek Series' }}</div>
+                            <div class="text-white/50 text-xs font-bold uppercase tracking-widest">{{ $promoProduct->brand ?? 'Lenz Breeze Series' }}</div>
                             <div class="text-white font-display text-xl font-bold">{{ $promoProduct->name ?? 'Premium Progressive RX' }}</div>
                         </div>
                     </div>

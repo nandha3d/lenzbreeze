@@ -23,7 +23,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-warm-700">Product Name <span class="text-red-500">*</span></label>
-                    <input type="text" name="product_name" value="{{ old('product_name', $warranty->product_name ?? '') }}" placeholder="e.g. EYE MEK Polarized Single Vision" required class="w-full px-4 py-2.5 rounded-lg border border-warm-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none">
+                    <input type="text" name="product_name" value="{{ old('product_name', $warranty->product_name ?? '') }}" placeholder="e.g. Lenz Breeze Polarized Single Vision" required class="w-full px-4 py-2.5 rounded-lg border border-warm-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none">
                     @error('product_name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div class="space-y-2">

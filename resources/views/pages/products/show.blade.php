@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $product->meta_title ?? $product->name . ' - EYE MEK')
+@section('title', $product->meta_title ?? $product->name . ' - Eye Mek - Lenz Breeze')
 @section('meta_description', $product->meta_description ?? Str::limit($product->description, 160))
 
 @section('content')
@@ -69,14 +69,14 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                     <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
                     
                     <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8 animate-slide-up">
-                        EYE MEK SV Collection
+                        Eye Mek SV Collection
                     </h2>
                     <div class="space-y-6">
                         <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1] animate-slide-up" style="animation-delay: 0.2s">
                             Precision in every pulse.
                         </h1>
                         <p class="text-xl md:text-2xl font-bold text-warm-100/90 leading-tight animate-slide-up" style="animation-delay: 0.4s">
-                            Introducing EYE MEK SV—where advanced HD Digital technology meets premium protection.
+                            Introducing Eye Mek SV—where advanced HD Digital technology meets premium protection.
                         </p>
                         <p class="text-lg text-warm-200/80 leading-relaxed max-w-xl animate-slide-up" style="animation-delay: 0.6s">
                             From the boardroom to the Great Outdoors, our Blue Cut and Photochromic lenses adapt to your world.
@@ -123,7 +123,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                             Experience the sleek tint of Grey & Brown Photochromic or the vibrant Blue and Green HMC coatings.
                         </p>
                         <p class="text-lg text-warm-200/80 leading-relaxed max-w-xl ml-auto">
-                            EYE MEK offers a lens for every outlook. Experience the ultimate fusion of CR-39 lightness and Polarized precision.
+                            Eye Mek offers a lens for every outlook. Experience the ultimate fusion of CR-39 lightness and Polarized precision.
                         </p>
                     </div>
                 </div>
@@ -157,7 +157,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                 
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
-                        Upgrade your view with <br/> EYE MEK Premium SV Lenses.
+                        Upgrade your view with <br/> Eye Mek Premium SV Lenses.
                     </h1>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
@@ -180,7 +180,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                     </div>
                     
                     <div class="mt-8 p-4 border-l-2 border-logo-yellow/50 bg-white/5 backdrop-blur-sm inline-block">
-                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">EYE MEK: THE ART OF VISION.</span>
+                        <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">Eye Mek: THE ART OF VISION.</span>
                     </div>
                 </div>
             </div>
@@ -255,14 +255,14 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                     <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
                     
                     <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8 animate-slide-up">
-                        EYE MEK PROGRESSIVE SERIES
+                        Eye Mek PROGRESSIVE SERIES
                     </h2>
                     <div class="space-y-6">
                         <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1] animate-slide-up" style="animation-delay: 0.2s">
                             Master Every Distance. <br/> Conquer Every Drive.
                         </h1>
                         <p class="text-xl md:text-2xl font-bold text-warm-100/90 leading-tight animate-slide-up" style="animation-delay: 0.4s">
-                            Introducing EYE MEK Progressive—engineered for those who never slow down.
+                            Introducing Eye Mek Progressive—engineered for those who never slow down.
                         </p>
                         <p class="text-lg text-warm-200/80 leading-relaxed max-w-xl animate-slide-up" style="animation-delay: 0.6s">
                             Featuring our signature <span class="text-logo-yellow font-bold uppercase tracking-wider">Drive X technology</span>, optimized for the road.
@@ -297,7 +297,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                         One Lens. <br/> Infinite Possibilities. ♾️
                     </h1>
                     <p class="text-xl font-bold text-warm-100/90 leading-tight">
-                        Meet the EYE MEK Progressive collection. Whether you're behind the wheel or behind a screen, we’ve got you covered:
+                        Meet the Eye Mek Progressive collection. Whether you're behind the wheel or behind a screen, we’ve got you covered:
                     </p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-8 pt-2">
@@ -408,7 +408,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                         D-Bifocal. <br/> (DBF) Precision.
                     </h1>
                     <p class="text-lg text-warm-200 leading-relaxed max-w-xl mx-auto">
-                        Tired of narrow reading zones? Step into the wide-angle view of EYE MEK DBF. Our Flat Top design provides an immediate, easy-to-find segment for near-vision, making it the perfect companion for everything from your morning newspaper to your evening hobbies. Lightweight, durable, and crystal clear—it’s the classic bifocal, perfected by EYE MEK.
+                        Tired of narrow reading zones? Step into the wide-angle view of Eye Mek DBF. Our Flat Top design provides an immediate, easy-to-find segment for near-vision, making it the perfect companion for everything from your morning newspaper to your evening hobbies. Lightweight, durable, and crystal clear—it’s the classic bifocal, perfected by Eye Mek.
                     </p>
                     <div class="mt-8 p-4 bg-white/5 backdrop-blur-md inline-block border border-white/10">
                         <span class="text-logo-yellow font-black uppercase tracking-[0.3em] text-sm italic">FLAT TOP. WIDER VIEW.</span>
@@ -940,7 +940,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                         
                         <p class="text-lg md:text-xl text-warm-100/90 leading-relaxed font-medium opacity-0"
                            data-animate-class="animate-slide-up" style="animation-delay: 0.5s">
-                            Whether it's the sleek tint of our Grey & Brown Photochromic or the vibrant protection of our Blue and Green HMC coatings, EYE MEK offers a lens for every outlook.
+                            Whether it's the sleek tint of our Grey & Brown Photochromic or the vibrant protection of our Blue and Green HMC coatings, Lenz Breeze offers a lens for every outlook.
                         </p>
 
                         <div class="pt-4 opacity-0" data-animate-class="animate-slide-up" style="animation-delay: 0.7s">
@@ -964,10 +964,10 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
             <div class="grid grid-cols-1 lg:grid-cols-3">
                 <div class="p-8 lg:p-12 lg:col-span-2">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 card-highlight">
-                        Eye Mek Protection Plan
+                        Lenz Breeze Protection Plan
                     </div>
                     <h2 class="font-display text-3xl font-bold mb-4 text-brand-500">Limited Warranty & Care Package</h2>
-                    <p class="leading-relaxed mb-8 font-medium text-brand-500/80">At Eye Mek, we stand behind the precision and quality of our premium lens collection. Every pair is backed by our comprehensive protection plan and professional maintenance kit.</p>
+                    <p class="leading-relaxed mb-8 font-medium text-brand-500/80">At Lenz Breeze, we stand behind the precision and quality of our premium lens collection. Every pair is backed by our comprehensive protection plan and professional maintenance kit.</p>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>

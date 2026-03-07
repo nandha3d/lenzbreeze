@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Contact Us - EYE MEK')
-@section('meta_description', 'Get in touch with EYE MEK. Contact our team for product inquiries, partnership opportunities, or general questions. Multiple locations across India.')
+@section('title', 'Contact Us - Lenz Breeze')
+@section('meta_description', 'Get in touch with Lenz Breeze. Contact our team for product inquiries, partnership opportunities, or general questions. Multiple locations across India.')
 
 @section('content')
 {{-- Page Hero --}}

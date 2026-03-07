@@ -27,22 +27,19 @@
                     Founded on 1st February 2024 in Trivandrum, Kerala, Lenz Breeze began with a simple mission — to make premium optical lenses accessible to everyone. What started as an ambitious vision has rapidly grown into a trusted name in lens manufacturing.
                 </p>
                 <p class="text-warm-600 mt-4 leading-relaxed">
-                    In a significant milestone, we expanded our reach by opening a branch in Ernakulam on 1st November 2024. Today, with specialized facilities in Trivandrum and Cochin, we produce high-quality lenses under our premier brand: <strong>EYE MEK</strong>, offering both high-performance premium and value-focused collections.
+                    In a significant milestone, we expanded our reach by opening a branch in Ernakulam on 1st November 2024. Today, with specialized facilities in Trivandrum and Cochin, we produce high-quality lenses under our premier brand: <strong>Eye Mek</strong>, offering both high-performance premium and value-focused collections.
                 </p>
                 <p class="text-warm-600 mt-4 leading-relaxed">
                     Every lens we craft reflects our commitment to precision engineering, innovative technology, and uncompromising quality. We believe everyone deserves crystal-clear vision, delivered with care and accuracy.
                 </p>
             </div>
             <div class="relative">
-                <div class="aspect-[4/3] rounded-2xl bg-gradient-to-br from-brand-100 to-accent-100 flex items-center justify-center">
-                    <div class="text-center">
-                        <div class="text-6xl font-display font-bold text-brand-300">LB</div>
-                        <div class="text-sm text-brand-400 mt-2">Est. 2024</div>
-                    </div>
+                <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-warm-100">
+                    <img src="{{ asset('images/aboutus.jpg') }}" alt="Lenz Breeze Manufacturing" class="w-full h-full object-cover">
                 </div>
                 <div class="absolute -bottom-6 -left-6 w-32 h-32 rounded-2xl gradient-accent flex items-center justify-center text-white shadow-lg">
                     <div class="text-center">
-                        <div class="text-2xl font-bold">5000+</div>
+                        <div class="text-2xl font-bold">10,000+</div>
                         <div class="text-xs mt-0.5">Customers</div>
                     </div>
                 </div>
@@ -67,7 +64,7 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
                 </div>
                 <h3 class="font-display text-2xl font-bold text-brand-500">Our Vision</h3>
-                <p class="text-warm-600 mt-3 leading-relaxed">To become India's most trusted and innovative optical lens brand, setting the benchmark for quality, sustainability, and customer satisfaction in the eyecare industry.</p>
+                <p class="text-warm-600 mt-3 leading-relaxed">To become India's most trusted and innovative optical lens brand, setting the benchmark for quality, sustainability, and customer satisfaction in the Eye Mek collection.</p>
             </div>
         </div>
     </div>

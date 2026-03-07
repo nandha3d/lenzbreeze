@@ -29,7 +29,7 @@
                             Label <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="label" id="label"
-                               placeholder="e.g. Product Warranty – EYE MEK UV420" required maxlength="255"
+                               placeholder="e.g. Product Warranty – Lenz Breeze UV420" required maxlength="255"
                                class="w-full px-4 py-2.5 rounded-lg border border-warm-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none transition-all text-sm"
                                x-model="label"
                                value="{{ old('label') }}">

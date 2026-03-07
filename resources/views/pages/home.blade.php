@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'EYE MEK - Premium Optical Lenses | Home')
-@section('meta_description', 'EYE MEK - India\'s premier optical lens manufacturer. Premium quality lenses with cutting-edge technology including Blue Cut, Anti-Glare, Photochromic and Polarized lenses.')
+@section('title', 'Lenz Breeze - Premium Optical Lenses | Home')
+@section('meta_description', 'Lenz Breeze - India\'s premier optical lens manufacturer. Premium quality lenses with cutting-edge technology including Blue Cut, Anti-Glare, Photochromic and Polarized lenses.')
 
 @section('content')
 <div class="lb-emergency-recovery-test flex lg:block text-brand-500"></div>
@@ -128,9 +128,9 @@
     <div class="container-custom py-8">
         <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="EYE MEK Logo" class="h-12 w-auto object-contain">
+                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="Eye Mek Logo" class="h-12 w-auto object-contain">
                 <div class="pl-3 border-l border-warm-200">
-                    <span class="font-display font-bold text-xl text-brand-500 uppercase tracking-tight">EYE MEK</span>
+                    <span class="font-display font-bold text-xl text-brand-500 uppercase tracking-tight">Eye Mek</span>
                     <span class="block text-xs text-warm-400">Premium Optical Lenses</span>
                 </div>
             </div>
@@ -184,7 +184,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="order-2 lg:order-1">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-500/20 border border-accent-500/30 text-accent-300 text-xs font-bold uppercase tracking-widest mb-6">
-                    Lenz Breeze Innovation
+                    Eye Mek Innovation
                 </div>
                 <h2 class="font-display text-4xl md:text-5xl font-bold text-white leading-tight">
                     {{ $promoProduct->tagline ?? 'Seamless Sight. Absolute Protection.' }}
@@ -268,7 +268,7 @@
                             <div class="text-6xl opacity-20 font-display font-bold text-brand-300 relative z-10">{{ substr($product->name ?? 'LB', 0, 2) }}</div>
                         @endif
                         <div class="absolute top-3 left-3 z-10">
-                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold {{ ($product->brand ?? '') === 'Lenz Breeze' ? 'bg-brand-500 text-white' : 'bg-warm-800 text-white' }}">{{ $product->brand ?? 'Premium' }}</span>
+                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold {{ ($product->brand ?? '') === 'Eye Mek' ? 'bg-brand-500 text-white' : 'bg-warm-800 text-white' }}">{{ $product->brand ?? 'Eye Mek' }}</span>
                         </div>
                     </div>
                     <div class="p-5">

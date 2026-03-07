@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Technologies - Lenz Breeze')
-@section('meta_description', 'Explore Lenz Breeze\'s advanced lens technologies — Blue Cut, Anti-Glare, Photochromic, and Polarized. Learn how our innovations protect and enhance your vision.')
+@section('meta_description', 'Explore Eye Mek\'s advanced lens technologies — Blue Cut, Anti-Glare, Photochromic, and Polarized. Learn how our innovations protect and enhance your vision.')
 
 @section('content')
 {{-- Page Hero --}}
@@ -23,7 +23,7 @@
             'gradient' => 'from-blue-500 to-indigo-600',
             'bg' => 'bg-blue-50',
             'demo_type' => 'blue-cut',
-            'description' => 'In today\'s digital world, our eyes are exposed to harmful high-energy visible (HEV) blue light (380-455nm) from screens, LED lighting, and sunlight. EYE MEK Blue Cut lenses use advanced molecular filtering to shield your eyes, helping to maintain natural melatonin production for better sleep and protecting against long-term retinal conditions like cataracts and macular degeneration.',
+            'description' => 'In today\'s digital world, our eyes are exposed to harmful high-energy visible (HEV) blue light (380-455nm) from screens, LED lighting, and sunlight. Eye Mek Blue Cut lenses use advanced molecular filtering to shield your eyes, helping to maintain natural melatonin production for better sleep and protecting against long-term retinal conditions like cataracts and macular degeneration.',
             'benefits' => [
                 'Cuts 99% of harmful HEV Blue Light while allowing beneficial turquoise light.',
                 'Boosts melatonin production to help you fall asleep faster and wake up fresher.',
@@ -53,7 +53,7 @@
             'gradient' => 'from-teal-500 to-emerald-600',
             'bg' => 'bg-teal-50',
             'demo_type' => 'anti-glare',
-            'description' => 'Uncoated lenses reflect up to 10% of light, leading to ghost images and reduced clarity. EYE MEK Anti-Reflective (AR) coatings utilize advanced vacuum deposition technology to apply 7+ microscopic layers that neutralize reflections, allowing up to 99.9% of light to reach your eyes for maximum visual brilliance.',
+            'description' => 'Uncoated lenses reflect up to 10% of light, leading to ghost images and reduced clarity. Eye Mek Anti-Reflective (AR) coatings utilize advanced vacuum deposition technology to apply 7+ microscopic layers that neutralize reflections, allowing up to 99.9% of light to reach your eyes for maximum visual brilliance.',
             'benefits' => [
                 'Transmits 99.9% of light for significantly sharper, more natural vision.',
                 'Eliminates starbursts and halos from headlights during night driving.',
@@ -559,6 +559,74 @@
 </section>
 </section>
 @endforeach
+
+{{-- Detailed Layout Chart & Progressive Lens Guide --}}
+<section class="section-padding bg-white relative overflow-hidden">
+    {{-- Technical Dot Grid Background --}}
+    <div class="absolute inset-0 opacity-[0.4] pointer-events-none" style="background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 32px 32px;"></div>
+    
+    <div class="container-custom relative z-10">
+        {{-- Header from user screenshot --}}
+        <div class="text-center mb-16 pt-8">
+            <h2 class="text-gray-900 font-black uppercase text-sm tracking-[0.4em] mb-4">
+                Technical Specification
+            </h2>
+            <h3 class="text-5xl md:text-7xl font-display font-black leading-tight text-gray-900">
+                Detailed Layout Chart <br>
+                & Progressive Lens Guide
+            </h3>
+        </div>
+
+        <div class="max-w-5xl mx-auto">
+            {{-- Clean Technical Frame --}}
+            <div class="relative rounded-[3rem] overflow-hidden border border-gray-100 bg-white shadow-[0_40px_100px_rgba(0,0,0,0.08)] p-4 md:p-10 group/chart">
+                {{-- HUD Corners --}}
+                <div class="absolute top-10 left-10 w-8 h-8 border-t-2 border-l-2 border-gold/20"></div>
+                <div class="absolute top-10 right-10 w-8 h-8 border-t-2 border-r-2 border-gold/20"></div>
+                <div class="absolute bottom-10 left-10 w-8 h-8 border-b-2 border-l-2 border-gold/20"></div>
+                <div class="absolute bottom-10 right-10 w-8 h-8 border-b-2 border-r-2 border-gold/20"></div>
+
+                {{-- The Actual Chart Image --}}
+                <div class="relative rounded-2xl overflow-hidden shadow-sm border border-gray-50">
+                    <img src="{{ asset('images/Layout Chart.jpg') }}" alt="Eye Mek Detailed Layout Chart" class="w-full h-auto">
+                </div>
+                
+                {{-- Specification Metadata --}}
+                <div class="mt-10 border-t border-gray-100 pt-8 flex flex-wrap items-center justify-between gap-6">
+                    <div class="flex gap-8">
+                        <div>
+                            <p class="text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-1">Fitting Height</p>
+                            <p class="text-sm font-bold text-gray-900 tracking-tight">16mm Min. Lower / 10mm Upper</p>
+                        </div>
+                        <div class="w-px h-10 bg-gray-100"></div>
+                        <div>
+                            <p class="text-[10px] font-mono text-gray-400 uppercase tracking-widest mb-1">Diameters</p>
+                            <p class="text-sm font-bold text-gray-900 tracking-tight">Ø 60 / 65 / 70 / 75 / 80mm</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="window.print()" class="px-8 py-4 bg-gray-900 text-white rounded-2xl text-xs font-bold uppercase tracking-widest hover:bg-gold transition-all shadow-lg hover:shadow-gold/20 flex items-center gap-3 group">
+                        <svg class="w-4 h-4 text-gold group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        Print High-Res Chart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Legend --}}
+        <div class="mt-16 flex flex-wrap justify-center gap-12 text-gray-400">
+            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em]">
+                <span class="text-gold">✚</span> Zentration Point
+            </div>
+            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em]">
+                <span class="text-gold">⎯⎯</span> Corridor Axis
+            </div>
+            <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em]">
+                <span class="text-gold">○</span> Near Reference
+            </div>
+        </div>
+    </div>
+</section>
 
 {{-- CTA --}}
 <section class="gradient-hero py-20">

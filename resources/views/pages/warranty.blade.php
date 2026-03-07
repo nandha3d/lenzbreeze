@@ -6,7 +6,7 @@
         {{-- Search Box --}}
         <div class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-display font-bold text-[#1A1A1A] mb-4">Warranty Verification</h1>
-            <p class="text-[#666] max-w-xl mx-auto">Verify the authenticity of your premium EYE MEK optics and track your lifetime vision protection.</p>
+            <p class="text-[#666] max-w-xl mx-auto">Verify the authenticity of your premium Lenz Breeze optics and track your lifetime vision protection.</p>
         </div>
 
         <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-[#E5E1D8] overflow-hidden mb-12">
@@ -54,7 +54,7 @@
                             <div class="flex justify-between items-start">
                                 <div>
                                     <div class="w-40 md:w-64 transition-transform duration-700 group-hover:scale-105">
-                                        <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="EYE MEK" class="w-full h-auto object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] brightness-110 contrast-125">
+                                        <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze" class="w-24 h-auto object-contain">
                                     </div>
                                     <p class="mt-2 text-[#D4AF37] text-[8px] md:text-xs font-black uppercase tracking-[0.6em] ml-1 drop-shadow-md italic">Create A New World</p>
                                 </div>

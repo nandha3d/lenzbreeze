@@ -32,8 +32,8 @@
                 <div>
                     <label class="block text-sm font-medium text-warm-700 mb-1.5">Brand <span class="text-red-500">*</span></label>
                     <select name="brand" class="w-full px-4 py-3 rounded-lg border border-warm-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition-all bg-white" required>
+                        <option value="Eye Mek" {{ old('brand', $product->brand ?? '') === 'Eye Mek' ? 'selected' : '' }}>Eye Mek</option>
                         <option value="Lenz Breeze" {{ old('brand', $product->brand ?? '') === 'Lenz Breeze' ? 'selected' : '' }}>Lenz Breeze</option>
-                        <option value="EYE MEK" {{ old('brand', $product->brand ?? '') === 'EYE MEK' ? 'selected' : '' }}>EYE MEK</option>
                     </select>
                 </div>
                 <div>

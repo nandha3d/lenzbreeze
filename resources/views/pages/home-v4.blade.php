@@ -16,7 +16,7 @@
         <div class="max-w-3xl">
             <div class="flex items-center gap-3 mb-6 animate-fade-in">
                 <span class="w-12 h-[2px] bg-gold"></span>
-                <h2 class="text-gold text-sm font-black tracking-[0.3em] uppercase">EYE MEK Precision 2024</h2>
+                <h2 class="text-gold text-sm font-black tracking-[0.3em] uppercase">Lenz Breeze Precision 2024</h2>
             </div>
             
             <h1 class="text-5xl md:text-8xl font-display font-black text-white leading-[0.9] mb-8 animate-fade-in-up">
@@ -25,7 +25,7 @@
             </h1>
             
             <p class="text-white/70 text-lg md:text-xl max-w-xl mb-10 leading-relaxed animate-fade-in-up delay-100">
-                Experience the world in ultra-high definition with EYE MEK's advanced optical engineering. Crafted for those who demand excellence.
+                Experience the world in ultra-high definition with Lenz Breeze's advanced optical engineering. Crafted for those who demand excellence.
             </p>
 
             <div class="flex flex-wrap gap-6 animate-fade-in-up delay-200">
@@ -174,7 +174,7 @@
         @for($i = 0; $i < 6; $i++)
             <div class="flex items-center gap-4">
                 <span class="w-2 h-2 rounded-full bg-gold"></span>
-                <span class="text-xl font-display font-black text-midnight tracking-[0.2em] uppercase">EYE MEK OPTICS</span>
+                <span class="text-xl font-display font-black text-midnight tracking-[0.2em] uppercase">Lenz Breeze OPTICS</span>
             </div>
             <div class="flex items-center gap-4">
                 <span class="w-2 h-2 rounded-full bg-tech-cyan"></span>

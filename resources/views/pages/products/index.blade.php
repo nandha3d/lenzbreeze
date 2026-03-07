@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', isset($category) ? $category->name . ' - Products - EYE MEK' : 'Products - EYE MEK')
-@section('meta_description', 'Explore our range of premium optical lenses. Blue Cut, Anti-Glare, Photochromic, Progressive, and Polarized lenses by EYE MEK.')
+@section('title', isset($category) ? $category->name . ' - Products - Lenz Breeze' : 'Products - Lenz Breeze')
+@section('meta_description', 'Explore our range of premium optical lenses. Blue Cut, Anti-Glare, Photochromic, Progressive, and Polarized lenses by Lenz Breeze.')
 
 @section('content')
 <div class="theme-product">
@@ -47,14 +47,14 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
             <div class="max-w-2xl text-white relative">
                 <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
                 <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8 animate-slide-up">
-                    EYE MEK PROGRESSIVE SERIES
+                    Eye Mek PROGRESSIVE SERIES
                 </h2>
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1] animate-slide-up" style="animation-delay: 0.2s">
                         Master Every Distance. <br/> Conquer Every Drive.
                     </h1>
                     <p class="text-xl md:text-2xl font-bold text-warm-100/90 leading-tight animate-slide-up" style="animation-delay: 0.4s">
-                        Introducing EYE MEK Progressive—engineered for those who never slow down.
+                        Introducing Eye Mek Progressive—engineered for those who never slow down.
                     </p>
                     <div class="pt-4 animate-slide-up" style="animation-delay: 0.6s">
                         <a href="{{ route('products.show', 'premium-progressive-rx') }}" class="btn-primary">Explore Details</a>
@@ -84,7 +84,7 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
             <div class="max-w-2xl text-white relative">
                 <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
                 <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
-                    EYE MEK SV Collection
+                    Eye Mek SV Collection
                 </h2>
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
@@ -127,7 +127,7 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
                         D-Bifocal. <br/> (DBF) Precision.
                     </h1>
                     <p class="text-lg text-warm-200 leading-relaxed max-w-xl">
-                        Tired of narrow reading zones? Step into the wide-angle view of EYE MEK DBF. The classic bifocal, perfected by EYE MEK.
+                        Tired of narrow reading zones? Step into the wide-angle view of Eye Mek DBF. The classic bifocal, perfected by Eye Mek.
                     </p>
                     <div class="pt-4">
                         <a href="{{ route('products.show', 'd-bifocal-lens') }}" class="btn-primary">Explore Details</a>
