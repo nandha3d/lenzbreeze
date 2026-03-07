@@ -1,5 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Premium Warranty Certificate')
+@section('title', 'Eye Mek Lens Warranty - Registration and Care Guide')
+@section('meta_description', 'Registered your Eye Mek lenses for warranty coverage. Find lens care instructions and warranty information for your Lenz Breeze purchase.')
 @section('content')
 <div class="min-h-screen py-20 bg-[#F9F7F2]">
     <div class="container-custom max-w-4xl px-4">

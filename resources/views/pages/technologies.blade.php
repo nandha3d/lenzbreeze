@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Technologies - Lenz Breeze')
-@section('meta_description', 'Explore Eye Mek\'s advanced lens technologies — Blue Cut, Anti-Glare, Photochromic, and Polarized. Learn how our innovations protect and enhance your vision.')
+@section('title', 'Lens Technologies - Eye Mek Blue Cut, Photochromic & More')
+@section('meta_description', 'Explore the science behind Lenz Breeze Eye Mek lenses. Featuring Blue Cut filters, Photochromic integration, and advanced multi-layer coatings. Learn how our innovations protect and enhance your vision.')
 
 @section('content')
 {{-- Page Hero --}}

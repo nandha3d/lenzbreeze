@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Contact Us - Lenz Breeze')
-@section('meta_description', 'Get in touch with Lenz Breeze. Contact our team for product inquiries, partnership opportunities, or general questions. Multiple locations across India.')
+@section('title', 'Contact Lenz Breeze - Visit our Trivandrum or Cochin Offices')
+@section('meta_description', 'Get in touch with Lenz Breeze. Contact our head office in Trivandrum or our branch office in Cochin for premium Eye Mek lens assistance.')
 
 @section('content')
 {{-- Page Hero --}}

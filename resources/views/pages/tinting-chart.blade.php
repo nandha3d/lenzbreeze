@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Lens Tinting Chart - Lenz Breeze')
-@section('meta_description', 'Explore our comprehensive lens tinting chart. Choose from a wide range of colors for your Eye Mek lenses.')
+@section('title', 'Tinting Color Chart - Eye Mek Premium Lens Shades')
+@section('meta_description', 'Browse our extensive range of lens tinting colors. From classic Black and Brown to vibrant Blue and Pink series for personalized Eye Mek style.')
 
 @section('content')
 {{-- Page Hero --}}

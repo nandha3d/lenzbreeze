@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'Lenz Breeze - Premium Optical Lenses | Home')
-@section('meta_description', 'Lenz Breeze - India\'s premier optical lens manufacturer. Premium quality lenses with cutting-edge technology including Blue Cut, Anti-Glare, Photochromic and Polarized lenses.')
+@section('title', 'Lenz Breeze - India\'s Premier Optical Lens Manufacturer')
+@section('meta_description', 'Lenz Breeze offers high-performance Eye Mek premium optical lenses. Explore our advanced lens technologies, including Blue Cut, Photochromic, and custom tinting.')
 
 @section('content')
 <div class="lb-emergency-recovery-test flex lg:block text-brand-500"></div>
@@ -26,7 +26,8 @@
                 title: 'Refined <span class=\'text-accent-300\'>Single Vision</span>', 
                 tagline: 'Experience sharp, distortion-free vision tailored exactly to your prescription using advanced manufacturing.',
                 image: '{{ asset('images/single-vision.jpeg') }}',
-                badge: 'Custom Precision'
+                badge: 'Custom Precision',
+                alt: 'Lenz Breeze Single Vision Optical Lens'
             }
         ],
         next() { this.activeSlide = (this.activeSlide + 1) % this.slides.length },
@@ -128,7 +129,7 @@
     <div class="container-custom py-8">
         <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="Eye Mek Logo" class="h-12 w-auto object-contain">
+                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="Eye Mek Premium Optical Lens Logo" width="150" height="48" class="h-12 w-auto object-contain">
                 <div class="pl-3 border-l border-warm-200">
                     <span class="font-display font-bold text-xl text-brand-500 uppercase tracking-tight">Eye Mek</span>
                     <span class="block text-xs text-warm-400">Premium Optical Lenses</span>
@@ -232,7 +233,7 @@
                 <div class="relative">
                     <div class="absolute -inset-4 bg-accent-500/20 blur-3xl rounded-full"></div>
                     <div class="glass-card overflow-hidden ring-1 ring-white/20 shadow-2xl rounded-2xl">
-                        <img src="https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=800&h=800&fit=crop&auto=format" alt="Premium Optical Lenses" class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700">
+                        <img src="https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=800&h=800&fit=crop&auto=format" alt="Premium Eye Mek Progressive Optical Lens" width="800" height="800" class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700">
                         <div class="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
                             <div class="text-white/50 text-xs font-bold uppercase tracking-widest">{{ $promoProduct->brand ?? 'Eye Mek Series' }}</div>
                             <div class="text-white font-display text-xl font-bold">{{ $promoProduct->name ?? 'Premium Progressive RX' }}</div>

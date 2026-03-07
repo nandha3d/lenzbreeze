@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'About Us - Lenz Breeze')
-@section('meta_description', 'Learn about Lenz Breeze - India\'s premier optical lens manufacturer with 20+ years of excellence, 4 manufacturing facilities, and ISO certified quality.')
+@section('title', 'About Lenz Breeze - Our Manufacturing Story & Mission')
+@section('meta_description', 'Lenz Breeze started with a mission to make premium optical lenses accessible. Learn about our state-of-the-art facilities and commitment to Eye Mek lens quality.')
 
 @section('content')
 {{-- Page Hero --}}
@@ -35,7 +35,7 @@
             </div>
             <div class="relative">
                 <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-warm-100">
-                    <img src="{{ asset('images/aboutus.jpg') }}" alt="Lenz Breeze Manufacturing" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/aboutus.jpg') }}" alt="Eye Mek Advanced Lens Manufacturing Facility" width="800" height="600" class="w-full h-full object-cover">
                 </div>
                 <div class="absolute -bottom-6 -left-6 w-32 h-32 rounded-2xl gradient-accent flex items-center justify-center text-white shadow-lg">
                     <div class="text-center">
