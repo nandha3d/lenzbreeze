@@ -965,18 +965,29 @@
             product_type = [];
             product_id = [];
             product_list = [];
-            qty_list = [];
-            product_warehouse_price = [];
-            product_price = [];
-            category = [];
-            product_brand = [];
-            // batch_no = data[8];
-            // expired_date = data[10];
-            // product_batch_id = data[9];
-            // is_embeded = data[11];
-            // imei_number = data[12];
+        console.log("=== DEBUG: Starting getProduct (Edit), Brand/Category/Type selected. Showing loader. ===");
+        $('.product-loading').removeClass('d-none').show();
+        lims_product_array = []; // Clear existing list immediately
+        product_code = [];
+        product_name = [];
+        product_qty = [];
+        product_type = [];
+        product_id = [];
+        product_list = [];
+        qty_list = [];
+        product_warehouse_price = [];
+        product_price = [];
+        category = [];
+        product_brand = [];
+        // batch_no = data[8];
+        // expired_date = data[10];
+        // product_batch_id = data[9];
+        // is_embeded = data[11];
+        // imei_number = data[12];
 
-            $('.product-loading').addClass('d-none');
+        $.get('{{ url("/admin/sales/getproduct-list") }}/' + warehouse_id + '?brand='+brand_id+'&category='+category_id +'&product_type='+product_type_id, function(data) {
+            console.log("=== DEBUG: getProduct AJAX Success (Edit). Hiding loader. Data count:", data.length, "===");
+            $('.product-loading').addClass('d-none').hide();
 
             if(data.length == 0){
                 alert('No Products available!!!!!!');

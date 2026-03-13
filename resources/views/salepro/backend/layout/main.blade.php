@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   @if(!config('database.connections.saleprosaas_landlord'))
-  <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.png') }}" />
+  <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.avif') }}" />
   <title>{{$general_setting->site_title}}</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -183,7 +183,7 @@
     }
   </style>
   @else
-  <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.png') }}" />
+  <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.avif') }}" />
   <title>{{$general_setting->site_title}}</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -280,18 +280,19 @@
     /* --- Unified Sidebar --- */
     .lz-sidebar {
       position: fixed; top: 0; left: 0; bottom: 0; width: 256px; z-index: 40;
-      background: #04101d; color: white; overflow-y: auto;
+      background: #ffffff; color: #374151; overflow-y: auto;
+      border-right: 1px solid #e5e7eb;
       display: flex; flex-direction: column;
       scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.1) transparent;
+      scrollbar-color: rgba(0,0,0,0.1) transparent;
     }
     .lz-sidebar::-webkit-scrollbar { width: 5px; }
     .lz-sidebar::-webkit-scrollbar-track { background: transparent; }
-    .lz-sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-    .lz-sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    .lz-sidebar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+    .lz-sidebar::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.2); }
     .lz-sidebar-logo {
       height: 64px; display: flex; align-items: center; padding: 0 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;
+      border-bottom: 1px solid #e5e7eb; flex-shrink: 0;
     }
     .lz-sidebar-logo a { display: flex; align-items: center; gap: 12px; text-decoration: none !important; }
     .lz-sidebar-logo .lz-logo-icon {
@@ -299,58 +300,58 @@
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
     .lz-sidebar-logo .lz-logo-icon span { font-weight: 700; font-size: 13px; color: var(--color-logo-text, #ffffff); }
-    .lz-sidebar-logo .lz-logo-text { font-weight: 700; font-size: 17px; color: #fff; }
+    .lz-sidebar-logo .lz-logo-text { font-weight: 700; font-size: 17px; color: #111827; }
     .lz-sidebar-nav { flex: 1; overflow-y: auto; }
     .lz-sidebar-bottom {
-      border-top: 1px solid rgba(255,255,255,0.1); padding: 12px; flex-shrink: 0;
+      border-top: 1px solid #e5e7eb; padding: 12px; flex-shrink: 0;
     }
     .lz-sidebar-bottom a, .lz-sidebar-bottom button {
       display: flex; align-items: center; gap: 12px; padding: 9px 12px;
       border-radius: 8px; font-size: 13px; font-weight: 500;
-      color: rgba(255,255,255,0.55) !important; text-decoration: none !important;
+      color: #6b7280 !important; text-decoration: none !important;
       border: none; background: none; width: 100%; cursor: pointer;
       transition: all 0.15s ease;
     }
-    .lz-sidebar-bottom a:hover { background: rgba(255,255,255,0.05); color: #fff !important; }
-    .lz-sidebar-bottom button:hover { background: rgba(239,68,68,0.15); color: #fca5a5 !important; }
+    .lz-sidebar-bottom a:hover { background: #f3f4f6; color: #111827 !important; }
+    .lz-sidebar-bottom button:hover { background: rgba(239,68,68,0.1); color: #ef4444 !important; }
 
     /* Unified sidebar nav styles */
     .unified-sidebar-nav { list-style: none; padding: 12px 16px; margin: 0; }
     .unified-sidebar-nav .nav-section-header {
-      color: rgba(255,255,255,0.4); font-size: 10px; font-weight: 700;
+      color: #9ca3af; font-size: 10px; font-weight: 700;
       text-transform: uppercase; letter-spacing: 1.2px; padding: 24px 12px 8px; margin-top: 8px;
     }
     .unified-sidebar-nav .nav-item > a {
       display: flex; align-items: center; gap: 14px; padding: 12px 16px;
-      color: rgba(255,255,255,0.8) !important; text-decoration: none !important;
+      color: #4b5563 !important; text-decoration: none !important;
       border-radius: 10px; font-size: 13.5px; font-weight: 500;
       transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       margin-bottom: 2px;
     }
     /* Submenu li also needs active state */
     .unified-sidebar-nav .submenu li.active a {
-      color: #fff !important;
-      background: rgba(0, 175, 176, 0.25) !important;
+      color: var(--color-accent-600, #009494) !important;
+      background: rgba(0, 175, 176, 0.1) !important;
       font-weight: 600;
     }
-    .unified-sidebar-nav .nav-item > a i { font-size: 18px; width: 22px; text-align: center; color: rgba(255,255,255,0.6); }
+    .unified-sidebar-nav .nav-item > a i { font-size: 18px; width: 22px; text-align: center; color: #9ca3af; }
     .unified-sidebar-nav .nav-item.has-submenu > a { position: relative; padding-right: 40px; }
     .unified-sidebar-nav .nav-item.has-submenu > a::after {
       content: "\f105"; font-family: "FontAwesome" !important; position: absolute; right: 20px;
-      font-size: 12px; color: rgba(255,255,255,0.5); transition: transform 0.2s ease;
+      font-size: 12px; color: #9ca3af; transition: transform 0.2s ease;
     }
     .unified-sidebar-nav .nav-item.has-submenu > a[aria-expanded="true"]::after { transform: rotate(90deg); color: var(--color-accent-500, #00afb0); }
-    .unified-sidebar-nav .nav-item > a:hover { background: rgba(0, 175, 176, 0.12) !important; color: #fff !important; }
-    .unified-sidebar-nav .nav-item > a:hover i { color: var(--color-accent-500, #00afb0); }
-    .unified-sidebar-nav .nav-item.active > a { background: rgba(0, 175, 176, 0.2) !important; color: #fff !important; font-weight: 600; }
-    .unified-sidebar-nav .nav-item.active > a i { color: var(--color-accent-500, #00afb0); }
+    .unified-sidebar-nav .nav-item > a:hover { background: rgba(0, 175, 176, 0.08) !important; color: var(--color-accent-600, #009494) !important; }
+    .unified-sidebar-nav .nav-item > a:hover i { color: var(--color-accent-600, #009494); }
+    .unified-sidebar-nav .nav-item.active > a { background: rgba(0, 175, 176, 0.1) !important; color: var(--color-accent-600, #009494) !important; font-weight: 600; }
+    .unified-sidebar-nav .nav-item.active > a i { color: var(--color-accent-600, #009494); }
     .unified-sidebar-nav .submenu { list-style: none; padding: 4px 0 8px 36px; margin: 0; }
     .unified-sidebar-nav .submenu li a {
-      display: block; padding: 7px 14px; color: rgba(255,255,255,0.6) !important;
+      display: block; padding: 7px 14px; color: #6b7280 !important;
       font-size: 12.8px; text-decoration: none !important; border-radius: 8px;
       transition: all 0.15s ease;
     }
-    .unified-sidebar-nav .submenu li a:hover { color: #fff !important; background: rgba(255,255,255,0.1) !important; }
+    .unified-sidebar-nav .submenu li a:hover { color: var(--color-accent-600, #009494) !important; background: rgba(0, 175, 176, 0.05) !important; }
 
     /* --- Top Bar --- */
     .lz-topbar {
@@ -565,11 +566,18 @@
     .page h2, section h2 { font-size: 16px !important; }
 
     /* --- Responsive sidebar toggle --- */
-    @media (max-width: 1024px) {
+    @media (max-width: 1199px) { /* Adjust to 1199px which is common for laptops with scaling */
       .lz-sidebar { transform: translateX(-100%); transition: transform 0.2s ease; }
-      .lz-sidebar.open { transform: translateX(0); }
+      .lz-sidebar.open { transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,0.5); }
       .lz-main { margin-left: 0 !important; }
+      .lz-toggle-btn { display: flex !important; }
     }
+    .lz-toggle-btn { 
+        display: none; align-items: center; justify-content: center;
+        background: transparent; border: none; font-size: 24px; color: #374151;
+        cursor: pointer; padding: 4px; margin-right: 12px;
+    }
+    .lz-toggle-btn:hover { color: var(--color-accent-600, #009494); }
 
     /* --- Quick Action Dropdown in topbar --- */
     .lz-topbar .dropdown-menu { border-radius: 8px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.12) !important; border: 1px solid #e5e7eb !important; }
@@ -619,12 +627,74 @@
     @if(Route::current()->getName() != 'sale.pos')
     <div class="lz-topbar d-print-none">
       <div class="lz-topbar-left">
+        <button type="button" class="lz-toggle-btn" onclick="document.querySelector('.lz-sidebar').classList.toggle('open')">
+            <i class="dripicons-menu"></i>
+        </button>
         <h1>@yield('page_title', 'Store Management')</h1>
       </div>
       <div class="lz-topbar-right">
         @php
+          $category_permission_active = $role_has_permissions_list->where('name', 'category')->first();
+          $add_permission_active = $role_has_permissions_list->where('name', 'products-add')->first();
+          $purchase_add_permission_active = $role_has_permissions_list->where('name', 'purchases-add')->first();
           $sale_add_permission_active = $role_has_permissions_list->where('name', 'sales-add')->first();
+          $expense_add_permission_active = $role_has_permissions_list->where('name', 'expenses-add')->first();
+          $quotation_add_permission_active = $role_has_permissions_list->where('name', 'quotes-add')->first();
+          $transfer_add_permission_active = $role_has_permissions_list->where('name', 'transfers-add')->first();
+          $return_add_permission_active = $role_has_permissions_list->where('name', 'returns-add')->first();
+          $purchase_return_add_permission_active = $role_has_permissions_list->where('name', 'purchase-return-add')->first();
+          $user_add_permission_active = $role_has_permissions_list->where('name', 'users-add')->first();
+          $customer_add_permission_active = $role_has_permissions_list->where('name', 'customers-add')->first();
+          $biller_add_permission_active = $role_has_permissions_list->where('name', 'billers-add')->first();
+          $supplier_add_permission_active = $role_has_permissions_list->where('name', 'suppliers-add')->first();
         @endphp
+        {{-- Quick Add "+" Dropdown --}}
+        <div class="dropdown" style="margin-right: 8px;">
+          <a class="btn btn-sm btn-pos" type="button" data-toggle="dropdown" aria-expanded="false">
+            <i class="dripicons-plus"></i>
+          </a>
+          <ul class="dropdown-menu">
+            @if($category_permission_active)
+            <li class="dropdown-item"><a data-toggle="modal" data-target="#category-modal">{{__('file.Add Category')}}</a></li>
+            @endif
+            @if($add_permission_active)
+            <li class="dropdown-item"><a href="{{route('products.create')}}">{{__('file.add_product')}}</a></li>
+            @endif
+            @if($purchase_add_permission_active)
+            <li class="dropdown-item"><a href="{{route('purchases.create')}}">{{trans('file.Add Purchase')}}</a></li>
+            @endif
+            @if($sale_add_permission_active)
+            <li class="dropdown-item"><a href="{{route('sales.create')}}">Create Order</a></li>
+            @endif
+            @if($expense_add_permission_active)
+            <li class="dropdown-item"><a data-toggle="modal" data-target="#expense-modal">{{trans('file.Add Expense')}}</a></li>
+            @endif
+            @if($quotation_add_permission_active)
+            <li class="dropdown-item"><a href="{{route('quotations.create')}}">{{trans('file.Add Quotation')}}</a></li>
+            @endif
+            @if($transfer_add_permission_active)
+            <li class="dropdown-item"><a href="{{route('transfers.create')}}">{{trans('file.Add Transfer')}}</a></li>
+            @endif
+            @if($return_add_permission_active)
+            <li class="dropdown-item"><a href="#" data-toggle="modal" data-target="#add-sale-return">{{trans('file.Add Return')}}</a></li>
+            @endif
+            @if($purchase_return_add_permission_active)
+            <li class="dropdown-item"><a href="#" data-toggle="modal" data-target="#add-purchase-return">{{trans('file.Add Purchase Return')}}</a></li>
+            @endif
+            @if($user_add_permission_active)
+            <li class="dropdown-item"><a href="{{route('user.create')}}">{{trans('file.Add User')}}</a></li>
+            @endif
+            @if($customer_add_permission_active)
+            <li class="dropdown-item"><a href="{{route('customer.create')}}">{{trans('file.Add Customer')}}</a></li>
+            @endif
+            @if($biller_add_permission_active)
+            <li class="dropdown-item"><a href="{{route('biller.create')}}">{{trans('file.Add Biller')}}</a></li>
+            @endif
+            @if($supplier_add_permission_active)
+            <li class="dropdown-item"><a href="{{route('supplier.create')}}">{{trans('file.Add Supplier')}}</a></li>
+            @endif
+          </ul>
+        </div>
         @if($sale_add_permission_active)
         <a href="{{route('payment.index')}}" class="btn btn-sm btn-pos"><i class="dripicons-card"></i> Payment</a>
         <a href="{{route('sales.index')}}" class="btn btn-sm btn-pos"><i class="dripicons-shopping-bag"></i> Order List</a>

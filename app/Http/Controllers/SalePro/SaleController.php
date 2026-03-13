@@ -48,6 +48,7 @@ use DB;
 use Cache;
 use App\Models\GeneralSetting;
 use App\Models\MailSetting;
+use App\Models\Warranty;
 use Stripe\Stripe;
 use NumberToWords\NumberToWords;
 use Illuminate\Support\Facades\Auth;
@@ -855,7 +856,7 @@ class SaleController extends Controller
             $product_type_list = ProductType::where('is_active', true)->get();
 
             $uri = $request->path();
-            if( $uri != 'sales/order'){
+            if( str_replace('admin/', '', $uri) != 'sales/order'){
                 return view('backend.sale.order',compact('currency_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_tax_list', 'lims_reward_point_setting_data','options', 'numberOfInvoice', 'custom_fields', 'lims_customer_group_all', 'brand_list', 'category_list', 'product_type_list', 'date'));
             }else{
                 return view('backend.sale.create',compact('currency_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_tax_list', 'lims_reward_point_setting_data','options', 'numberOfInvoice', 'custom_fields', 'lims_customer_group_all', 'brand_list', 'category_list', 'product_type_list'));
@@ -1207,6 +1208,57 @@ class SaleController extends Controller
 
                 Product_Sale::create($product_sale);
             }
+
+            // ── Auto-create Warranty record for this order ──────────────
+            if ($data['sale_status'] != 3) { // Skip drafts
+                try {
+                    $warranty_data = [
+                        'sale_id'        => $lims_sale_data->id,
+                        'sale_order_no'  => $data['order_no'],
+                        'serial_number'  => $data['order_no'], // Order no = warranty serial
+                        'customer_name'  => $lims_customer_data->name,
+                        'customer_phone' => $lims_customer_data->phone_number,
+                        'customer_email' => $lims_customer_data->email,
+                        'customer_address' => $lims_customer_data->address,
+                        'purchase_date'  => date('Y-m-d', strtotime($data['created_at'])),
+                        'expiry_date'    => date('Y-m-d', strtotime($data['created_at'] . ' +12 months')),
+                        'warranty_months' => 12,
+                        'status'         => 'active',
+                    ];
+
+                    // Collect product names from line items
+                    $product_names = [];
+                    foreach ($product_id as $idx => $pid) {
+                        $prod = Product::find($pid);
+                        if ($prod && !in_array($prod->name, $product_names)) {
+                            $product_names[] = $prod->name;
+                        }
+                    }
+                    $warranty_data['product_name'] = implode(', ', $product_names);
+
+                    // Extract eye prescription from line items (R / L)
+                    foreach ($product_id as $idx => $pid) {
+                        $eye_side = strtoupper($lr[$idx] ?? '');
+                        if ($eye_side === 'R') {
+                            $warranty_data['right_eye_sph']  = $sph[$idx] ?? null;
+                            $warranty_data['right_eye_cyl']  = $cyl[$idx] ?? null;
+                            $warranty_data['right_eye_axis'] = $axis[$idx] ?? null;
+                            $warranty_data['right_eye_add']  = $addition[$idx] ?? null;
+                        } elseif ($eye_side === 'L') {
+                            $warranty_data['left_eye_sph']  = $sph[$idx] ?? null;
+                            $warranty_data['left_eye_cyl']  = $cyl[$idx] ?? null;
+                            $warranty_data['left_eye_axis'] = $axis[$idx] ?? null;
+                            $warranty_data['left_eye_add']  = $addition[$idx] ?? null;
+                        }
+                    }
+
+                    Warranty::create($warranty_data);
+                } catch (\Exception $e) {
+                    \Log::warning('Warranty auto-creation failed for order ' . $data['order_no'] . ': ' . $e->getMessage());
+                }
+            }
+            // ── End warranty auto-creation ──────────────────────────────
+
             if($data['sale_status'] == 3)
                 $message = 'Sale successfully added to draft';
             else
@@ -1354,6 +1406,20 @@ class SaleController extends Controller
         else
             return redirect('sales')->with('message', $message);
 
+    }
+
+    public function warehousesByLocation(Request $request) {
+        $place = $request->input('place');
+        $city = $request->input('city');
+        $warehouses = Warehouse::where('is_active', true)
+            ->where(function($q) use ($place, $city) {
+                if($place) $q->where('address', 'LIKE', "%$place%");
+                if($city) $q->orWhere('address', 'LIKE', "%$city%");
+            })->get();
+        if($warehouses->isEmpty()) {
+            $warehouses = Warehouse::where('is_active', true)->get();
+        }
+        return response()->json($warehouses);
     }
 
     public function getSoldItem($id)
@@ -1836,77 +1902,45 @@ class SaleController extends Controller
     public function getProductList(Request $request, $id)
     {
 
-        $lims_product_warehouse_data = Product::where([
-            ['products.brand_id', $request->brand],
-            ['products.category_id', $request->category],
-            ['products.product_type_id', $request->product_type],
-        ])
-        ->select( 'products.name', 'products.code', 'products.type', 'products.category_id', 'products.product_type_id', 'products.product_list', 'products.qty_list', 'products.is_embeded', 'products.price', 'products.brand_id')
+        $query = Product::query();
+        if($request->has('brand') && $request->brand != '')
+            $query->where('products.brand_id', $request->brand);
+        if($request->has('category') && $request->category != '')
+            $query->where('products.category_id', $request->category);
+        if($request->has('product_type') && $request->product_type != '') {
+            $product_type = ProductType::where('id', $request->product_type)
+                ->orWhere('name', $request->product_type)
+                ->first();
+            if($product_type)
+                $query->where('products.product_type_id', $product_type->id);
+        }
+
+        $lims_product_warehouse_data = $query
+        ->select( 'products.id', 'products.name', 'products.code', 'products.type', 'products.category_id', 'products.product_type_id', 'products.product_list', 'products.qty_list', 'products.is_embeded', 'products.price', 'products.brand_id', 'products.qty')
                                         ->get();
 
-
-        // $query = Product::join('product_warehouse', 'products.id', '=', 'product_warehouse.product_id');
-        // if(config('without_stock') == 'no') {
-        //     $query = $query->where([
-        //         ['products.is_active', true],
-        //         ['product_warehouse.warehouse_id', $id],
-        //         ['product_warehouse.qty', '>', 0]
-        //     ]);
-        // }
-        // else {
-        //     $query = $query->where([
-        //         ['products.is_active', true],
-        //         ['product_warehouse.warehouse_id', $id]
-        //     ]);
-        // }
-
-        // $lims_product_warehouse_data = $query
-        //                                 ->where([
-        //                                     ['products.brand_id', $request->brand],
-        //                                     ['products.category_id', $request->category],
-        //                                     ['products.product_type_id', $request->product_type],
-        //                                 ])
-
-        //                                 ->select('product_warehouse.*', 'products.name', 'products.code', 'products.type', 'products.category_id', 'products.product_type_id', 'products.product_list', 'products.qty_list', 'products.is_embeded', 'products.price', 'products.brand_id')
-        //                                 ->get();
-        $product_code = [];
-        $product_name = [];
-        $product_qty = [];
-        $product_type = [];
-        $product_id = [];
-        $product_list = [];
-        $qty_list = [];
-        $product_price = [];
-        $batch_no = [];
-        $product_batch_id = [];
-        $expired_date = [];
-        $is_embeded = [];
-        $imei_number = [];
-        $product_category = [];
-        $brand = [];
-
         $data = [];
-        //product without variant
-        foreach ($lims_product_warehouse_data as $product_warehouse){
-
-            $data[] =
-                [
-                    'qty'       => $product_warehouse->qty,
-                    'price'     => $product_warehouse->price,
-                    'code'      => $product_warehouse->code,
-                    'name'      => htmlspecialchars($product_warehouse->name),
-                    'type'      => $product_warehouse->productType->name,
-                    'category'  => $product_warehouse->category->name,
-                    'id'        => $product_warehouse->product_id,
-                    'list'      => $product_warehouse->product_list,
-                    'qty_list'  => $product_warehouse->qty_list,
-                    'brand'     => $product_warehouse->brand->title
-                ];
-
+        try {
+            foreach ($lims_product_warehouse_data as $product_warehouse){
+                $data[] =
+                    [
+                        'qty'       => $product_warehouse->qty ?? 0,
+                        'price'     => $product_warehouse->price,
+                        'code'      => $product_warehouse->code,
+                        'name'      => htmlspecialchars($product_warehouse->name),
+                        'type'      => $product_warehouse->productType->name ?? 'N/A',
+                        'category'  => $product_warehouse->category->name ?? 'N/A',
+                        'id'        => $product_warehouse->id,
+                        'list'      => $product_warehouse->product_list,
+                        'qty_list'  => $product_warehouse->qty_list,
+                        'brand'     => $product_warehouse->brand->title ?? 'N/A'
+                    ];
             }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
 
-        //return $product_id;
-        return $data;
+        return response()->json($data);
     }
 
     public function posSale($id='')
@@ -2025,7 +2059,7 @@ class SaleController extends Controller
                 if($images[0])
                     $product->base_image = $images[0];
                 else
-                    $product->base_image = 'zummXD2dvAtI.png';
+                    $product->base_image = 'zummXD2dvAtI.avif';
             }
             $product_number = count($lims_product_list);
             $lims_pos_setting_data = PosSetting::latest()->first();
@@ -2153,6 +2187,7 @@ class SaleController extends Controller
     public function limsProductSearch(Request $request)
     {
         $todayDate = date('Y-m-d');
+        $product_data = explode("|", $request['data']);
         $product_info = explode("?", $request['data']);
         $product_code = $product_info[0];
         $customer_id = $product_info[1] ?? null;
@@ -2179,7 +2214,7 @@ class SaleController extends Controller
             $lims_product_data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
                 ->select('products.*', 'product_variants.id as product_variant_id', 'product_variants.item_code', 'product_variants.additional_price')
                 ->where([
-                    ['product_variants.item_code', $product_data[0]],
+                    ['product_variants.item_code', $product_code],
                     ['products.is_active', true]
                 ])->first();
 
@@ -2273,10 +2308,10 @@ class SaleController extends Controller
             'qty' => $qty,
             'wholesale_price' => $lims_product_data->wholesale_price,
             'cost' => $lims_product_data->cost,
-            'sku' => $product_data[2] ?? null, // Assuming product_data[2] is SKU
-            'type' => $product_data[3] ?? null, // Assuming product_data[3] is type
-            'brand' => $product_data[5] ?? null, // Assuming product_data[5] is brand
-            'pcode' => $lims_product_data->code, // Added for consistency, assuming pcode is product code
+            'sku' => $lims_product_data->code, 
+            'type' => $lims_product_data->type,
+            'brand' => $lims_product_data->brand_id,
+            'pcode' => $lims_product_data->code,
             'base' => $lims_product_data->base,
             'addition' => $lims_product_data->addition,
             'lr' => $lims_product_data->lr,
@@ -2302,10 +2337,10 @@ class SaleController extends Controller
             15 => $qty,
             16 => $lims_product_data->wholesale_price,
             17 => $lims_product_data->cost,
-            18 => $product_data[2] ?? null, // Corresponds to 'sku'
-            19 => $product_data[3] ?? null, // Corresponds to 'type'
-            20 => $product_data[5] ?? null, // Corresponds to 'brand'
-            21 => $lims_product_data->product_list,
+            18 => $lims_product_data->is_imei, 
+            19 => $lims_product_data->addition, 
+            20 => $lims_product_data->base,
+            21 => $lims_product_data->lr,
             22 => $lims_product_data->variant_list,
             23 => $lims_product_data->qty_list,
             24 => $lims_product_data->type,
@@ -2316,10 +2351,18 @@ class SaleController extends Controller
     public function limsProductSearchNew(Request $request)
     {
         $todayDate = date('Y-m-d');
-        $product_info = explode("?", $request['data']);
-        $product_code = $product_info[0];
+        $product_data = explode("|", $request['data']); // Split by pipe FIRST (like reference)
+        $product_info = explode("?", $request['data']); // Then split by ? for customer/qty
         $customer_id = $product_info[1] ?? null;
         $qty = $product_info[2] ?? 1;
+
+        // DEBUG: Log what we're searching for
+        \Log::info('=== limsProductSearchNew DEBUG ===', [
+            'raw_input' => $request['data'],
+            'product_data_0_code' => $product_data[0],
+            'customer_id' => $customer_id,
+            'qty' => $qty,
+        ]);
 
         $product_variant_id = null;
         $all_discount = DB::table('discount_plan_customers')
@@ -2333,10 +2376,17 @@ class SaleController extends Controller
                         ])
                         ->select('discounts.*')
                         ->get();
+        // Use $product_data[0] (the code portion) — NOT the full pipe-string
         $lims_product_data = Product::where([
-            ['code', $product_code],
+            ['code', $product_data[0]],
             ['is_active', true]
         ])->first();
+
+        \Log::info('Product lookup result', [
+            'searched_code' => $product_data[0],
+            'found' => $lims_product_data ? true : false,
+            'product_name' => $lims_product_data->name ?? 'NOT FOUND',
+        ]);
 
         if(!$lims_product_data) {
             $lims_product_data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
@@ -2421,35 +2471,63 @@ class SaleController extends Controller
             $unit_operation_value_str = implode(",",$unit_operation_value) . ',';
         }
 
-        $product_data = [
-            $lims_product_data->name,
-            $product_variant_id ? $lims_product_data->item_code : $lims_product_data->code,
-            $product_price,
-            $lims_product_data->wholesale_price,
-            $tax_rate,
-            $tax_name,
-            $lims_product_data->tax_method,
-            $unit_name_str,
-            $unit_operator_str,
-            $unit_operation_value_str,
-            $lims_product_data->id,
-            $product_variant_id ?? 'n/a',
-            $lims_product_data->is_variant,
-            $lims_product_data->promotion,
-            $lims_product_data->last_date,
-            $lims_product_data->promotion_price,
-            $lims_product_data->is_batch,
-            $lims_product_data->is_diffPrice,
-            $lims_product_data->is_imei,
-            $lims_product_data->addition,
-            $lims_product_data->base,
-            $lims_product_data->lr,
-            $lims_product_data->is_wholesale,
-            $lims_product_data->qty_list,
-            $lims_product_data->type,
-        ];
+        // Build response EXACTLY like reference SalePro (sequential $product[] pushes)
+        // Index 0: name
+        $product[] = $lims_product_data->name;
+        // Index 1: code
+        if($lims_product_data->is_variant){
+            $product[] = $lims_product_data->item_code;
+        } else {
+            $product[] = $lims_product_data->code;
+        }
+        // Index 2: price (after discount/promotion)
+        $product[] = $product_price;
+        // Index 3: tax_rate
+        $product[] = $tax_rate;
+        // Index 4: tax_name
+        $product[] = $tax_name;
+        // Index 5: tax_method
+        $product[] = $lims_product_data->tax_method;
+        // Index 6: unit_name
+        $product[] = $unit_name_str;
+        // Index 7: unit_operator
+        $product[] = $unit_operator_str;
+        // Index 8: unit_operation_value
+        $product[] = $unit_operation_value_str;
+        // Index 9: product id
+        $product[] = $lims_product_data->id;
+        // Index 10: product_variant_id
+        $product[] = $product_variant_id;
+        // Index 11: promotion
+        $product[] = $lims_product_data->promotion;
+        // Index 12: is_batch
+        $product[] = $lims_product_data->is_batch;
+        // Index 13: is_imei
+        $product[] = $lims_product_data->is_imei;
+        // Index 14: is_variant
+        $product[] = $lims_product_data->is_variant;
+        // Index 15: wholesale_price
+        $product[] = $lims_product_data->wholesale_price;
+        // Index 16: cost
+        $product[] = $lims_product_data->cost;
+        // Index 17: sku (from input data)
+        $product[] = $product_data[2] ?? null;
 
-        return response()->json($product_data);
+        // Associative keys for display (exactly like reference)
+        $product['type'] = $lims_product_data->type;
+        $product['brand'] = $lims_product_data->brand_id;
+        $product['name'] = $lims_product_data->name;
+        $product['code'] = $lims_product_data->code;
+        $product['cost'] = $lims_product_data->cost;
+        $product['id'] = $lims_product_data->id;
+        $product['qty'] = 1;
+        $product['wholesale_price'] = $lims_product_data->wholesale_price;
+        $product['price'] = $lims_product_data->price;
+        $product['addition'] = $lims_product_data->addition;
+        $product['base'] = $lims_product_data->base;
+        $product['lr'] = $lims_product_data->lr;
+
+        return $product;
     }
 
     public function checkDiscount(Request $request)
@@ -3435,7 +3513,14 @@ class SaleController extends Controller
                     ->first();
         $totalDue = $saleData->grand_total - $returned_amount - $saleData->paid_amount;
 
-        return view('backend.sale.lab_receipt', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+        // Warranty QR generation
+        $warranty = \App\Models\Warranty::where('sale_id', $id)->first();
+        $warrantyQr = null;
+        if ($warranty) {
+            $warrantyQr = (new \chillerlan\QRCode\QRCode)->render($warranty->getVerificationUrl());
+        }
+
+        return view('backend.sale.lab_receipt', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue', 'warrantyQr', 'warranty'));
 
     }
 

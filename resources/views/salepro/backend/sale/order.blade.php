@@ -14,6 +14,40 @@
     .order-list input[type="text"]{
         padding: 5px 6px;
     }
+
+    .product-img {
+        cursor: pointer;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 15px;
+        transition: all 0.3s;
+        text-align: center;
+    }
+
+    .product-img:hover {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-color: #8b5cf6;
+    }
+
+    .product-img img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        margin-bottom: 8px;
+    }
+
+    .product-img p {
+        margin-bottom: 2px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .product-img span {
+        font-size: 12px;
+        color: #666;
+    }
 </style>
 @endpush
 @if(session()->has('not_permitted'))
@@ -36,14 +70,19 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>{{trans('file.Date')}}</label>
-                                            <div><b>{{$date}}</b></div>
-                                            {{-- <input type="text" name="created_at" class="form-control date" placeholder="Choose date" value="" autocomplete="off" readonly=true/> --}}
-                                        </div>
+                                    {{-- General Info Card --}}
+                                    <div class="col-md-12 mb-4">
+                                        <div class="card shadow border-0">
+                                            <div class="card-body p-4 bg-white rounded-xl">
+                                                <h5 class="text-primary mb-3" style="font-weight: 600;"><i class="dripicons-information text-info"></i> General Information</h5>
+                                                <div class="row">
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label>{{trans('file.Date')}}</label>
+                                                            <input type="text" name="created_at" class="form-control date" placeholder="Choose date" value="{{$date}}" autocomplete="off" />
+                                                        </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label>
                                                 {{trans('file.Reference No')}}
@@ -59,7 +98,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.customer')}} *</label>
-                                            <div class="input-group pos">
+                                            <div class="input-group pos d-flex flex-nowrap">
                                                 <?php
                                                   $deposit = [];
                                                   $points = [];
@@ -70,14 +109,14 @@
                                                     ['role_id', \Auth::user()->role_id] ])->first();
                                                 ?>
                                                 @if($customer_active)
-                                                <select required name="customer_id" id="customer_id" class="selectpicker form-control" data-live-search="true" title="Select customer..." style="width: 100px">
+                                                <select required name="customer_id" id="customer_id" class="selectpicker form-control" data-live-search="true" title="Select customer...">
                                                 @foreach($lims_customer_list as $customer)
                                                     @php
                                                       $deposit[$customer->id] = $customer->deposit - $customer->expense;
 
                                                       $points[$customer->id] = $customer->points;
                                                     @endphp
-                                                    <option value="{{$customer->id}}">{{$customer->name . ' (' .$customer->place .'-'. $customer->city . ')'}}</option>
+                                                    <option value="{{$customer->id}}" data-place="{{$customer->place}}" data-city="{{$customer->city}}">{{$customer->name . ' (' .$customer->place .'-'. $customer->city . ')'}}</option>
                                                 @endforeach
                                                 </select>
                                                 <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#addCustomer"><i class="dripicons-plus"></i></button>
@@ -89,7 +128,7 @@
 
                                                       $points[$customer->id] = $customer->points;
                                                     @endphp
-                                                    <option value="{{$customer->id}}">{{$customer->name . ' (' .$customer->place .'-'. $customer->city . ')'}}</option>
+                                                    <option value="{{$customer->id}}" data-place="{{$customer->place}}" data-city="{{$customer->city}}">{{$customer->name . ' (' .$customer->place .'-'. $customer->city . ')'}}</option>
                                                 @endforeach
                                                 </select>
                                                 @endif
@@ -99,7 +138,7 @@
                                     @if(isset(auth()->user()->warehouse_id))
                                     <input type="hidden" name="warehouse_id" id="warehouse_id" value="{{auth()->user()->warehouse_id}}" />
                                     @else
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label>{{trans('file.Warehouse')}} *</label>
                                             <select required name="warehouse_id" id="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
@@ -114,7 +153,7 @@
                                     @if(isset(auth()->user()->biller_id))
                                     <input type="hidden" name="biller_id" id="biller_id" value="{{auth()->user()->biller_id}}" />
                                     @else
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label>{{trans('file.Biller')}} *</label>
                                             <select required id="biller_id" name="biller_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Biller...">
@@ -125,11 +164,56 @@
                                         </div>
                                     </div>
                                     @endif
+                                                </div> <!-- End general row -->
+                                            </div> <!-- End general card-body -->
+                                        </div> <!-- End general card -->
+                                    </div> <!-- End general col-12 -->
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Brand *</label>
-                                            <select required name="brand_id" id="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
+                                    {{-- End User Details Section (Added for Warranty flow) --}}
+                                    <div class="col-md-12 mb-4">
+                                        <div class="card shadow border-0" style="background-color: #f0f9ff;">
+                                            <div class="card-body p-4 rounded-xl">
+                                                <h5 class="text-primary mb-3" style="font-weight: 600;"><i class="dripicons-user text-primary"></i> End User Details (Captured for Warranty)</h5>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Name</label>
+                                                            <input type="text" name="end_user_name" class="form-control" placeholder="Full name of buyer"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Phone</label>
+                                                            <input type="text" name="end_user_phone" class="form-control" placeholder="Phone number"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Email</label>
+                                                            <input type="email" name="end_user_email" class="form-control" placeholder="Email (optional)"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Address</label>
+                                                            <input type="text" name="end_user_address" class="form-control" placeholder="City or Address"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Product Selection Card --}}
+                                    <div class="col-md-12 mb-4">
+                                        <div class="card shadow border-0" style="background-color: #faf5ff;">
+                                            <div class="card-body p-4 rounded-xl">
+                                                <h5 class="text-primary mb-3" style="font-weight: 600;"><i class="dripicons-tags text-secondary" style="color:#8b5cf6;"></i> Product Selection</h5>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Brand *</label>
+                                                            <select required name="brand_id" id="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
                                                 @foreach($brand_list as $brand)
                                                 <option value="{{$brand->id}}">{{$brand->title}}</option>
                                                 @endforeach
@@ -155,14 +239,21 @@
                                                 @foreach($product_type_list as $type)
                                                 <option value="{{$type->id}}">{{$type->name}}</option>
                                                 @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div> <!-- End Product Selection row -->
+                                            </div> <!-- End Product Selection card-body -->
+                                        </div> <!-- End Product Selection card -->
+                                    </div> <!-- End Product Selection col-12 -->
+                                </div> <!-- End main form row -->
 
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-12  d-none product-loading ">
-                                        <div class="alert alert-info" role="alert">
+                                {{-- Barcode Search Card --}}
+                                <div class="card shadow border-0 mb-4" style="background-color: #faf5ff;">
+                                    <div class="card-body p-4 rounded-xl">
+                                        <div class="row">
+                                            <div class="col-md-12 d-none product-loading">
+                                                <div class="alert alert-info" role="alert">
                                             Product list is loading.... Please wait...
                                           </div>
                                     </div>
@@ -173,12 +264,23 @@
                                             <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Please type product code and select..." class="form-control" />
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row mt-5">
                                     <div class="col-md-12">
-                                        <h5>{{trans('file.Order Table')}} *</h5>
-                                        <div class="table-responsive mt-3">
-                                            <table id="myTable" class="table table-hover order-list">
+                                        <div id="product-list-container" class="row mt-3">
+                                            <!-- Products will be loaded here -->
+                                        </div>
+                                    </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- End Barcode Search Card -->
+
+                                {{-- Order Table Card --}}
+                                <div class="card shadow border-0 mb-4 bg-white">
+                                    <div class="card-body p-4 rounded-xl">
+                                        <h5 class="text-primary mb-3" style="font-weight: 600;"><i class="dripicons-cart text-success"></i> {{trans('file.Order Table')}} *</h5>
+                                        <div class="row mt-3">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive mt-3">
+                                                    <table id="myTable" class="table table-hover order-list">
                                                 <thead>
                                                     <tr>
                                                         <th>{{trans('file.name')}}</th>
@@ -215,8 +317,11 @@
                                                 </tfoot>
                                             </table>
                                         </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                </div> <!-- End Order Table Card -->
+
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group">
@@ -253,11 +358,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>{{trans('file.Order Tax')}}</label>
-                                            <select class="form-control" name="order_tax_rate">
+
+                                {{-- Payment & Finalization Card --}}
+                                <div class="card shadow border-0 mb-4" style="background-color: #f6fdf9;">
+                                    <div class="card-body p-4 rounded-xl">
+                                        <h5 class="text-primary mb-4" style="font-weight: 600;"><i class="dripicons-wallet text-success"></i> Payment & Finalization</h5>
+                                        <div class="row mt-3">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>{{trans('file.Order Tax')}}</label>
+                                                    <select class="form-control" name="order_tax_rate">
                                                 <option value="0">No Tax</option>
                                                 @foreach($lims_tax_list as $tax)
                                                 <option value="{{$tax->rate}}">{{$tax->name}}</option>
@@ -477,9 +587,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                    </div> <!-- End Payment card-body -->
+                                </div> <!-- End Payment card -->
+
+                                <div class="form-group text-right">
                                     {{-- <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-button"> --}}
-                                    <button id="submit-button" type="button" class="btn btn-primary">{{trans('file.submit')}}</button>
+                                    <button id="submit-button" type="button" class="btn btn-primary btn-lg shadow" style="border-radius: 8px; padding: 10px 40px; font-weight: bold;"><i class="dripicons-checkmark mr-2"></i> {{trans('file.submit')}}</button>
                                 </div>
                             </div>
                         </div>
@@ -679,6 +792,13 @@ var qty_list = [];
 var product_price = [];
 var wholesale_price = [];
 var product_warehouse_price  = [];
+var tax_rate = [];
+var tax_name = [];
+var tax_method = [];
+var unit_name = [];
+var unit_operator = [];
+var unit_operation_value = [];
+var product_discount = [];
 
 
 
@@ -710,26 +830,48 @@ $('select[name="product_type_id"]').on('change', function() {
 });
 
 function getProduct(warehouse_id){
-    // Refactored to avoid loading entire product list
-    lims_product_array = [];
+    var brand_id = $('#brand_id').val();
+    var category_id = $('#category_id').val();
+    var product_type_id = $('#product_type_id').val();
+
+    if(!brand_id){
+        return;
+    }else if(!category_id){
+        return;
+    }else if(!product_type_id){
+        return;
+    }
+
+
+    console.log("=== DEBUG: Starting getProduct, Brand/Category/Type selected. Showing loader. ===");
+    $('.product-loading').removeClass('d-none').show();
+    lims_product_array = []; // Clear existing list immediately
+
+    $.get('{{ url("/admin/sales/getproduct-list") }}/' + warehouse_id + '?brand='+brand_id+'&category='+category_id +'&product_type='+product_type_id, function(data) {
+        console.log("=== DEBUG: getProduct AJAX Success. Hiding loader. Data count:", data.length, "===");
+        $('.product-loading').addClass('d-none').hide();
+
+        if(data.length == 0){
+            alert('No Products available!!!!!!');
+        }
+
+        $.each(data, function(index, row) {
+            lims_product_array.push(row.code+'|'+row.name+'|'+row.category+'|'+row.type +'|'+row.price + '|' + row.brand);
+        });
+
+    }).fail(function(xhr) {
+        console.error("=== DEBUG: getProduct AJAX Failed. Status:", xhr.status, "Error:", xhr.responseText, "===");
+        $('.product-loading').addClass('d-none').hide();
+    });
 }
 
 var lims_productcodeSearch = $('#lims_productcodeSearch');
 lims_productcodeSearch.autocomplete({
     source: function(request, response) {
-        $.ajax({
-            url: "{{ route('products.search_autocomplete') }}",
-            type: "GET",
-            data: {
-                term: request.term,
-                warehouse_id: $("#warehouse_id").val(),
-                brand_id: $("#brand_id").val(),
-                category_id: $("#category_id").val()
-            },
-            success: function(data) {
-                response(data);
-            }
-        });
+        var matcher = new RegExp(".?" + $.ui.autocomplete.escapeRegex(request.term), "i");
+        response($.grep(lims_product_array, function(item) {
+            return matcher.test(item);
+        }));
     },
     response: function(event, ui) {
         if (ui.content.length == 1) {
@@ -737,6 +879,10 @@ lims_productcodeSearch.autocomplete({
             $(this).autocomplete( "close" );
             $(".ui-helper-hidden-accessible").css('display', 'none');
             productSearch(data);
+        }
+        else if(ui.content.length == 0 && $('#lims_productcodeSearch').val().length == 13) {
+            $(".ui-helper-hidden-accessible").css('display', 'none');
+          productSearch($('#lims_productcodeSearch').val()+'|'+1);
         }
     },
     select: function(event, ui) {
@@ -851,82 +997,106 @@ var reward_point_setting = <?php echo json_encode($lims_reward_point_setting_dat
 @endif
 
 function productSearch(data) {
-    var customer_id = $('#customer_id').val();
+    var product_info = data.split("|");
+    var code = product_info[0];
+    var pre_qty = 0;
+    var flag = true;
+
+    // $(".product-code").each(function(i) {
+    //     if ($(this).val() == code) {
+    //         rowindex = i;
+    //         pre_qty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val();
+    //     }
+    // });
+
     $.ajax({
         type: 'GET',
-        url: "{{route('product_sale.search_new')}}",
+        url: "{{url('/admin/sales/lims_product_search_new')}}",
         data: {
-            data: data + '?' + customer_id
+            data: data+'?'+$('#customer_id').val()+'?'+(parseFloat(pre_qty) + 1)
         },
         success: function(data) {
+            console.log('=== DEBUG: lims_product_search_new response ===', data);
+            $("input[name='product_code_name']").val('');
             var flag = 1;
-            $(".product_code").each(function(i) {
-                if ($(this).val() == data[1]) {
-                    rowindex = i;
-                    var qty = parseFloat($('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val()) + 1;
-                    $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(qty);
-                    checkQuantity(String(qty), true);
-                    flag = 0;
-                }
-            });
-            if (flag) {
-                var newRow = $("<tr>");
-                var cols = '';
-                
-                // Add to data arrays for global access
-                product_code.push(data[1]);
-                product_name.push(data[0]);
-                product_price.push(parseFloat(data[2]));
-                wholesale_price.push(parseFloat(data[3]));
-                tax_rate.push(parseFloat(data[4]));
-                tax_name.push(data[5]);
-                tax_method.push(data[6]);
-                unit_name.push(data[7]);
-                unit_operator.push(data[8]);
-                unit_operation_value.push(data[9]);
-                product_id.push(data[10]);
-                is_variant.push(data[12]);
-                is_imei.push(data[18]);
-                product_discount.push(0);
+            // if (pre_qty > 0) {
+            //     var qty = 1 + parseInt(pre_qty);
+            //     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(qty);
+            //     checkQuantity(String(qty), true);
+            //     flag = 0;
+            // }else{
+            var newRow = $("<tr>");
+            var cols = '';
+            pos = product_code.indexOf(data['code']);
+            // temp_unit_name = (data[6]).split(',');
+            cols += '<td>' + data['name'] +
+                // '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button>' +
+                ' <br> ' +
+                ' <span>Base: '+data['base']+' </span> '+
+                ' <span style="margin-left:5px">Add: '+data['addition']+' </span> '+
+                ' <span style="margin-left:5px">'+data['lr']+' </span> '+
+                '</td>';
+            cols += '<td>' + data['code'] + '</td>';
+            cols += '<td><input type="text" class="form-control sph" name="sph[]" value="" required/></td>';
+            cols += '<td><input type="text" class="form-control cyl" name="cyl[]" value="" required/></td>';
+            cols += '<td><input type="text" class="form-control axis" name="axis[]" value="" required/></td>';
+            cols += '<td><input type="text" class="form-control addition" name="addition[]" value="'+data['addition']+'" required/></td>';
+            cols += '<td><input type="text" class="form-control lr" name="lr[]" value="'+data['lr']+'" required/></td>';
+            cols += '<td><input type="text" class="form-control qty update_product" name="qty[]" value="'+data['qty']+'" required/></td>';
+            cols += '<td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="'+data['price']+'" required/></td>';
+            cols += `<td>
+                <div class="input-group-prepend">
+                <select  name="discount_type[]" class="form-control discount_type update_product" style="width:60px;padding: 6px;">
+                    <option value="Percentage">%</option>
+                    <option value="Flat">F</option>
+                </select>
+                <input style="width:60px" type=" text" class="form-control discount_value update_product" name="discount_value[]" value=""/> </td>
+                </div>
+                `;
+            cols += '<td class="discount amt">{{number_format(0, $general_setting->decimal, '.', '')}}</td>';
+            // cols += '<td class="tax  amt"></td>';
+            cols += '<td class="sub-total amt"></td>';
+            cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
+            cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data['code'] + '"/>';
+            cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data['id'] + '"/>';
+            // cols += '<input type="hidden" class="sale-unit" name="sale_unit[]" value="' + temp_unit_name[0] + '"/>';
+            // cols += '<input type="hidden" class="net_unit_price" name="net_unit_price[]" />';
+            cols += '<input type="hidden" class="discount-value" name="discount[]" />';
+            cols += '<input type="hidden" class="tax-rate" name="tax_rate[]" value="0"/>';
+            cols += '<input type="hidden" class="tax-value" name="tax[]" />';
+            cols += '<input type="hidden" class="subtotal-value" name="subtotal[]" />';
 
-                cols += '<td>' + data[0] +
-                    ' <br> ' +
-                    ' <span>Base: '+data[20]+' </span> '+
-                    ' <span style="margin-left:5px">Add: '+data[19]+' </span> '+
-                    ' <span style="margin-left:5px">'+data[21]+' </span> ' + '</td>';
-                cols += '<td>' + data[1] + '</td>';
-                cols += '<td><input type="text" class="form-control sph" name="sph[]" value="" required/></td>';
-                cols += '<td><input type="text" class="form-control cyl" name="cyl[]" value="" required/></td>';
-                cols += '<td><input type="text" class="form-control axis" name="axis[]" value="" required/></td>';
-                cols += '<td><input type="text" class="form-control addition" name="addition[]" value="'+data[19]+'" required/></td>';
-                cols += '<td><input type="text" class="form-control lr" name="lr[]" value="'+data[21]+'" required/></td>';
-                cols += '<td><input type="text" class="form-control qty update_product" name="qty[]" value="1" required/></td>';
-                cols += '<td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="'+data[2]+'" required/></td>';
-                cols += `<td>
-                    <div class="input-group-prepend">
-                    <select  name="discount_type[]" class="form-control discount_type update_product" style="width:60px;padding: 6px;">
-                        <option value="Percentage">%</option>
-                        <option value="Flat">F</option>
-                    </select>
-                    <input style="width:60px" type=" text" class="form-control discount_value update_product" name="discount_value[]" value=""/>
-                    </div>
-                    </td>`;
-                cols += '<td class="discount amt">0.00</td>';
-                cols += '<td class="sub-total amt">0.00</td>';
-                cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
-                cols += '<input type="hidden" class="product_code" name="product_code[]" value="' + data[1] + '"/>';
-                cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[10] + '"/>';
-                cols += '<input type="hidden" class="discount-value" name="discount[]" />';
-                cols += '<input type="hidden" class="tax-rate" name="tax_rate[]" value="'+data[4]+'"/>';
-                cols += '<input type="hidden" class="tax-value" name="tax[]" />';
-                cols += '<input type="hidden" class="subtotal-value" name="subtotal[]" />';
+            newRow.append(cols);
+            $("table.order-list tbody").prepend(newRow);
+            rowindex = newRow.index();
 
-                newRow.append(cols);
-                $("table.order-list tbody").prepend(newRow);
-                rowindex = newRow.index();
-                
-                checkQuantity(1, true);
+            if(!data[11] && product_warehouse_price[pos]) {
+                product_price.splice(rowindex, 0, parseFloat(product_warehouse_price[pos] * currency['exchange_rate']) + parseFloat(product_warehouse_price[pos] * currency['exchange_rate'] * customer_group_rate));
             }
+            else {
+                product_price.splice(rowindex, 0, parseFloat(data[2] * currency['exchange_rate']) + parseFloat(data[2] * currency['exchange_rate'] * customer_group_rate));
+            }
+            if(data[15])
+                wholesale_price.splice(rowindex, 0, parseFloat(data[15] * currency['exchange_rate']) + parseFloat(data[15] * currency['exchange_rate'] * customer_group_rate));
+            else
+                wholesale_price.splice(rowindex, 0, '{{number_format(0, $general_setting->decimal, '.', '')}}');
+            cost.splice(rowindex, 0, parseFloat(data[16] * currency['exchange_rate']));
+            product_discount.splice(rowindex, 0, '{{number_format(0, $general_setting->decimal, '.', '')}}');
+            tax_rate.splice(rowindex, 0, parseFloat(data[3]));
+            tax_name.splice(rowindex, 0, data[4]);
+            tax_method.splice(rowindex, 0, data[5]);
+            unit_name.splice(rowindex, 0, data[6]);
+            unit_operator.splice(rowindex, 0, data[7]);
+            unit_operation_value.splice(rowindex, 0, data[8]);
+            is_imei.splice(rowindex, 0, data[13]);
+            is_variant.splice(rowindex, 0, data[14]);
+            checkQuantity(1, true);
+            // if(data[13]) {
+            //     populatePriceOption();
+            //     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.edit-product').click();
+            // }
+            // }
+
         }
     });
 }
@@ -939,8 +1109,35 @@ $('.selectpicker').selectpicker({
 $('[data-toggle="tooltip"]').tooltip();
 
 $('select[name="customer_id"]').on('change', function() {
-    setCustomerGroupRate($(this).val());
+    var customer_id = $(this).val();
+    var selected = $(this).find('option:selected');
+    var place = selected.data('place');
+    var city = selected.data('city');
+    
+    filterWarehouseByCustomer(place, city);
+    setCustomerGroupRate(customer_id);
 });
+
+function filterWarehouseByCustomer(place, city) {
+    $.ajax({
+        url: "{{ url('/admin/sales/warehouses-by-location') }}",
+        data: { place: place, city: city },
+        success: function(data) {
+            var $wh = $('select[name="warehouse_id"]');
+            $wh.empty().append('<option value="">Select warehouse...</option>');
+            $wh.append('<option value="all">All</option>');
+            $.each(data, function(i, wh) {
+                $wh.append('<option value="'+wh.id+'">'+wh.name+'</option>');
+            });
+            $wh.selectpicker('refresh');
+            
+            // Auto-trigger getProduct if location matched a warehouse
+            if(data.length > 0) {
+                $wh.val(data[0].id).trigger('change');
+            }
+        }
+    });
+}
 
 var warehouse_id = $("#warehouse_id").val();
 if(warehouse_id.length){
@@ -1191,7 +1388,7 @@ function checkDiscount(qty, flag) {
         $.ajax({
             type: 'GET',
             async: false,
-            url: '../sales/check-discount?qty='+qty+'&customer_id='+customer_id+'&product_id='+product_id+'&warehouse_id='+warehouse_id,
+            url: '{{url("/admin/sales/check-discount")}}?qty='+qty+'&customer_id='+customer_id+'&product_id='+product_id+'&warehouse_id='+warehouse_id,
             success: function(data) {
                 pos = product_code.indexOf($('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .product-code').val());
                 product_price[rowindex] = parseFloat(data[0] * currency['exchange_rate']) + parseFloat(data[0] * currency['exchange_rate'] * customer_group_rate);
