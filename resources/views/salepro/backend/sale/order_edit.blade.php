@@ -113,16 +113,16 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-md-12  d-none product-loading ">
-                                        <div class="alert alert-info" role="alert">
-                                            Product list is loading.... Please wait...
-                                          </div>
-                                    </div>
                                     <div class="col-md-12">
                                         <label>{{trans('file.Select Product')}}</label>
                                         <div class="search-box input-group">
                                             <button type="button" class="btn btn-secondary btn-lg"><i class="fa fa-barcode"></i></button>
                                             <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Please type product code and select..." class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div id="product-list-container" class="row mt-3">
+                                            <!-- Products will be loaded here -->
                                         </div>
                                     </div>
                                 </div>
@@ -955,18 +955,9 @@
             return;
         }
 
-        $('.product-loading').removeClass('d-none');
-
-        $.get('../getproduct-list/' + warehouse_id + '?brand='+brand_id+'&category='+category_id +'&product_type='+product_type_id, function(data) {
-            lims_product_array = [];
-            product_code = [];
-            product_name = [];
-            product_qty = [];
-            product_type = [];
-            product_id = [];
-            product_list = [];
         console.log("=== DEBUG: Starting getProduct (Edit), Brand/Category/Type selected. Showing loader. ===");
-        $('.product-loading').removeClass('d-none').show();
+        $('#product-list-container').html('<div class="col-md-12"><div class="alert alert-info" role="alert">Product list is loading.... Please wait...</div></div>');
+        
         lims_product_array = []; // Clear existing list immediately
         product_code = [];
         product_name = [];
@@ -979,15 +970,10 @@
         product_price = [];
         category = [];
         product_brand = [];
-        // batch_no = data[8];
-        // expired_date = data[10];
-        // product_batch_id = data[9];
-        // is_embeded = data[11];
-        // imei_number = data[12];
 
         $.get('{{ url("/admin/sales/getproduct-list") }}/' + warehouse_id + '?brand='+brand_id+'&category='+category_id +'&product_type='+product_type_id, function(data) {
             console.log("=== DEBUG: getProduct AJAX Success (Edit). Hiding loader. Data count:", data.length, "===");
-            $('.product-loading').addClass('d-none').hide();
+            $('#product-list-container').empty();
 
             if(data.length == 0){
                 alert('No Products available!!!!!!');
@@ -1005,7 +991,6 @@
                 product_brand.push(row.brand);
             });
 
-
             $.each(product_code, function(index) {
                 if(exist_code.includes(product_code[index])) {
                     pos = exist_code.indexOf(product_code[index]);
@@ -1015,6 +1000,9 @@
                 }
             });
 
+        }).fail(function(xhr) {
+            console.error("=== DEBUG: getProduct AJAX Failed. Status:", xhr.status, "Error:", xhr.responseText, "===");
+            $('#product-list-container').empty();
         });
     }
 

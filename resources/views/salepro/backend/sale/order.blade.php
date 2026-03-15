@@ -252,11 +252,6 @@
                                 <div class="card shadow border-0 mb-4" style="background-color: #faf5ff;">
                                     <div class="card-body p-4 rounded-xl">
                                         <div class="row">
-                                            <div class="col-md-12 d-none product-loading">
-                                                <div class="alert alert-info" role="alert">
-                                            Product list is loading.... Please wait...
-                                          </div>
-                                    </div>
                                     <div class="col-md-12">
                                         <label>{{trans('file.Select Product')}}</label>
                                         <div class="search-box input-group">
@@ -844,12 +839,12 @@ function getProduct(warehouse_id){
 
 
     console.log("=== DEBUG: Starting getProduct, Brand/Category/Type selected. Showing loader. ===");
-    $('.product-loading').removeClass('d-none').show();
+    $('#product-list-container').html('<div class="col-md-12"><div class="alert alert-info" role="alert">Product list is loading.... Please wait...</div></div>');
     lims_product_array = []; // Clear existing list immediately
 
     $.get('{{ url("/admin/sales/getproduct-list") }}/' + warehouse_id + '?brand='+brand_id+'&category='+category_id +'&product_type='+product_type_id, function(data) {
         console.log("=== DEBUG: getProduct AJAX Success. Hiding loader. Data count:", data.length, "===");
-        $('.product-loading').addClass('d-none').hide();
+        $('#product-list-container').empty();
 
         if(data.length == 0){
             alert('No Products available!!!!!!');
@@ -861,7 +856,7 @@ function getProduct(warehouse_id){
 
     }).fail(function(xhr) {
         console.error("=== DEBUG: getProduct AJAX Failed. Status:", xhr.status, "Error:", xhr.responseText, "===");
-        $('.product-loading').addClass('d-none').hide();
+        $('#product-list-container').empty();
     });
 }
 
