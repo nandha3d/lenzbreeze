@@ -183,6 +183,7 @@
 @endsection
 
 @push('scripts')
+@include('salepro.backend.report._export_helper')
 <script type="text/javascript">
     $("ul#report").siblings('a').attr('aria-expanded','true');
     $("ul#report").addClass("show");
@@ -268,11 +269,17 @@
                     columns: ':visible:Not(.not-exported-sale)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_sale(dt, true);
-                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_sale(dt, false);
+                action: newexportaction,
+                footer:true
+            },
+                        {
+                extend: 'excel',
+                text: '<i title="export to excel" class="dripicons-document-new"></i>',
+                exportOptions: {
+                    columns: ':visible:not(.not-exported)',
+                    rows: ':visible'
                 },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -282,11 +289,7 @@
                     columns: ':visible:Not(.not-exported-sale)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_sale(dt, true);
-                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_sale(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -296,11 +299,7 @@
                     columns: ':visible:Not(.not-exported-sale)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_sale(dt, true);
-                    $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                    datatable_sum_sale(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -326,7 +325,7 @@
         else {
             $( dt_selector.column( 5 ).footer() ).html(dt_selector.column( 5, {page:'current'} ).data().sum().toFixed({{$general_setting->decimal}}));
             $( dt_selector.column( 6 ).footer() ).html(dt_selector.column( 6, {page:'current'} ).data().sum().toFixed({{$general_setting->decimal}}));
-            $( dt_selector.column( 7 ).footer() ).html(dt_selector.cells( rows, 7, { page: 'current' } ).data().sum().toFixed({{$general_setting->decimal}}));
+            $( dt_selector.column( 7 ).footer() ).html(dt_selector.column( 7, {page:'current'} ).data().sum().toFixed({{$general_setting->decimal}}));
         }
     }
 
@@ -394,11 +393,17 @@
                     columns: ':visible:Not(.not-exported-payment)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_payment(dt, true);
-                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_payment(dt, false);
+                action: newexportaction,
+                footer:true
+            },
+                        {
+                extend: 'excel',
+                text: '<i title="export to excel" class="dripicons-document-new"></i>',
+                exportOptions: {
+                    columns: ':visible:not(.not-exported)',
+                    rows: ':visible'
                 },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -408,11 +413,7 @@
                     columns: ':visible:Not(.not-exported-payment)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_payment(dt, true);
-                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_payment(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -422,11 +423,7 @@
                     columns: ':visible:Not(.not-exported-payment)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_payment(dt, true);
-                    $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                    datatable_sum_payment(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -516,11 +513,17 @@
                     columns: ':visible:Not(.not-exported-return)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_return(dt, true);
-                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_return(dt, false);
+                action: newexportaction,
+                footer:true
+            },
+                        {
+                extend: 'excel',
+                text: '<i title="export to excel" class="dripicons-document-new"></i>',
+                exportOptions: {
+                    columns: ':visible:not(.not-exported)',
+                    rows: ':visible'
                 },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -530,11 +533,7 @@
                     columns: ':visible:Not(.not-exported-return)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_return(dt, true);
-                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_return(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -544,11 +543,7 @@
                     columns: ':visible:Not(.not-exported-return)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_return(dt, true);
-                    $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                    datatable_sum_return(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -640,11 +635,17 @@
                     columns: ':visible:Not(.not-exported-quotation)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_quotation(dt, true);
-                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_quotation(dt, false);
+                action: newexportaction,
+                footer:true
+            },
+                        {
+                extend: 'excel',
+                text: '<i title="export to excel" class="dripicons-document-new"></i>',
+                exportOptions: {
+                    columns: ':visible:not(.not-exported)',
+                    rows: ':visible'
                 },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -654,11 +655,7 @@
                     columns: ':visible:Not(.not-exported-quotation)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_quotation(dt, true);
-                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_quotation(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -668,11 +665,7 @@
                     columns: ':visible:Not(.not-exported-quotation)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_quotation(dt, true);
-                    $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                    datatable_sum_quotation(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {

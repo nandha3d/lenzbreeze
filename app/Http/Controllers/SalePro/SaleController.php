@@ -517,6 +517,7 @@ class SaleController extends Controller
         ini_set('memory_limit', '1G');
         ini_set('display_errors', 0);
         error_reporting(0);
+        set_time_limit(0);
         try {
             $columns = array(
             1 => 'id',
@@ -587,9 +588,9 @@ class SaleController extends Controller
         // $totalFiltered = $q->groupBy('sales.id')->count();
 
         if($request->input('length') != -1)
-            $limit = $request->input('length');
-        else
-            $limit = 10;
+        $limit = $request->input('length');
+    else
+        $limit = $totalData;
 
         $start = $request->input('start');
         $order = 'sales.'.$columns[$request->input('order.0.column')];
@@ -599,8 +600,64 @@ class SaleController extends Controller
                     ->limit($limit)
                     ->orderBy($order, $dir);
 
-        // echo $q->select('sales.id', 'sales.*')->groupBy('sales.id')->toSql();exit;
-        $sales = $q->select('sales.id', 'sales.*')->groupBy('sales.id')->get();
+        // Eager load relationships to avoid N+1 queries
+        $sales = $q->select('sales.id', 'sales.*')
+            ->with(['biller', 'customer', 'user', 'warehouse'])
+            ->groupBy('sales.id')
+            ->get();
+
+        $saleIds = $sales->pluck('id')->toArray();
+
+        // Bulk fetch categories for all sales in one query
+        $categoryMap = [];
+        if (!empty($saleIds)) {
+            $psData = Product_Sale::select("product_sales.sale_id", "categories.name")
+                ->join('products', 'product_sales.product_id', '=', 'products.id')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->whereIn('product_sales.sale_id', $saleIds)
+                ->get();
+            
+            foreach ($psData as $row) {
+                // Keep the last one found per sale (simulating the 'orderBy categories.id desc limit 1' logic roughly)
+                $categoryMap[$row->sale_id] = $row->name;
+            }
+        }
+
+        // Bulk fetch payments
+        $paymentMap = [];
+        if (!empty($saleIds)) {
+            $paymentData = Payment::whereIn('sale_id', $saleIds)
+                ->select('sale_id', 'paying_method')
+                ->get()
+                ->groupBy('sale_id');
+            foreach($paymentData as $sid => $pMethods) {
+                $paymentMap[$sid] = $pMethods->pluck('paying_method')->toArray();
+            }
+        }
+
+        // Bulk fetch deliveries
+        $deliveryMap = DB::table('deliveries')
+            ->whereIn('sale_id', $saleIds)
+            ->select('sale_id', 'status')
+            ->get()
+            ->pluck('status', 'sale_id')
+            ->toArray();
+
+        // Bulk fetch returned amounts
+        $returnMap = DB::table('returns')
+            ->whereIn('sale_id', $saleIds)
+            ->select('sale_id', DB::raw('SUM(grand_total) as total'))
+            ->groupBy('sale_id')
+            ->get()
+            ->pluck('total', 'sale_id')
+            ->toArray();
+
+        // Bulk fetch coupons and currencies if needed
+        $couponIds = $sales->pluck('coupon_id')->filter()->unique();
+        $coupons = Coupon::whereIn('id', $couponIds)->get()->keyBy('id');
+
+        $currencyIds = $sales->pluck('currency_id')->filter()->unique();
+        $currencies = Currency::whereIn('id', $currencyIds)->get()->keyBy('id');
 
         // Load permissions server-side (never trust client-sent permissions)
         $all_permission = $request['all_permission'] ?? [];
@@ -622,24 +679,15 @@ class SaleController extends Controller
             {
                 foreach ($sales as $key=>$sale)
                 {
-
-
-                    $ps = Product_Sale::select("categories.name as name")
-                    ->leftjoin('products', 'product_sales.product_id', '=', 'products.id')
-                    ->leftjoin('categories', 'products.category_id', '=', 'categories.id')
-                    ->where('product_sales.sale_id', $sale->id)
-                    ->limit(1)
-                    ->orderBy('categories.id', 'desc')->first();
-
-
+                    $category_name_val = $categoryMap[$sale->id] ?? null;
                     $category_name = '';
-                    if($ps){
-                        if($ps->name == 'RX Lens'){
-                            $category_name = '<div class="badge badge-success">'.$ps->name.'</div>';
-                        }else if($ps->name == 'Stock Lens'){
-                            $category_name = '<div class="badge badge-warning">'.$ps->name.'</div>';
-                        }else if($ps->name == 'Others'){
-                            $category_name = '<div class="badge badge-info">'.$ps->name.'</div>';
+                    if($category_name_val){
+                        if($category_name_val == 'RX Lens'){
+                            $category_name = '<div class="badge badge-success">'.$category_name_val.'</div>';
+                        }else if($category_name_val == 'Stock Lens'){
+                            $category_name = '<div class="badge badge-warning">'.$category_name_val.'</div>';
+                        }else if($category_name_val == 'Others'){
+                            $category_name = '<div class="badge badge-info">'.$category_name_val.'</div>';
                         }
                     }
 
@@ -659,9 +707,10 @@ class SaleController extends Controller
                     $nestedData['reference_no'] = $sale->reference_no;
                     $nestedData['biller'] = $sale->biller->name;
                     $nestedData['customer'] = $sale->customer->name.'<br>'.$sale->customer->place.'<input type="hidden" class="deposit" value="'.($sale->customer->deposit - $sale->customer->expense).'" />'.'<input type="hidden" class="points" value="'.$sale->customer->points.'" />';
-                    // $nestedData['payment_method'] = $nestedData['payment_method'] ? '' 'N/A';
-                    $payments = Payment::where('sale_id', $sale->id)->pluck('paying_method')->toArray();
+                    
+                    $payments = $paymentMap[$sale->id] ?? [];
                     $nestedData['payment_method'] = implode(",", $payments);
+                    
                     if($sale->sale_status == 1){
                         $nestedData['sale_status'] = '<div class="badge badge-success">'.trans('file.Completed').'</div>';
                         $sale_status = trans('file.Completed');
@@ -691,13 +740,14 @@ class SaleController extends Controller
                         $nestedData['payment_status'] = '<div class="badge badge-warning">'.trans('file.Partial').'</div>';
                     else
                         $nestedData['payment_status'] = '<div class="badge badge-success">'.trans('file.Paid').'</div>';
-                    $delivery_data = DB::table('deliveries')->select('status')->where('sale_id', $sale->id)->first();
-                    if($delivery_data) {
-                        if($delivery_data->status == 1)
+                    
+                    $d_status = $deliveryMap[$sale->id] ?? null;
+                    if($d_status) {
+                        if($d_status == 1)
                             $nestedData['delivery_status'] = '<div class="badge badge-primary">'.trans('file.Packing').'</div>';
-                        elseif($delivery_data->status == 2)
+                        elseif($d_status == 2)
                             $nestedData['delivery_status'] = '<div class="badge badge-info">'.trans('file.Delivering').'</div>';
-                        elseif($delivery_data->status == 3)
+                        elseif($d_status == 3)
                             $nestedData['delivery_status'] = '<div class="badge badge-success">'.trans('file.Delivered').'</div>';
                     }
                     else
@@ -705,7 +755,7 @@ class SaleController extends Controller
 
                     $nestedData['grand_total'] = number_format($sale->grand_total, config('decimal'));
                     //$nestedData['grand_total'] = \Illuminate\Support\Number::format($sale->grand_total, locale: 'id');
-                    $returned_amount = DB::table('returns')->where('sale_id', $sale->id)->sum('grand_total');
+                    $returned_amount = $returnMap[$sale->id] ?? 0;
                     $nestedData['returned_amount'] = number_format($returned_amount, config('decimal'));
                     $nestedData['paid_amount'] = number_format($sale->paid_amount, config('decimal'));
                     $nestedData['due'] = number_format($sale->grand_total - $returned_amount - $sale->paid_amount, config('decimal'));
@@ -776,7 +826,7 @@ class SaleController extends Controller
                         '<li>
                             <button type="button" class="add-delivery btn btn-link" data-id = "'.$sale->id.'"><i class="fa fa-truck"></i> '.trans('file.Add Delivery').'</button>
                         </li>';
-                    if(in_array("sales-delete", $request['all_permission']))
+                    if(in_array("sales-delete", $all_permission))
                         $nestedData['options'] .= \Form::open(["route" => ["sales.destroy", $sale->id], "method" => "DELETE"] ).'
                                 <li>
                                   <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> '.trans("file.delete").'</button>
@@ -784,16 +834,10 @@ class SaleController extends Controller
                             </ul>
                         </div>';
                     // data for sale details by one click
-                    $coupon = Coupon::find($sale->coupon_id);
-                    if($coupon)
-                        $coupon_code = $coupon->code;
-                    else
-                        $coupon_code = null;
+                    $coupon = isset($coupons[$sale->coupon_id]) ? $coupons[$sale->coupon_id] : null;
+                    $coupon_code = $coupon ? $coupon->code : null;
 
-                    if($sale->currency_id)
-                        $currency_code = Currency::select('code')->find($sale->currency_id)->code;
-                    else
-                        $currency_code = 'N/A';
+                    $currency_code = isset($currencies[$sale->currency_id]) ? $currencies[$sale->currency_id]->code : 'N/A';
 
                     $nestedData['sale'] = array( '[ "'.date(config('date_format'), strtotime($sale->created_at->toDateString())).'"', ' "'.$sale->reference_no.'"', ' "'.$sale_status.'"', ' "'.$sale->biller->name.'"', ' "'.$sale->biller->company_name.'"', ' "'.$sale->biller->email.'"', ' "'.$sale->biller->phone_number.'"', ' "'.$sale->biller->address.'"', ' "'.$sale->biller->city.'"', ' "'.$sale->customer->name.'"', ' "'.$sale->customer->phone_number.'"', ' "'.$sale->customer->address.'"', ' "'.$sale->customer->city.'"', ' "'.$sale->id.'"', ' "'.$sale->total_tax.'"', ' "'.$sale->total_discount.'"', ' "'.$sale->total_price.'"', ' "'.$sale->order_tax.'"', ' "'.$sale->order_tax_rate.'"', ' "'.$sale->order_discount.'"', ' "'.$sale->shipping_cost.'"', ' "'.$sale->grand_total.'"', ' "'.$sale->paid_amount.'"', ' "'.preg_replace('/[\n\r]/', "<br>", $sale->sale_note).'"', ' "'.preg_replace('/[\n\r]/', "<br>", $sale->staff_note).'"', ' "'.$sale->user->name.'"', ' "'.$sale->user->email.'"', ' "'.$sale->warehouse->name.'"', ' "'.$coupon_code.'"', ' "'.$sale->coupon_discount.'"', ' "'.$sale->document.'"', ' "'.$currency_code.'"', ' "'.$sale->exchange_rate.'"]'
                     );
