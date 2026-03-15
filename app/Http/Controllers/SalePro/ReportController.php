@@ -89,7 +89,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -887,7 +891,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         //return $request;
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
@@ -1671,7 +1679,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         //return $request;
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
@@ -1908,11 +1920,6 @@ class ReportController extends Controller
             1 => 'name'
         );
 
-        if($request->input('length') != -1)
-            $limit = $request->input('length');
-        else
-            $limit = $totalData;
-        //return $request;
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -1923,6 +1930,21 @@ class ReportController extends Controller
                 ['name', 'LIKE', "%{$search}%"],
                 ['is_active', true]
             ])->count();
+        }
+        else {
+            $totalData = Product::where('is_active', true)->count();
+        }
+
+        if($request->input('length') != -1)
+            $limit = $request->input('length');
+        else
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
+
+        if($request->input('search.value')) {
             $lims_product_all = Product::with('category')
                                 ->select('id', 'name', 'code', 'category_id', 'qty', 'is_variant', 'price', 'cost')
                                 ->where([
@@ -1934,7 +1956,6 @@ class ReportController extends Controller
                                   ->get();
         }
         else {
-            $totalData = Product::where('is_active', true)->count();
             $lims_product_all = Product::with('category')
                                 ->select('id', 'name', 'code', 'category_id', 'qty', 'is_variant', 'price', 'cost')
                                 ->where('is_active', true)
@@ -2239,7 +2260,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'sales.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -2353,7 +2378,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'purchases.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -2474,7 +2503,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'quotations.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -2586,7 +2619,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'returns.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -2687,7 +2724,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'expenses.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -2793,7 +2834,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'sales.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -2909,7 +2954,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'quotations.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3016,7 +3065,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'payments.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3100,7 +3153,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'sales.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3215,7 +3272,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'purchases.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3336,7 +3397,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'quotations.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3444,7 +3509,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'transfers.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3559,7 +3628,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'payments.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3642,7 +3715,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'payrolls.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3732,7 +3809,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'expenses.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -3833,7 +3914,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
 
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
@@ -4002,7 +4087,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'payments.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -4088,7 +4177,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'quotations.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -4201,7 +4294,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'returns.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -4327,7 +4424,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
 
         $start = $request->input('start');
         $order = $columns[$request->input('order.0.column')];
@@ -4464,7 +4565,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'sales.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -4552,7 +4657,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'quotations.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -4666,7 +4775,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'returns.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -4818,7 +4931,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'purchases.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -4932,7 +5049,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'payments.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -5017,7 +5138,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start');
         $order = 'return_purchases.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -5119,7 +5244,11 @@ class ReportController extends Controller
         if($request->input('length') != -1)
             $limit = $request->input('length');
         else
-            $limit = $totalData;
+            {
+                if(!isset($totalData))
+                    $totalData = 100000;
+                $limit = $totalData;
+            }
         $start = $request->input('start_date');
         $order = 'quotations.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
@@ -5239,7 +5368,11 @@ class ReportController extends Controller
             if($request->input('length') != -1)
                 $limit = $request->input('length');
             else
+                {
+                if(!isset($totalData))
+                    $totalData = 100000;
                 $limit = $totalData;
+            }
             $start = $request->input('start');
             $order = 'sales.'.$columns[$request->input('order.0.column')];
             $dir = $request->input('order.0.dir');
