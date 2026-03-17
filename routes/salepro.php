@@ -323,6 +323,9 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
 
 
     Route::controller(SaleController::class)->group(function () {
+        Route::post('sales/export-start', 'exportStart');
+        Route::post('sales/export-process', 'exportProcess');
+        Route::get('sales/export-download', 'exportDownload');
         Route::post('sales/sale-data', 'saleData');
         Route::post('sales/sendmail', 'sendMail')->name('sale.sendmail');
         Route::get('sales/sale_by_csv', 'saleByCsv');
@@ -355,6 +358,7 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
         Route::get('sales/today-sale', 'todaySale');
         Route::get('sales/today-profit/{warehouse_id}', 'todayProfit');
         Route::get('sales/check-discount', 'checkDiscount');
+        Route::get('sales/warehouses-by-location', 'warehousesByLocation');
         Route::get('sales/get-sold-items/{id}', 'getSoldItem');
         Route::post('sales/sendsms', 'sendSMS')->name('sale.sendsms');
         Route::post('sales/whatsapp-notification', 'whatsappNotificationSend')->name('sale.wappnotification');

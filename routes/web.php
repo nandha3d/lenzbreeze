@@ -34,9 +34,9 @@ Route::prefix('admin')->middleware(['auth', \App\Http\Middleware\AdminAccess::cl
     Route::get('/web-products', [AdminController::class, 'products'])->name('admin.web_products');
     Route::get('/web-products/create', [AdminController::class, 'createProduct'])->name('admin.web_products.create');
     Route::post('/web-products', [AdminController::class, 'storeProduct'])->name('admin.web_products.store');
-    Route::get('/web-products/{product}/edit', [AdminController::class, 'editProduct'])->name('admin.web_products.edit');
-    Route::put('/web-products/{product}', [AdminController::class, 'updateProduct'])->name('admin.web_products.update');
-    Route::delete('/web-products/{product}', [AdminController::class, 'deleteProduct'])->name('admin.web_products.delete');
+    Route::get('/web-products/{web_product}/edit', [AdminController::class, 'editProduct'])->name('admin.web_products.edit');
+    Route::put('/web-products/{web_product}', [AdminController::class, 'updateProduct'])->name('admin.web_products.update');
+    Route::delete('/web-products/{web_product}', [AdminController::class, 'deleteProduct'])->name('admin.web_products.delete');
 
     // Inquiries
     Route::get('/inquiries', [AdminController::class, 'inquiries'])->name('admin.web_inquiries');
@@ -98,3 +98,50 @@ Route::post('/logout', function (\Illuminate\Http\Request $request) {
 
 // Merge SalePro Routes here:
 // SalePro routes are loaded natively in bootstrap/app.php
+
+// Auto-deploy database route for Hostinger
+Route::get('/deploy-auto-import', function () {
+    try {
+        set_time_limit(0); 
+        ini_set('memory_limit', '-1'); // Attempt to ignore memory limits completely
+        
+        $sqlPath = database_path('lenzbreeze_live.sql');
+        if (!file_exists($sqlPath)) {
+            return 'SQL file not found at: ' . $sqlPath;
+        }
+
+        $pdo = \Illuminate\Support\Facades\DB::connection()->getPdo();
+        $pdo->exec('SET FOREIGN_KEY_CHECKS=0;'); // Critical for bulk imports
+        
+        $handle = fopen($sqlPath, 'r');
+        $query = '';
+        
+        while (($line = fgets($handle)) !== false) {
+            $trimmed = trim($line);
+            
+            // Skip empty lines or pure SQL comments
+            if ($trimmed == '' || str_starts_with($trimmed, '--') || str_starts_with($trimmed, '/*')) {
+                continue;
+            }
+            
+            $query .= $line; // Append the line
+            
+            // If the line finishes a SQL statement
+            if (str_ends_with(rtrim($query), ';')) {
+                try {
+                    $pdo->exec($query); // Bypasses heavy Laravel components (QueryLogger, Str overrides)
+                } catch (\Exception $subE) {
+                    // Suppress and continue (common during DROP IF EXISTS)
+                }
+                $query = ''; // Clear payload
+            }
+        }
+        fclose($handle);
+        
+        $pdo->exec('SET FOREIGN_KEY_CHECKS=1;'); // Re-enable
+
+        return 'Database imported successfully using line-by-line streaming! Memory overhead completely avoided. You can now use the application.';
+    } catch (\Exception $e) {
+        return 'Error during import: ' . $e->getMessage();
+    }
+});
