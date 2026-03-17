@@ -34,11 +34,20 @@ use App\Traits\CacheForget;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use File;
+use App\Services\ImageService;
 
 class ProductController extends Controller
 {
     use CacheForget;
     use TenantInfo;
+
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
 
     public function index(Request $request)
     {
@@ -86,18 +95,17 @@ class ProductController extends Controller
         error_reporting(0);
         try {
             $columns = array(
-                2 => 'name',
-            3 => 'code',
-            4 => 'brand_id',
-            5 => 'category_id',
-            6 => 'qty',
-            7 => 'unit_id',
-            8 => 'price',
-            9 => 'cost',
-            10 => 'stock_worth',
-            11 => 'base',
-            12 => 'addition'
-        );
+                1 => 'name',
+                2 => 'code',
+                3 => 'brand_id',
+                4 => 'category_id',
+                5 => 'product_type_id',
+                6 => 'qty',
+                7 => 'base',
+                8 => 'addition',
+                9 => 'price',
+                10 => 'cost'
+            );
 
         $warehouse_id = $request->input('warehouse_id');
 
@@ -122,7 +130,8 @@ class ProductController extends Controller
             $field_names[] = str_replace(" ", "_", strtolower($fieldName));
         }
         if(empty($request->input('search.value'))){
-            $products = Product::with('category', 'brand', 'unit')->offset($start)
+            $products = Product::with('category', 'brand', 'unit', 'productType')
+                        ->offset($start)
                         ->where('is_active', true)
                         ->limit($limit)
                         ->orderBy($order,$dir)
@@ -132,7 +141,7 @@ class ProductController extends Controller
         {
             $search = $request->input('search.value');
             $q = Product::select('products.*')
-                ->with('category', 'brand', 'unit')
+                ->with('category', 'brand', 'unit', 'productType')
                 ->join('categories', 'products.category_id', '=', 'categories.id')
                 ->leftjoin('product_purchases','product_purchases.product_id','=', 'products.id')
                 ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
@@ -231,6 +240,17 @@ class ProductController extends Controller
         $data = array();
         if(!empty($products))
         {
+            // Eagerly pre-calculate warehouse quantities if a warehouse is given
+            $warehouse_qtys = [];
+            if ($warehouse_id > 0) {
+                $productIds = $products->pluck('id')->toArray();
+                $warehouse_qtys = Product_Warehouse::whereIn('product_id', $productIds)
+                                    ->where('warehouse_id', $warehouse_id)
+                                    ->selectRaw('product_id, SUM(qty) as total_qty')
+                                    ->groupBy('product_id')
+                                    ->pluck('total_qty', 'product_id')->toArray();
+            }
+
             foreach ($products as $key=>$product)
             {
                 $nestedData['id'] = $product->id;
@@ -241,36 +261,35 @@ class ProductController extends Controller
 
                 $product_image = explode(",", $product->image);
                 $product_image = htmlspecialchars($product_image[0]);
-                if($product_image && $product_image != 'zummXD2dvAtI.png') {
-                    if(file_exists("public/images/product/small/". $product_image))
+                if($product_image && $product_image != 'zummXD2dvAtI.avif') {
+                    if(file_exists(public_path("images/product/small/". $product_image)))
                         $nestedData['image'] = '<img src="'.url('images/product/small', $product_image).'" height="80" width="80">';
                     else
                         $nestedData['image'] = '<img src="'.url('images/product', $product_image).'" height="80" width="80">';
                 }
                 else
-                    $nestedData['image'] = '<img src="images/zummXD2dvAtI.png" height="80" width="80">';
+                    $nestedData['image'] = '<img src="'.url('images/zummXD2dvAtI.avif').'" height="80" width="80">';
+                
                 $nestedData['name'] = $product->name;
                 $nestedData['code'] = $product->code;
                 if($product->brand)
                     $nestedData['brand'] = $product->brand->title;
                 else
                     $nestedData['brand'] = "N/A";
-                $nestedData['category'] = $product->category->name;
+                
+                $nestedData['category'] = $product->category ? $product->category->name : 'N/A';
+                
                 if($warehouse_id > 0 && $product->type == 'standard') {
-                    $nestedData['qty'] = Product_Warehouse::where([
-                                                ['product_id', $product->id],
-                                                ['warehouse_id', $warehouse_id]
-                                            ])->sum('qty');
+                    $nestedData['qty'] = $warehouse_qtys[$product->id] ?? 0;
                 }
                 elseif($product->type == 'standard') {
-                    $nestedData['qty'] = Product_Warehouse::where([
-                        ['product_id', $product->id],
-                    ])->sum('qty');
+                    // If no warehouse specified, use the aggregate qty on the product model itself
+                    $nestedData['qty'] = $product->qty;
                 }
                 else
                     $nestedData['qty'] = $product->qty;
 
-                if($product->unit_id)
+                if($product->unit)
                     $nestedData['unit'] = $product->unit->unit_name;
                 else
                     $nestedData['unit'] = 'N/A';
@@ -279,9 +298,9 @@ class ProductController extends Controller
                 $nestedData['cost'] = $product->cost;
 
                 if(config('currency_position') == 'prefix')
-                    $nestedData['stock_worth'] = config('currency').' '.($nestedData['qty'] * $product->price).' / '.config('currency').' '.($nestedData['qty'] * $product->cost);
+                    $nestedData['stock_worth'] = config('currency').' '.number_format(($nestedData['qty'] * $product->price), 2).' / '.config('currency').' '.number_format(($nestedData['qty'] * $product->cost), 2);
                 else
-                    $nestedData['stock_worth'] = ($nestedData['qty'] * $product->price).' '.config('currency').' / '.($nestedData['qty'] * $product->cost).' '.config('currency');
+                    $nestedData['stock_worth'] = number_format(($nestedData['qty'] * $product->price), 2).' '.config('currency').' / '.number_format(($nestedData['qty'] * $product->cost), 2).' '.config('currency');
 
                 //fetching custom fields data
                 foreach($field_names as $field_name) {
@@ -454,29 +473,21 @@ class ProductController extends Controller
             }
 
             foreach ($images as $key => $image) {
-                $ext = pathinfo($image->getClientOriginalName(), PATHINFO_EXTENSION);
-                $imageName = date("Ymdhis") . ($key + 1);
+                $baseName = date("Ymdhis") . ($key + 1);
 
-                // Handle multi-tenant logic if necessary
-                if (!config('database.connections.saleprosaas_landlord')) {
-                    $imageName = $imageName . '.' . $ext;
-
-                } else {
-                    $imageName = $this->getTenantId() . '_' . $imageName . '.' . $ext;
+                // Handle multi-tenant logic
+                if (config('database.connections.saleprosaas_landlord')) {
+                    $baseName = $this->getTenantId() . '_' . $baseName;
                 }
 
-                $image->move(public_path('images/product'), $imageName);
+                $sizes = [
+                    'xlarge' => [1000, 1250],
+                    'large' => [500, 500],
+                    'medium' => [250, 250],
+                    'small' => [100, 100],
+                ];
 
-                $manager = new ImageManager(Driver::class);
-                $image = $manager->read(public_path('images/product/'). $imageName);
-
-                $image->cover(1000, 1250)->save(public_path('images/product/xlarge/'). $imageName, 100);
-
-                $image->cover(500, 500)->save(public_path('images/product/large/'). $imageName, 100);
-
-                $image->cover(250, 250)->save(public_path('images/product/medium/' . $imageName), 100);
-
-                $image->cover(100, 100)->save(public_path('images/product/small/' . $imageName), 100);
+                $imageName = $this->imageService->saveAsAvif($image, 'images/product', $baseName, $sizes);
 
                 // Collect image names for saving in the database
                 $image_names[] = $imageName;
@@ -487,7 +498,7 @@ class ProductController extends Controller
         }
 
         else {
-            $data['image'] = 'zummXD2dvAtI.png';
+            $data['image'] = 'zummXD2dvAtI.avif';
         }
         $file = $request->file;
         if ($file) {
@@ -1251,26 +1262,21 @@ class ProductController extends Controller
                 $length = count(explode(",", $lims_product_data->image));
 
                 foreach ($images as $key => $image) {
-                    $ext = pathinfo($image->getClientOriginalName(), PATHINFO_EXTENSION);
+                    $baseName = date("Ymdhis") . ($length + $key + 1);
 
-                    if (!config('database.connections.saleprosaas_landlord')) {
-                        $imageName = date("Ymdhis") . ($length + $key + 1) . '.' . $ext;
-                    } else {
-                        $imageName = $this->getTenantId() . '_' . date("Ymdhis") . ($length + $key + 1) . '.' . $ext;
+                    // Handle multi-tenant logic
+                    if (config('database.connections.saleprosaas_landlord')) {
+                        $baseName = $this->getTenantId() . '_' . $baseName;
                     }
 
-                    $image->move(public_path('images/product'), $imageName);
+                    $sizes = [
+                        'xlarge' => [1000, 1250],
+                        'large' => [500, 500],
+                        'medium' => [250, 250],
+                        'small' => [100, 100],
+                    ];
 
-                    $manager = new ImageManager(Driver::class);
-                    $image = $manager->read(public_path('images/product/'). $imageName);
-
-                    $image->cover(1000, 1250)->save(public_path('images/product/xlarge/'). $imageName, 100);
-
-                    $image->cover(500, 500)->save(public_path('images/product/large/'). $imageName, 100);
-
-                    $image->cover(250, 250)->save(public_path('images/product/medium/' . $imageName), 100);
-
-                    $image->cover(100, 100)->save(public_path('images/product/small/' . $imageName), 100);
+                    $imageName = $this->imageService->saveAsAvif($image, 'images/product', $baseName, $sizes);
 
                     $image_names[] = $imageName;
                 }
@@ -1527,6 +1533,7 @@ class ProductController extends Controller
         $warehouse_id = $request->input('warehouse_id');
         $brand_id = $request->input('brand_id');
         $category_id = $request->input('category_id');
+        $product_type_id = $request->input('product_type_id');
         
         // Search standard products
         $query = Product::where('products.is_active', true)
@@ -1541,18 +1548,21 @@ class ProductController extends Controller
         if($category_id && $category_id != 'null') {
             $query->where('products.category_id', $category_id);
         }
+        if($product_type_id && $product_type_id != 'null') {
+            $query->where('products.product_type_id', $product_type_id);
+        }
 
         $products = $query->join('categories', 'categories.id', '=', 'products.category_id')
             ->leftJoin('brands', 'brands.id', '=', 'products.brand_id')
-            ->select('products.id', 'products.name', 'products.code', 'products.price', 'categories.name as category_name', 'brands.title as brand_title')
+            ->leftJoin('product_types', 'product_types.id', '=', 'products.product_type_id')
+            ->select('products.id', 'products.name', 'products.code', 'products.price', 'categories.name as category_name', 'brands.title as brand_title', 'product_types.name as type_name')
             ->limit(15)
             ->get();
 
         $results = [];
         foreach ($products as $product) {
             // Format: code|name|category|type|price|brand
-            // We use 'standard' as default type for standard products
-            $value = $product->code . '|' . $product->name . '|' . $product->category_name . '|standard|' . $product->price . '|' . ($product->brand_title ?? 'N/A');
+            $value = $product->code . '|' . $product->name . '|' . $product->category_name . '|' . ($product->type_name ?? 'standard') . '|' . $product->price . '|' . ($product->brand_title ?? 'N/A');
             $results[] = [
                 'id' => $product->id,
                 'value' => $value,
@@ -1764,7 +1774,7 @@ class ProductController extends Controller
                     'qty' => 0,
                     'product_details' => $data['productdetails'] ?? '',
                     'is_active' => true,
-                    'image' => $data['image'] ?? 'zummXD2dvAtI.png',
+                    'image' => $data['image'] ?? 'zummXD2dvAtI.avif',
                     'base' => $data['base'],
                     'addition' => $data['addition'],
                     'lr' => $data['lr']
@@ -1886,7 +1896,7 @@ class ProductController extends Controller
             if($lims_product_data->image) {
                 $images = explode(",", $lims_product_data->image);
                 foreach ($images as $image) {
-                    $this->fileDelete(public_path('images/product/'), $image);
+                    $this->imageService->deleteImage('images/product', $image, ['xlarge', 'large', 'medium', 'small']);
                 }
             }
         }
@@ -1903,13 +1913,10 @@ class ProductController extends Controller
         else {
             $lims_product_data = Product::findOrFail($id);
             $lims_product_data->is_active = false;
-            if($lims_product_data->image != 'zummXD2dvAtI.png') {
+            if($lims_product_data->image != 'zummXD2dvAtI.avif') {
                 $images = explode(",", $lims_product_data->image);
                 foreach ($images as $key => $image) {
-                    $this->fileDelete(public_path('images/product/'), $image);
-                    $this->fileDelete(public_path('images/product/large/'), $image);
-                    $this->fileDelete(public_path('images/product/medium/'), $image);
-                    $this->fileDelete(public_path('images/product/small/'), $image);
+                    $this->imageService->deleteImage('images/product', $image, ['xlarge', 'large', 'medium', 'small']);
                 }
             }
             $lims_product_data->save();

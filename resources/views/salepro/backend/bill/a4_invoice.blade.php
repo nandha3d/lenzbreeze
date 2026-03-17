@@ -316,11 +316,11 @@
             <tr>
                 @if($general_setting->currency_position == 'prefix')
                 <td class="td-text" colspan="3" rowspan="2" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top;">
-                    {{trans('file.In Words')}}<br>INR <span style="text-transform:capitalize;font-size: 15px;">{{str_replace("-"," ", App\Http\Controllers\BillController::NumberToWords($bill->grand_total))}}</span> only
+                    {{trans('file.In Words')}}<br>INR <span style="text-transform:capitalize;font-size: 15px;">{{str_replace("-"," ", App\Http\Controllers\SalePro\BillController::NumberToWords($bill->grand_total))}}</span> only
                 </td>
                 @else
                     <td class="td-text" colspan="3" rowspan="2" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top;">
-                        {{trans('file.In Words')}}:<br><span style="text-transform:capitalize;font-size: 15px;">{{str_replace("-"," ", App\Http\Controllers\BillController::NumberToWords($bill->grand_total))}}</span> INR only
+                        {{trans('file.In Words')}}:<br><span style="text-transform:capitalize;font-size: 15px;">{{str_replace("-"," ", App\Http\Controllers\SalePro\BillController::NumberToWords($bill->grand_total))}}</span> INR only
                     </td>
                 @endif
 

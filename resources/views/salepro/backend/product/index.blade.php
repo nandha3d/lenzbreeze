@@ -136,7 +136,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label> {{trans('file.Sample File')}}</label>
-                        <a href="sample_file/sample_products.csv" class="btn btn-info btn-block btn-md"><i class="dripicons-download"></i>  {{trans('file.Download')}}</a>
+                        <a href="{{url('sample_file/sample_products.csv')}}" class="btn btn-info btn-block btn-md"><i class="dripicons-download"></i>  {{trans('file.Download')}}</a>
                     </div>
                 </div>
            </div>
@@ -317,7 +317,7 @@
             }
         }
         else {
-            slidertext = '<img src="images/product/zummXD2dvAtI.png" height="300" width="100%">';
+            slidertext = '<img src="images/product/zummXD2dvAtI.avif" height="300" width="100%">';
         }
         $("#combo-header").text('');
         $("table.item-list thead").remove();
@@ -468,6 +468,13 @@
             },
             "processing": true,
             "serverSide": true,
+            "deferRender": true,
+            "columnDefs": [
+                {
+                    "orderable": false,
+                    "targets": [0, 11]
+                }
+            ],
             "ajax":{
                 url:"{{url('admin/products/product-data')}}",
                 data:{
