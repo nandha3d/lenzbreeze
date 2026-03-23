@@ -72,10 +72,10 @@
             @endif
             @if($sp_adjustment)
             <li class="{{ str_contains($currentUrl, '/admin/qty_adjustment') ? 'active' : '' }}"><a href="{{ url('/admin/qty_adjustment') }}">Adjustment List</a></li>
-            <li><a href="{{ url('/admin/qty_adjustment/create') }}">Add Adjustment</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/qty_adjustment/create') ? 'active' : '' }}"><a href="{{ url('/admin/qty_adjustment/create') }}">Add Adjustment</a></li>
             @endif
             @if($sp_stock_count)
-            <li><a href="{{ url('/admin/stock-count') }}">Stock Count</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/stock-count') ? 'active' : '' }}"><a href="{{ url('/admin/stock-count') }}">Stock Count</a></li>
             @endif
         </ul>
     </li>
@@ -92,7 +92,7 @@
             @php $sp_purchase_add = $role_has_permissions_list->where('name', 'purchases-add')->first(); @endphp
             @if($sp_purchase_add)
             <li class="{{ request()->is('admin/purchases/create') ? 'active' : '' }}"><a href="{{ url('/admin/purchases/create') }}">Add Purchase</a></li>
-            <li><a href="{{ url('/admin/purchases/purchase_by_csv') }}">Import By CSV</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/purchases/purchase_by_csv') ? 'active' : '' }}"><a href="{{ url('/admin/purchases/purchase_by_csv') }}">Import By CSV</a></li>
             @endif
         </ul>
     </li>
@@ -109,7 +109,7 @@
     @endphp
     @if($sp_sale_index || $sp_packing || $sp_gift_card || $sp_coupon || $sp_delivery)
     @php 
-        $isSaleActive = str_contains($currentUrl, '/admin/sales') || str_contains($currentUrl, '/admin/bill') || str_contains($currentUrl, '/admin/payment') || str_contains($currentUrl, '/admin/packing-slips') || str_contains($currentUrl, '/admin/challans') || str_contains($currentUrl, '/admin/delivery');
+        $isSaleActive = str_contains($currentUrl, '/admin/sales') || str_contains($currentUrl, '/admin/bill') || str_contains($currentUrl, '/admin/payment') || str_contains($currentUrl, '/admin/packing-slips') || str_contains($currentUrl, '/admin/challans') || str_contains($currentUrl, '/admin/delivery') || str_contains($currentUrl, '/admin/coupons') || str_contains($currentUrl, '/admin/gift_cards');
     @endphp
     <li class="nav-item has-submenu {{ $isSaleActive ? 'active' : '' }}">
         <a href="#sp-sale" data-toggle="collapse" aria-expanded="{{ $isSaleActive ? 'true' : 'false' }}"><i class="dripicons-cart"></i><span>Sale</span></a>
@@ -123,7 +123,7 @@
             @endif
             @if($sp_sale_add)
             <li class="{{ request()->is('admin/sales/create') ? 'active' : '' }}"><a href="{{ url('/admin/sales/create') }}">Create Order</a></li>
-            <li><a href="{{ url('/admin/sales/sale_by_csv') }}">Import By CSV</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/sales/sale_by_csv') ? 'active' : '' }}"><a href="{{ url('/admin/sales/sale_by_csv') }}">Import By CSV</a></li>
             @endif
             @if($sp_packing)
             <li class="{{ str_contains($currentUrl, '/admin/packing-slips') ? 'active' : '' }}"><a href="{{ url('/admin/packing-slips') }}">Packing Slip List</a></li>
@@ -133,12 +133,12 @@
             <li class="{{ str_contains($currentUrl, '/admin/delivery') ? 'active' : '' }}"><a href="{{ url('/admin/delivery') }}">Delivery List</a></li>
             @endif
             @if($sp_gift_card)
-            <li><a href="{{ url('/admin/gift_cards') }}">Gift Card List</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/gift_cards') ? 'active' : '' }}"><a href="{{ url('/admin/gift_cards') }}">Gift Card List</a></li>
             @endif
             @if($sp_coupon)
-            <li><a href="{{ url('/admin/coupons') }}">Coupon List</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/coupons') ? 'active' : '' }}"><a href="{{ url('/admin/coupons') }}">Coupon List</a></li>
             @endif
-            <li><a href="{{ url('/admin/couriers') }}">Courier List</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/couriers') ? 'active' : '' }}"><a href="{{ url('/admin/couriers') }}">Courier List</a></li>
         </ul>
     </li>
     @endif
@@ -146,11 +146,11 @@
     {{-- ── Expense ── --}}
     @php $sp_expense_index = $role_has_permissions_list->where('name', 'expenses-index')->first(); @endphp
     @if($sp_expense_index)
-    <li class="nav-item has-submenu {{ str_contains($currentUrl, '/salepro/expense') ? 'active' : '' }}">
-        <a href="#sp-expense" data-toggle="collapse" aria-expanded="false"><i class="dripicons-wallet"></i><span>Expense</span></a>
-        <ul id="sp-expense" class="collapse submenu">
-            <li><a href="{{ url('/admin/expense_categories') }}">Expense Category</a></li>
-            <li><a href="{{ url('/admin/expenses') }}">Expense List</a></li>
+    <li class="nav-item has-submenu {{ str_contains($currentUrl, '/admin/expense_categories') || str_contains($currentUrl, '/admin/expenses') ? 'active' : '' }}">
+        <a href="#sp-expense" data-toggle="collapse" aria-expanded="{{ str_contains($currentUrl, '/admin/expense_categories') || str_contains($currentUrl, '/admin/expenses') ? 'true' : 'false' }}"><i class="dripicons-wallet"></i><span>Expense</span></a>
+        <ul id="sp-expense" class="collapse submenu {{ str_contains($currentUrl, '/admin/expense_categories') || str_contains($currentUrl, '/admin/expenses') ? 'show' : '' }}">
+            <li class="{{ str_contains($currentUrl, '/admin/expense_categories') ? 'active' : '' }}"><a href="{{ url('/admin/expense_categories') }}">Expense Category</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/expenses') ? 'active' : '' }}"><a href="{{ url('/admin/expenses') }}">Expense List</a></li>
         </ul>
     </li>
     @endif
@@ -158,9 +158,9 @@
     {{-- ── Transfer ── --}}
     @php $sp_transfer_index = $role_has_permissions_list->where('name', 'transfers-index')->first(); @endphp
     @if($sp_transfer_index)
-    <li class="nav-item has-submenu {{ str_contains($currentUrl, '/salepro/transfers') ? 'active' : '' }}">
-        <a href="#sp-transfer" data-toggle="collapse" aria-expanded="false"><i class="dripicons-export"></i><span>Transfer</span></a>
-        <ul id="sp-transfer" class="collapse submenu">
+    <li class="nav-item has-submenu {{ str_contains($currentUrl, '/admin/transfers') ? 'active' : '' }}">
+        <a href="#sp-transfer" data-toggle="collapse" aria-expanded="{{ str_contains($currentUrl, '/admin/transfers') ? 'true' : 'false' }}"><i class="dripicons-export"></i><span>Transfer</span></a>
+        <ul id="sp-transfer" class="collapse submenu {{ str_contains($currentUrl, '/admin/transfers') ? 'show' : '' }}">
             <li><a href="{{ url('/admin/transfers') }}">Transfer List</a></li>
             @php $sp_transfer_add = $role_has_permissions_list->where('name', 'transfers-add')->first(); @endphp
             @if($sp_transfer_add)
@@ -176,14 +176,15 @@
         $sp_purchase_return = $role_has_permissions_list->where('name', 'purchase-return-index')->first();
     @endphp
     @if($sp_sale_return || $sp_purchase_return)
-    <li class="nav-item has-submenu {{ str_contains($currentUrl, '/salepro/return') ? 'active' : '' }}">
-        <a href="#sp-return" data-toggle="collapse" aria-expanded="false"><i class="dripicons-return"></i><span>Return</span></a>
-        <ul id="sp-return" class="collapse submenu">
+    @php $isReturnActive = str_contains($currentUrl, '/admin/return-sale') || str_contains($currentUrl, '/admin/return-purchase'); @endphp
+    <li class="nav-item has-submenu {{ $isReturnActive ? 'active' : '' }}">
+        <a href="#sp-return" data-toggle="collapse" aria-expanded="{{ $isReturnActive ? 'true' : 'false' }}"><i class="dripicons-return"></i><span>Return</span></a>
+        <ul id="sp-return" class="collapse submenu {{ $isReturnActive ? 'show' : '' }}">
             @if($sp_sale_return)
-            <li><a href="{{ url('/admin/return-sale') }}">Sale</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/return-sale') ? 'active' : '' }}"><a href="{{ url('/admin/return-sale') }}">Sale</a></li>
             @endif
             @if($sp_purchase_return)
-            <li><a href="{{ url('/admin/return-purchase') }}">Purchase</a></li>
+            <li class="{{ str_contains($currentUrl, '/admin/return-purchase') ? 'active' : '' }}"><a href="{{ url('/admin/return-purchase') }}">Purchase</a></li>
             @endif
         </ul>
     </li>
@@ -197,9 +198,10 @@
         $sp_account_statement = $role_has_permissions_list->where('name', 'account-statement')->first();
     @endphp
     @if($sp_account_index || $sp_balance_sheet || $sp_account_statement || $sp_money_transfer)
-    <li class="nav-item has-submenu {{ str_contains($currentUrl, '/salepro/accounts') || str_contains($currentUrl, '/salepro/money-transfers') ? 'active' : '' }}">
-        <a href="#sp-accounting" data-toggle="collapse" aria-expanded="false"><i class="dripicons-briefcase"></i><span>Accounting</span></a>
-        <ul id="sp-accounting" class="collapse submenu">
+    @php $isAccountActive = str_contains($currentUrl, '/admin/accounts') || str_contains($currentUrl, '/admin/money-transfers') || str_contains($currentUrl, '/admin/balancesheet'); @endphp
+    <li class="nav-item has-submenu {{ $isAccountActive ? 'active' : '' }}">
+        <a href="#sp-accounting" data-toggle="collapse" aria-expanded="{{ $isAccountActive ? 'true' : 'false' }}"><i class="dripicons-briefcase"></i><span>Accounting</span></a>
+        <ul id="sp-accounting" class="collapse submenu {{ $isAccountActive ? 'show' : '' }}">
             @if($sp_account_index)
             <li><a href="{{ url('/admin/accounts') }}">Account List</a></li>
             @endif
@@ -273,37 +275,185 @@
 
     {{-- ── Reports ── --}}
     @php
-        $sp_profit_loss = $role_has_permissions_list->where('name', 'profit-loss')->first();
-        $sp_best_seller = $role_has_permissions_list->where('name', 'best-seller')->first();
-        $sp_product_report = $role_has_permissions_list->where('name', 'product-report')->first();
-        $sp_sale_report = $role_has_permissions_list->where('name', 'sale-report')->first();
-        $sp_purchase_report = $role_has_permissions_list->where('name', 'purchase-report')->first();
-        $sp_customer_report = $role_has_permissions_list->where('name', 'customer-report')->first();
-        $sp_supplier_report = $role_has_permissions_list->where('name', 'supplier-report')->first();
-        $sp_daily_sale = $role_has_permissions_list->where('name', 'daily-sale')->first();
-        $sp_monthly_sale = $role_has_permissions_list->where('name', 'monthly-sale')->first();
+        $profit_loss_active = $role_has_permissions_list->where('name', 'profit-loss')->first();
+        $best_seller_active = $role_has_permissions_list->where('name', 'best-seller')->first();
+        $warehouse_report_active = $role_has_permissions_list->where('name', 'warehouse-report')->first();
+        $warehouse_stock_report_active = $role_has_permissions_list->where('name', 'warehouse-stock-report')->first();
+        $product_report_active = $role_has_permissions_list->where('name', 'product-report')->first();
+        $daily_sale_active = $role_has_permissions_list->where('name', 'daily-sale')->first();
+        $monthly_sale_active = $role_has_permissions_list->where('name', 'monthly-sale')->first();
+        $daily_purchase_active = $role_has_permissions_list->where('name', 'daily-purchase')->first();
+        $monthly_purchase_active = $role_has_permissions_list->where('name', 'monthly-purchase')->first();
+        $purchase_report_active = $role_has_permissions_list->where('name', 'purchase-report')->first();
+        $sale_report_active = $role_has_permissions_list->where('name', 'sale-report')->first();
+        $sale_report_chart_active = $role_has_permissions_list->where('name', 'sale-report-chart')->first();
+        $payment_report_active = $role_has_permissions_list->where('name', 'payment-report')->first();
+        $product_expiry_report_active = $role_has_permissions_list->where('name', 'product-expiry-report')->first();
+        $product_qty_alert_active = $role_has_permissions_list->where('name', 'product-qty-alert')->first();
+        $dso_report_active = $role_has_permissions_list->where('name', 'dso-report')->first();
+        $user_report_active = $role_has_permissions_list->where('name', 'user-report')->first();
+        $biller_report_active = $role_has_permissions_list->where('name', 'biller-report')->first();
+        $customer_report_active = $role_has_permissions_list->where('name', 'customer-report')->first();
+        $supplier_report_active = $role_has_permissions_list->where('name', 'supplier-report')->first();
+        $due_report_active = $role_has_permissions_list->where('name', 'due-report')->first();
+        $supplier_due_report_active = $role_has_permissions_list->where('name', 'supplier-due-report')->first();
     @endphp
-    @if($sp_profit_loss || $sp_best_seller || $sp_product_report || $sp_sale_report || $sp_purchase_report || $sp_customer_report || $sp_supplier_report || $sp_daily_sale || $sp_monthly_sale)
-    <li class="nav-item has-submenu {{ str_contains($currentUrl, '/salepro/report') ? 'active' : '' }}">
-        <a href="#sp-reports" data-toggle="collapse" aria-expanded="false"><i class="dripicons-document-remove"></i><span>Reports</span></a>
-        <ul id="sp-reports" class="collapse submenu">
-            @if($sp_profit_loss)
-            <li><a href="{{ url('/admin/report/profit_loss') }}">Summary Report</a></li>
+    @if($profit_loss_active || $best_seller_active || $warehouse_report_active || $warehouse_stock_report_active || $product_report_active || $daily_sale_active || $monthly_sale_active || $daily_purchase_active || $monthly_purchase_active || $purchase_report_active || $sale_report_active || $sale_report_chart_active || $payment_report_active || $product_expiry_report_active || $product_qty_alert_active || $dso_report_active || $user_report_active || $biller_report_active || $customer_report_active || $supplier_report_active || $due_report_active || $supplier_due_report_active)
+    <li class="nav-item has-submenu {{ str_contains($currentUrl, '/report') ? 'active' : '' }}">
+        <a href="#sp-report" data-toggle="collapse" aria-expanded="false"><i class="dripicons-document-remove"></i><span>Reports</span></a>
+        <ul id="sp-report" class="collapse submenu">
+            @if($profit_loss_active)
+            <li id="profit-loss-report-menu">
+            {!! Form::open(['route' => 'report.profitLoss', 'method' => 'post', 'id' => 'profitLoss-report-form']) !!}
+            <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
+            <input type="hidden" name="end_date" value="{{date('Y-m-d')}}" />
+            <a id="profitLoss-link" href="">{{trans('file.Summary Report')}}</a>
+            {!! Form::close() !!}
+            </li>
             @endif
-            @if($sp_best_seller)
-            <li><a href="{{ url('/admin/report/best_seller') }}">Best Seller</a></li>
+            @if($best_seller_active)
+            <li id="best-seller-report-menu">
+            <a href="{{url('admin/report/best_seller')}}">{{trans('file.Best Seller')}}</a>
+            </li>
             @endif
-            @if($sp_product_report)
-            <li><a href="{{ url('/admin/report/product_report') }}">Product Report</a></li>
+            @if($product_report_active)
+            <li id="product-report-menu">
+            {!! Form::open(['route' => 'report.product', 'method' => 'get', 'id' => 'product-report-form']) !!}
+            <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
+            <input type="hidden" name="end_date" value="{{date('Y-m-d')}}" />
+            <input type="hidden" name="warehouse_id" value="0" />
+            <a id="report-link" href="">{{trans('file.Product Report')}}</a>
+            {!! Form::close() !!}
+            </li>
             @endif
-            @if($sp_daily_sale)
-            <li><a href="{{ url('/admin/report/daily_sale/' . date('Y') . '/' . date('m')) }}">Daily Sale</a></li>
+            @if($daily_sale_active)
+            <li id="daily-sale-report-menu">
+            <a href="{{url('admin/report/daily_sale/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Sale')}}</a>
+            </li>
             @endif
-            @if($sp_monthly_sale)
-            <li><a href="{{ url('/admin/report/monthly_sale/' . date('Y')) }}">Monthly Sale</a></li>
+            @if($monthly_sale_active)
+            <li id="monthly-sale-report-menu">
+            <a href="{{url('admin/report/monthly_sale/'.date('Y'))}}">{{trans('file.Monthly Sale')}}</a>
+            </li>
             @endif
-            @if($sp_customer_report)
-            <li><a href="{{ url('/admin/report/customer_report') }}">Customer Report</a></li>
+            @if($daily_purchase_active)
+            <li id="daily-purchase-report-menu">
+            <a href="{{url('admin/report/daily_purchase/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Purchase')}}</a>
+            </li>
+            @endif
+            @if($monthly_purchase_active)
+            <li id="monthly-purchase-report-menu">
+            <a href="{{url('admin/report/monthly_purchase/'.date('Y'))}}">{{trans('file.Monthly Purchase')}}</a>
+            </li>
+            @endif
+            @if($sale_report_active)
+            <li id="sale-report-menu">
+            {!! Form::open(['route' => 'report.sale', 'method' => 'post', 'id' => 'sale-report-form']) !!}
+            <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
+            <input type="hidden" name="end_date" value="{{date('Y-m-d')}}" />
+            <input type="hidden" name="warehouse_id" value="0" />
+            <a id="sale-report-link" href="">{{trans('file.Sale Report')}}</a>
+            {!! Form::close() !!}
+            </li>
+            @endif
+            <li id="challan-report-menu"><a href="{{route('report.challan')}}"> {{trans('file.Challan Report')}}</a></li>
+            @if($sale_report_chart_active)
+            <li id="sale-report-chart-menu">
+                {!! Form::open(['route' => 'report.saleChart', 'method' => 'post', 'id' => 'sale-report-chart-form']) !!}
+                <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
+                <input type="hidden" name="end_date" value="{{date('Y-m-d')}}" />
+                <input type="hidden" name="warehouse_id" value="0" />
+                <input type="hidden" name="time_period" value="weekly" />
+                <a id="sale-report-chart-link" href="">{{trans('file.Sale Report Chart')}}</a>
+                {!! Form::close() !!}
+            </li>
+            @endif
+            @if($payment_report_active)
+            <li id="payment-report-menu">
+            {!! Form::open(['route' => 'report.paymentByDate', 'method' => 'post', 'id' => 'payment-report-form']) !!}
+            <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
+            <input type="hidden" name="end_date" value="{{date('Y-m-d')}}" />
+            <a id="payment-report-link" href="">{{trans('file.Payment Report')}}</a>
+            {!! Form::close() !!}
+            </li>
+            @endif
+            @if($purchase_report_active)
+            <li id="purchase-report-menu">
+            {!! Form::open(['route' => 'report.purchase', 'method' => 'post', 'id' => 'purchase-report-form']) !!}
+            <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
+            <input type="hidden" name="end_date" value="{{date('Y-m-d')}}" />
+            <input type="hidden" name="warehouse_id" value="0" />
+            <a id="purchase-report-link" href="">{{trans('file.Purchase Report')}}</a>
+            {!! Form::close() !!}
+            </li>
+            @endif
+            @if($customer_report_active)
+            <li id="customer-report-menu">
+            <a href="{{route('report.customer')}}">{{trans('file.Customer Report')}}</a>
+            </li>
+            @endif
+            @if($customer_report_active)
+            <li id="customer-report-menu">
+                <a href="{{route('report.customer_group')}}" href="">{{trans('file.Customer Group Report')}}</a>
+            </li>
+            @endif
+            @if($due_report_active)
+            <li id="due-report-menu">
+                {!! Form::open(['route' => 'report.customerDueByDate', 'method' => 'post', 'id' => 'customer-due-report-form']) !!}
+                <input type="hidden" name="start_date" value="{{date('Y-m-d', strtotime('-1 year'))}}" />
+                <input type="hidden" name="end_date" value="{{date('Y-m-d')}}" />
+                <a id="due-report-link" href="">{{trans('file.Customer Due Report')}}</a>
+                {!! Form::close() !!}
+            </li>
+            @endif
+            @if($supplier_report_active)
+            <li id="supplier-report-menu">
+                <a id="supplier-report-link" href="">{{trans('file.Supplier Report')}}</a>
+            </li>
+            @endif
+            @if($supplier_due_report_active)
+            <li id="supplier-due-report-menu">
+                {!! Form::open(['route' => 'report.supplierDueByDate', 'method' => 'post', 'id' => 'supplier-due-report-form']) !!}
+                <input type="hidden" name="start_date" value="{{date('Y-m-d', strtotime('-1 year'))}}" />
+                <input type="hidden" name="end_date" value="{{date('Y-m-d')}}" />
+                <a id="supplier-due-report-link" href="">{{trans('file.Supplier Due Report')}}</a>
+                {!! Form::close() !!}
+            </li>
+            @endif
+            @if($warehouse_report_active)
+            <li id="warehouse-report-menu">
+            <a id="warehouse-report-link" href="">{{trans('file.Warehouse Report')}}</a>
+            </li>
+            @endif
+            @if($warehouse_stock_report_active)
+            <li id="warehouse-stock-report-menu">
+            <a href="{{route('report.warehouseStock')}}">{{trans('file.Warehouse Stock Chart')}}</a>
+            </li>
+            @endif
+            @if($product_expiry_report_active)
+            <li id="productExpiry-report-menu">
+            <a href="{{route('report.productExpiry')}}">{{trans('file.Product Expiry Report')}}</a>
+            </li>
+            @endif
+            @if($product_qty_alert_active)
+            <li id="qtyAlert-report-menu">
+            <a href="{{route('report.qtyAlert')}}">{{trans('file.Product Quantity Alert')}}</a>
+            </li>
+            @endif
+            @if($dso_report_active)
+            <li id="daily-sale-objective-menu">
+                <a href="{{route('report.dailySaleObjective')}}">{{trans('file.Daily Sale Objective Report')}}</a>
+            </li>
+            @endif
+            @if($user_report_active)
+            <li id="user-report-menu">
+            <a id="user-report-link" href="">{{trans('file.User Report')}}</a>
+            </li>
+            @endif
+            @if($biller_report_active)
+            <li id="biller-report-menu">
+                <a id="biller-report-link" href="">{{trans('file.Biller Report')}}</a>
+            </li>
             @endif
         </ul>
     </li>

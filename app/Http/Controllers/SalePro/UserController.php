@@ -113,7 +113,7 @@ class UserController extends Controller
             $data['is_active'] = true;
             Customer::create($data);
         }
-        return redirect('user')->with('message1', $message);
+        return redirect('admin/user')->with('message1', $message);
     }
 
     public function edit($id)
@@ -164,7 +164,7 @@ class UserController extends Controller
         }
 
         cache()->forget('user_role');
-        return redirect('user')->with('message2', 'Data updated successfullly');
+        return redirect('admin/user')->with('message2', 'Data updated successfullly');
     }
 
     public function superadminProfile($id)
@@ -237,7 +237,7 @@ class UserController extends Controller
             return redirect('/login');
         }
         else
-            return redirect('user')->with('message3', 'Data deleted successfullly');
+            return redirect('admin/user')->with('message3', 'Data deleted successfullly');
     }
 
     public function notificationUsers()

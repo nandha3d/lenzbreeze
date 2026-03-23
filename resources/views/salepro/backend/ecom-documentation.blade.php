@@ -63,7 +63,7 @@
             <p>It is presumed that you already have SalePro installed on your server. If you login to SalePro, you should see 'Addon List' menu item on your admin panel/dashboard sidebar. Click 'Addon List' and on the following page you should see 'SalePro eCommerce' listed along with other Add-ons. Unless already installed, it should show 'Buy Now' and 'Install' button. When installed, it will show 'Update' button.</p>
             <p>To purchase this addon click the 'Buy Now' button. If you have already purchased, click the 'Install' button</p>
             <p>
-                <img alt="" src="read_me/assets/images/ecommerce-installation1.png">
+                <img alt="" src="read_me/assets/images/ecommerce-installation1.avif">
             </p>
             <p>Type your purchase key which you will get from the envato during the purchase. Then click on the submit button. If your purchase key is correct then the addon will be installed automatically and you will see a new option on the left side bar named eCommerce.</p>
             <p>
@@ -110,7 +110,7 @@
             </div>
             <p>Category add/edit options are just like SalePro. Few eCommerce specific input fields are added. These input options are listed right at the bottom of the 'Add Category' modal on <a href="{{url('/category')}}">'Category'</a> page in your admin panel. While adding/editing a category, please insert unique meta title and meta description for that specific category. These information will help serch engines to index/list the pages on their search results, thereby improve your sales potential.</p>
             <p>
-                <img alt="" src="read_me/assets/images/ecommerce-category1.png">
+                <img alt="" src="read_me/assets/images/ecommerce-category1.avif">
             </p>
             <p>Upload an image under 'Icon' label and check 'List on catgeory dropdown' checkbox, if you want to show the categroy on the website's header dropdown (see below image)</p>
             <p>
@@ -153,7 +153,7 @@
             </div>
             <p>First create Menu on <a href="{{url('/menu')}}">'Menu'</a> page listed in eCommerce dropdown in your admin panel sidebar. If you want to create a menu for the header section/main navigation of your website, choose 'Main navigation' as location from location dropdown. You can create menus for footer widgets here and later choose these menus for footer widget on <a href="{{url('/widget')}}">'Widgets'</a> page.</p>
             <p>
-                <img alt="" src="read_me/assets/images/ecommerce-menu1.png">
+                <img alt="" src="read_me/assets/images/ecommerce-menu1.avif">
             </p>
             <p>After you create menu, you need to insert menu items. You'll see an 'eye icon' on green button on each row on 'Menu' table (see above image). On clicking it, it will take you to menu items/details page. 'Categories','Collections','Brands', 'Pages', 'Custom Links' on the left pane and a right pane for menu structure/menu tree. Check your desired menu items on each section on the left pane and click 'Add to menu' button at the bottom of assciated section to add the items to the right pane. When the items are already on the right pane, you can drag nad drop them to change their order or create nested menus</p>
             <p>
@@ -201,12 +201,12 @@
             <h2><strong>Add Role</strong></h2>
             <p>You can create, edit and delete user roles. You can controll user access by changing the role permission. So, under a certain role users have specific access over this software</p>
             <p>
-                <img alt="" src="read_me/assets/images/role1.png">
+                <img alt="" src="read_me/assets/images/role1.avif">
             </p>
             <h2><strong>Add Warehouse</strong></h2>
             <p>You can create, edit and delete warehouse. You can also import warehouse with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/warehouse1.png">
+                <img alt="" src="read_me/assets/images/warehouse1.avif">
             </p>
             <h2><strong>Add Customer Group</strong></h2>
             <p>
@@ -216,22 +216,22 @@
                 You can also import customer group with CSV file. <strong>You must follow the instruction to import data from CSV.</strong>
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/customer_group1.png">
+                <img alt="" src="read_me/assets/images/customer_group1.avif">
             </p>
             <h2><strong>Add Brand</strong></h2>
             <p>You can create, edit and delete product brand. You can also import brand with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/brand1.png">
+                <img alt="" src="read_me/assets/images/brand1.avif">
             </p>
             <h2><strong>Add Unit</strong></h2>
             <p>You can create, edit and delete product unit. You can also import brand with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/unit1.png">
+                <img alt="" src="read_me/assets/images/unit1.avif">
             </p>
             <h2><strong>Add Tax</strong></h2>
             <p>You can create, edit and delete different product tax. You can also import tax with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/tax1.png">
+                <img alt="" src="read_me/assets/images/tax1.avif">
             </p>
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
             <h2><strong>General Settings</strong></h2>
@@ -242,7 +242,7 @@
             <p>You can set your own POS settings from this module. You can set default customer, biller, warehouse and how many Featured products will be displayed in the POS module. You have to set your <strong>Stripe</strong> public and private key for Credit Card Payment. To implement payment with <strong>Paypal</strong> you have to buy live api from Paypal. You will also need to fillup the following information.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/pos1.png">
+                <img alt="" src="read_me/assets/images/pos1.avif">
             </p>
             <h2><strong>HRM Setting</strong></h2>
             <p>You can set default CheckIn and CheckOut time in HRM Setting.</p>

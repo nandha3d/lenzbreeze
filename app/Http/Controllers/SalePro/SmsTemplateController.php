@@ -28,7 +28,7 @@ class SmsTemplateController extends Controller
 
         SmsTemplate::create($data);
 
-        return redirect('smstemplates')->with('message', 'Data inserted successfully');
+        return redirect('admin/smstemplates')->with('message', 'Data inserted successfully');
     }
 
     public function update(Request $request, string $id)
@@ -57,7 +57,7 @@ class SmsTemplateController extends Controller
         }
 
         $template->update($data);
-        return redirect('smstemplates')->with('message', 'Data updated successfully');
+        return redirect('admin/smstemplates')->with('message', 'Data updated successfully');
 
     }
 

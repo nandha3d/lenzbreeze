@@ -345,10 +345,12 @@
         "serverSide": true,
         "order": [],
         "ajax":{
-            url:"delivery/delivery_list_data",
             dataType: "json",
             type:"get",
         },
+
+        @include('salepro.backend.report._export_helper')
+
         "columns": [
             {"data": "key"},
             {"data": "reference_no"},
@@ -399,33 +401,37 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
+                action: newexportaction,
             },
             {
                 extend: 'excel',
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
+                action: newexportaction,
             },
             {
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
+                action: newexportaction,
             },
             {
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
+                action: newexportaction,
             },
             {
                 text: '<i title="delete" class="dripicons-cross"></i>',

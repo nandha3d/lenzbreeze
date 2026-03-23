@@ -1,5 +1,5 @@
         <ul id="side-main-menu" class="side-menu list-unstyled d-print-none">
-            <li><a href="{{url('/dashboard')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
+            <li><a href="{{url('admin/dashboard')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
             <?php
 
                 $index_permission_active = $role_has_permissions_list->where('name', 'products-index')->first();
@@ -53,7 +53,7 @@
                 ?>
                 @if($add_permission_active)
                 <li id="purchase-create-menu"><a href="{{route('purchases.create')}}">{{trans('file.Add Purchase')}}</a></li>
-                <li id="purchase-import-menu"><a href="{{url('purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
+                <li id="purchase-import-menu"><a href="{{url('admin/purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
                 @endif
             </ul>
             </li>
@@ -87,7 +87,7 @@
                 @if($sale_add_permission_active)
                 {{-- <li><a href="{{route('sale.pos')}}">POS</a></li> --}}
                 <li id="sale-create-menu"><a href="{{route('sales.create')}}">Create Order</a></li>
-                <li id="sale-import-menu"><a href="{{url('sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li>
+                <li id="sale-import-menu"><a href="{{url('admin/sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li>
                 @endif
                 @if($packing_slip_challan_active)
                 <li id="packing-list-menu"><a href="{{route('packingSlip.index')}}">{{trans('file.Packing Slip List')}}</a></li>
@@ -175,7 +175,7 @@
                 ?>
                 @if($add_permission_active)
                 <li id="transfer-create-menu"><a href="{{route('transfers.create')}}">{{trans('file.Add Transfer')}}</a></li>
-                <li id="transfer-import-menu"><a href="{{url('transfers/transfer_by_csv')}}">{{trans('file.Import Transfer By CSV')}}</a></li>
+                <li id="transfer-import-menu"><a href="{{url('admin/transfers/transfer_by_csv')}}">{{trans('file.Import Transfer By CSV')}}</a></li>
                 @endif
             </ul>
             </li>
@@ -379,7 +379,7 @@
                 @endif
                 @if($best_seller_active)
                 <li id="best-seller-report-menu">
-                <a href="{{url('report/best_seller')}}">{{trans('file.Best Seller')}}</a>
+                <a href="{{url('admin/report/best_seller')}}">{{trans('file.Best Seller')}}</a>
                 </li>
                 @endif
                 @if($product_report_active)
@@ -394,22 +394,22 @@
                 @endif
                 @if($daily_sale_active)
                 <li id="daily-sale-report-menu">
-                <a href="{{url('report/daily_sale/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Sale')}}</a>
+                <a href="{{url('admin/report/daily_sale/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Sale')}}</a>
                 </li>
                 @endif
                 @if($monthly_sale_active)
                 <li id="monthly-sale-report-menu">
-                <a href="{{url('report/monthly_sale/'.date('Y'))}}">{{trans('file.Monthly Sale')}}</a>
+                <a href="{{url('admin/report/monthly_sale/'.date('Y'))}}">{{trans('file.Monthly Sale')}}</a>
                 </li>
                 @endif
                 @if($daily_purchase_active)
                 <li id="daily-purchase-report-menu">
-                <a href="{{url('report/daily_purchase/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Purchase')}}</a>
+                <a href="{{url('admin/report/daily_purchase/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Purchase')}}</a>
                 </li>
                 @endif
                 @if($monthly_purchase_active)
                 <li id="monthly-purchase-report-menu">
-                <a href="{{url('report/monthly_purchase/'.date('Y'))}}">{{trans('file.Monthly Purchase')}}</a>
+                <a href="{{url('admin/report/monthly_purchase/'.date('Y'))}}">{{trans('file.Monthly Purchase')}}</a>
                 </li>
                 @endif
                 @if($sale_report_active)
@@ -649,7 +649,7 @@
                     <li id="hrm-setting-menu"><a href="{{route('setting.hrm')}}"> {{trans('file.HRM Setting')}}</a></li>
                     @endif
                     <li id="barcode-setting-menu"><a href="{{route('barcodes.index')}}"> {{trans('file.Barcode Settings')}}</a></li>
-                    <li id="languages"><a href="{{url('languages/')}}"> {{trans('file.Languages')}}</a></li>
+                    <li id="languages"><a href="{{url('admin/languages/')}}"> {{trans('file.Languages')}}</a></li>
                 </ul>
             </li>
         </ul>

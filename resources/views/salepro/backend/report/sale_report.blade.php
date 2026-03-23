@@ -74,6 +74,7 @@
 
 @push('scripts')
 <script type="text/javascript">
+@include('salepro.backend.report._export_helper')
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -158,21 +159,16 @@
             }
         ],
         'select': { style: 'multi',  selector: 'td:first-child'},
-        'lengthMenu': [[10, 25, 50, 100, 500], [10, 25, 50, 100, 500]],
+        'lengthMenu': [[10, 25, 50, 100, 500, -1], [10, 25, 50, 100, 500, "All"]],
         dom: '<"row"lfB>rtip',
         buttons: [
             {
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported)',
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -180,13 +176,8 @@
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -194,13 +185,8 @@
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -208,13 +194,8 @@
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {

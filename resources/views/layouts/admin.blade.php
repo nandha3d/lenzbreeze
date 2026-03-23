@@ -9,12 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
     {{-- Dripicons for unified sidebar --}}
     <link rel="stylesheet" href="{{ asset('vendor/dripicons/webfont.css') }}">
+    <!-- Font Awesome CSS (needed for submenu arrows) -->
+    <link rel="stylesheet" href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Unified sidebar styles for LenzBreeze Tailwind layout */
         .unified-sidebar-nav { list-style: none; padding: 8px 12px; margin: 0; }
         .unified-sidebar-nav .nav-section-header {
-            color: rgba(255,255,255,0.35);
+            color: #9ca3af;
             font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
@@ -28,7 +30,7 @@
             gap: 10px;
             padding: 9px 12px;
             border-radius: 8px;
-            color: rgba(255,255,255,0.55);
+            color: #4b5563;
             font-size: 13px;
             font-weight: 500;
             text-decoration: none;
@@ -38,15 +40,31 @@
             font-size: 16px;
             width: 20px;
             text-align: center;
+            color: #9ca3af;
         }
         .unified-sidebar-nav .nav-item > a:hover {
-            background: rgba(255,255,255,0.06);
-            color: #fff;
+            background: rgba(0, 175, 176, 0.08);
+            color: var(--color-accent-600, #009494);
+        }
+        .unified-sidebar-nav .nav-item > a:hover i {
+            color: var(--color-accent-600, #009494);
         }
         .unified-sidebar-nav .nav-item.active > a {
-            background: rgba(255,255,255,0.1);
-            color: #fff;
+            background: rgba(0, 175, 176, 0.1);
+            color: var(--color-accent-600, #009494);
+            font-weight: 600;
         }
+        .unified-sidebar-nav .nav-item.active > a i {
+            color: var(--color-accent-600, #009494);
+        }
+        
+        .unified-sidebar-nav .nav-item.has-submenu > a { position: relative; padding-right: 40px; }
+        .unified-sidebar-nav .nav-item.has-submenu > a::after {
+            content: "\f105"; font-family: "FontAwesome" !important; position: absolute; right: 16px;
+            font-size: 12px; color: #9ca3af; transition: transform 0.2s ease;
+        }
+        .unified-sidebar-nav .nav-item.has-submenu > a[aria-expanded="true"]::after { transform: rotate(90deg); color: var(--color-accent-500, #00afb0); }
+
         .unified-sidebar-nav .submenu {
             list-style: none;
             padding: 2px 0 4px 32px;
@@ -55,50 +73,64 @@
         .unified-sidebar-nav .submenu li a {
             display: block;
             padding: 5px 12px;
-            color: rgba(255,255,255,0.45);
+            color: #6b7280;
             font-size: 12.5px;
             text-decoration: none;
             border-radius: 6px;
             transition: all 0.15s ease;
         }
         .unified-sidebar-nav .submenu li a:hover {
-            color: #fff;
-            background: rgba(255,255,255,0.04);
+            color: var(--color-accent-600, #009494);
+            background: rgba(0, 175, 176, 0.05);
+        }
+        .unified-sidebar-nav .submenu li.active a {
+            color: var(--color-accent-600, #009494);
+            background: rgba(0, 175, 176, 0.1);
+            font-weight: 600;
         }
         /* Submenu collapse/expand via JS */
-        .unified-sidebar-nav .submenu { display: none; }
-        .unified-sidebar-nav .submenu.show { display: block; }
+        .unified-sidebar-nav .submenu { 
+            display: none; 
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .unified-sidebar-nav .submenu.show { 
+            display: block !important; 
+            visibility: visible !important;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-warm-100 font-sans" x-data="{ sidebarOpen: true }">
     <div class="flex">
         {{-- Sidebar --}}
-        <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="fixed inset-y-0 left-0 z-30 bg-brand-900 text-white transition-all duration-300 flex flex-col overflow-y-auto">
+        <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="fixed inset-y-0 left-0 z-[100] bg-white border-r border-gray-200 text-gray-800 transition-all duration-300 flex flex-col overflow-y-auto lz-sidebar">
             {{-- Logo --}}
-            <div class="h-16 flex items-center px-5 border-b border-white/10 shrink-0">
+            <div class="h-16 flex items-center px-5 border-b border-gray-200 shrink-0">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style="background-color: var(--color-logo-bg)">
-                        <span class="font-bold text-sm font-display" style="color: var(--color-logo-text)">LB</span>
+                        <span class="font-bold text-sm font-display text-white">LB</span>
                     </div>
-                    <span x-show="sidebarOpen" x-cloak class="font-display font-bold text-lg">Admin</span>
+                    <span x-show="sidebarOpen" x-cloak class="font-display font-bold text-lg text-gray-900">Admin</span>
                 </a>
             </div>
 
             {{-- Unified Nav --}}
-            <nav class="flex-1 overflow-y-auto">
+            <nav class="flex-1 overflow-y-auto sidebar-scrollbar">
                 @include('partials.unified-sidebar')
             </nav>
 
             {{-- Bottom --}}
-            <div class="border-t border-white/10 p-3 shrink-0">
-                <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:bg-white/5 hover:text-white transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            <div class="border-t border-gray-200 p-3 shrink-0">
+                <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                     <span x-show="sidebarOpen" x-cloak>View Website</span>
                 </a>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:bg-red-500/20 hover:text-red-300 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors">
+                        <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                         <span x-show="sidebarOpen" x-cloak>Logout</span>
                     </button>
                 </form>
@@ -141,20 +173,41 @@
     </div>
     @stack('scripts')
     <script>
-        // Unified sidebar submenu toggle (no Bootstrap JS available in Tailwind layout)
-        document.querySelectorAll('.unified-sidebar-nav [data-toggle="collapse"]').forEach(function(trigger) {
-            trigger.addEventListener('click', function(e) {
-                e.preventDefault();
-                var target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.classList.toggle('show');
-                    this.setAttribute('aria-expanded', target.classList.contains('show'));
-                }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Unified sidebar submenu toggle
+            document.querySelectorAll('.unified-sidebar-nav [data-toggle="collapse"]').forEach(function(trigger) {
+                trigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Avoid event bubbling that might hit other listeners
+                    
+                    var targetId = this.getAttribute('href');
+                    var target = document.querySelector(targetId);
+                    
+                    if (target) {
+                        var isShowing = target.classList.contains('show');
+                        
+                        // Close other open submenus
+                        document.querySelectorAll('.unified-sidebar-nav .submenu.show').forEach(function(openSub) {
+                            if (openSub !== target) {
+                                openSub.classList.remove('show');
+                                var otherTrigger = document.querySelector('a[href="#' + openSub.id + '"]');
+                                if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+                            }
+                        });
+                        
+                        // Toggle current
+                        target.classList.toggle('show');
+                        this.setAttribute('aria-expanded', !isShowing);
+                    }
+                });
             });
-        });
-        // Auto-expand active submenus
-        document.querySelectorAll('.unified-sidebar-nav .nav-item.active .submenu').forEach(function(sub) {
-            sub.classList.add('show');
+
+            // Auto-expand active submenus with priority
+            document.querySelectorAll('.unified-sidebar-nav .nav-item.active .submenu').forEach(function(sub) {
+                sub.classList.add('show');
+                var trigger = document.querySelector('a[href="#' + sub.id + '"]');
+                if (trigger) trigger.setAttribute('aria-expanded', 'true');
+            });
         });
     </script>
 </body>

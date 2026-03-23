@@ -154,6 +154,7 @@
 
 @push('scripts')
 <script type="text/javascript">
+@include('salepro.backend.report._export_helper')
 
     $("ul#product").siblings('a').attr('aria-expanded','true');
     $("ul#product").addClass("show");
@@ -246,25 +247,31 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale)',
+                    columns: ':visible:not(.not-exported-sale)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale)',
+                    columns: ':visible:not(.not-exported-sale)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale)',
+                    columns: ':visible:not(.not-exported-sale)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'colvis',
@@ -338,42 +345,30 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-purchase)',
+                    columns: ':visible:not(.not-exported-purchase)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_purchase(dt, true);
-                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_purchase(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-purchase)',
+                    columns: ':visible:not(.not-exported-purchase)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_purchase(dt, true);
-                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum_purchase(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-purchase)',
+                    columns: ':visible:not(.not-exported-purchase)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum_purchase(dt, true);
-                    $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                    datatable_sum_purchase(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -464,25 +459,31 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale-return)',
+                    columns: ':visible:not(.not-exported-sale-return)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale-return)',
+                    columns: ':visible:not(.not-exported-sale-return)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale-return)',
+                    columns: ':visible:not(.not-exported-sale-return)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'colvis',
@@ -556,25 +557,31 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-purchase-return)',
+                    columns: ':visible:not(.not-exported-purchase-return)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-purchase-return)',
+                    columns: ':visible:not(.not-exported-purchase-return)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-purchase-return)',
+                    columns: ':visible:not(.not-exported-purchase-return)',
                     rows: ':visible'
-                }
+                },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'colvis',

@@ -12,7 +12,7 @@
     <div class="container-fluid">
         @if(in_array("sales-add", $all_permission))
             <a href="{{route('sales.create')}}" class="btn btn-info add-sale-btn"><i class="dripicons-plus"></i> {{trans('file.Add Sale')}}</a>&nbsp;
-            <a href="{{url('sales/sale_by_csv')}}" class="btn btn-primary add-sale-btn"><i class="dripicons-copy"></i> {{trans('file.Import Sale')}}</a>
+            <a href="{{url('admin/sales/sale_by_csv')}}" class="btn btn-primary add-sale-btn"><i class="dripicons-copy"></i> {{trans('file.Import Sale')}}</a>
         @endif
         <div class="card mt-3">
             <h3 class="text-center mt-3">{{trans('file.Filter Sales')}}</h3>
@@ -122,6 +122,19 @@
 
                     <div class="col-md-3 ">
                         <div class="form-group">
+                            <label><strong>Biller</strong></label>
+                            <select name="biller_id" id="biller_id" class="selectpicker form-control" data-live-search="true" title="Select biller..." style="width: 100px">
+                                <option value="all">All</option>
+                                @foreach($lims_biller_list as $biller)
+                                    <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3 ">
+                        <div class="form-group">
                             <label><strong>Category</strong></label>
                             <select name="category_id" id="category_id" class="selectpicker form-control" data-live-search="true" title="Select category..." style="width: 100px">
                                 <option value="all">All</option>
@@ -143,6 +156,25 @@
                 </div>
 
                 {{-- {!! Form::close() !!} --}}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Export Progress Modal -->
+    <div id="export-modal" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true" class="modal fade text-left" data-backdrop="static" data-keyboard="false">
+        <div role="document" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="exportModalLabel" class="modal-title">Exporting Data...</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Generating file, please wait. Do not close this window.</p>
+                    <div class="progress">
+                        <div id="export-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                            0%
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -609,6 +641,7 @@
 
 @push('scripts')
 <script type="text/javascript">
+@include('salepro.backend.report._export_helper')
 
     $("ul#sale").siblings('a').attr('aria-expanded','true');
     $("ul#sale").addClass("show");
@@ -804,7 +837,7 @@
         rowindex = $(this).closest('tr').index();
         deposit = $('table.sale-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.deposit').val();
         var sale_id = $(this).data('id').toString();
-        var balance = $('table.sale-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('td:nth-child(12)').text();
+        var balance = $(this).data('due').toString();
         balance = parseFloat(balance.replace(/,/g, ''));
         $('input[name="paying_amount"]').val(balance);
         $('#add-payment input[name="balance"]').val(balance);
@@ -1097,47 +1130,78 @@
         oTable.api().draw();
     });
 
-    function newexportaction(e, dt, button, config) {
-        var self = this;
-        var oldStart = dt.settings()[0]._iDisplayStart;
-        dt.one('preXhr', function (e, s, data) {
-            // Just this once, load all data from the server...
-            data.start = 0;
-            data.length = 2147483647;
-            dt.one('preDraw', function (e, settings) {
-                // Call the original action function
-                if (button[0].className.indexOf('buttons-copy') >= 0) {
-                    $.fn.dataTable.ext.buttons.copyHtml5.action.call(self, e, dt, button, config);
-                } else if (button[0].className.indexOf('buttons-excel') >= 0) {
-                    $.fn.dataTable.ext.buttons.excelHtml5.available(dt, config) ?
-                        $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config) :
-                        $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
-                } else if (button[0].className.indexOf('buttons-csv') >= 0) {
-                    $.fn.dataTable.ext.buttons.csvHtml5.available(dt, config) ?
-                        $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config) :
-                        $.fn.dataTable.ext.buttons.csvFlash.action.call(self, e, dt, button, config);
-                } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
-                    $.fn.dataTable.ext.buttons.pdfHtml5.available(dt, config) ?
-                        $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config) :
-                        $.fn.dataTable.ext.buttons.pdfFlash.action.call(self, e, dt, button, config);
-                } else if (button[0].className.indexOf('buttons-print') >= 0) {
-                    $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+    function serverSideExport(type) {
+        $('#export-modal').modal('show');
+        $('#export-progress-bar').css('width', '0%').text('0%').attr('aria-valuenow', 0);
+
+        let dataParams = {
+            starting_date: $("#start-date").val(),
+            ending_date: $("#end-date").val(),
+            warehouse_id: $("#warehouse_id").val(),
+            biller_id: $("#biller_id").val(),
+            sale_status: $("#sale-status").val(),
+            sale_type: sale_type,
+            payment_status: payment_status,
+            payment_method: payment_method,
+            customer_id: $("#customer_id").val(),
+            category_id: $("#category_id").val(),
+            search: $('#sale-table_filter input').val()
+        };
+
+        $.ajax({
+            url: "sales/export-start",
+            type: "POST",
+            data: dataParams,
+            success: function(response) {
+                let totalChunks = response.total_chunks;
+                let fileName = response.file_name;
+                let currentChunk = 0;
+
+                function processChunk() {
+                    if (currentChunk >= totalChunks) {
+                        $('#export-progress-bar').css('width', '100%').text('100%').attr('aria-valuenow', 100);
+                        setTimeout(function() {
+                            $('#export-modal').modal('hide');
+                            window.location.href = "sales/export-download?file_name=" + fileName;
+                        }, 1500);
+                        return;
+                    }
+
+                    dataParams.chunk_index = currentChunk;
+                    dataParams.file_name = fileName;
+
+                    $.ajax({
+                        url: "sales/export-process",
+                        type: "POST",
+                        data: dataParams,
+                        success: function() {
+                            currentChunk++;
+                            let percent = Math.round((currentChunk / totalChunks) * 100);
+                            $('#export-progress-bar').css('width', percent + '%').text(percent + '%').attr('aria-valuenow', percent);
+                            processChunk();
+                        },
+                        error: function() {
+                            alert("Error generating export chunk.");
+                            $('#export-modal').modal('hide');
+                        }
+                    });
                 }
-                dt.one('preXhr', function (e, s, data) {
-                    // DataTables thinks the first item displayed is index 0, but we're not drawing that.
-                    // Set the property to what it was before exporting.
-                    settings._iDisplayStart = oldStart;
-                    data.start = oldStart;
-                });
-                // Reload the grid with the original page. Otherwise, API functions like table.cell(this) don't work properly.
-                setTimeout(dt.ajax.reload, 0);
-                // Prevent rendering of the full data to the DOM
-                return false;
-            });
+
+                if (totalChunks > 0) {
+                    processChunk();
+                } else {
+                    $('#export-modal').modal('hide');
+                    alert("No records to export.");
+                }
+            },
+            error: function() {
+                alert("Error starting export.");
+                $('#export-modal').modal('hide');
+            }
         });
-        // Requery the server with the new one-time export settings
-        dt.ajax.reload();
-    };
+    }
+
+    // newexportaction is provided by the shared _export_helper partial included above
 
 
     var oTable = $('#sale-table').dataTable( {
@@ -1155,11 +1219,13 @@
                 d.payment_status = payment_status;
                 d.payment_method = payment_method;
                 d.customer_id = $("#customer_id").val();
+                d.biller_id = $("#biller_id").val();
                 d.category_id = $("#category_id").val();
             },
             dataType: "json",
             type:"post"
         },
+        deferRender: true,
         /*rowId: function(data) {
               return 'row_'+data['id'];
         },*/
@@ -1180,6 +1246,7 @@
                     'next': '<i class="dripicons-chevron-right"></i>'
             }
         },
+        'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
         order:[['1', 'desc']],
         'columnDefs': [
             {
@@ -1202,7 +1269,6 @@
             }
         ],
         'select': { style: 'multi',  selector: 'td:first-child'},
-        'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
         dom: '<"row"lfB>rtip',
         rowId: 'ObjectID',
         buttons: [
@@ -1210,52 +1276,34 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
                 extend: 'excel',
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
-                exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
-                    rows: ':visible'
-                },
-                newexportaction,
-                // footer:true
+                action: function(e, dt, button, config) {
+                    serverSideExport('excel');
+                }
             },
             {
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
-                exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
-                    rows: ':visible'
-                },
                 action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
-                footer:true
+                    serverSideExport('csv');
+                }
             },
             {
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -1313,8 +1361,8 @@
             $( dt_selector.column( 9 ).footer() ).html(dt_selector.cells( rows, 9, { page: 'current' } ).data().sum().toFixed({{$general_setting->decimal}}));
         }
         else {
-            $( dt_selector.column( 8 ).footer() ).html(dt_selector.cells( rows, 8, { page: 'current' } ).data().sum().toFixed({{$general_setting->decimal}}));
-            $( dt_selector.column( 9 ).footer() ).html(dt_selector.cells( rows, 9, { page: 'current' } ).data().sum().toFixed({{$general_setting->decimal}}));
+            $( dt_selector.column( 8 ).footer() ).html(dt_selector.column( 8, {page:'current'} ).data().sum().toFixed({{$general_setting->decimal}}));
+            $( dt_selector.column( 9 ).footer() ).html(dt_selector.column( 9, {page:'current'} ).data().sum().toFixed({{$general_setting->decimal}}));
         }
     }
 

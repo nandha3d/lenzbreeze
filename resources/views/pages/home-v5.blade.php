@@ -121,7 +121,7 @@
                     {{-- Floating badge --}}
                     <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-xl p-4 z-20 max-w-[180px]">
                         <div class="flex items-center gap-2 mb-1">
-                            <img src="{{ asset('images/logo-icon.png') }}" class="w-7 h-7 object-contain" alt="Lenz Breeze">
+                            <img src="{{ asset('images/logo-icon.avif') }}" class="w-7 h-7 object-contain" alt="Lenz Breeze">
                             <span class="font-display font-bold text-brand-500 text-sm">Eye Mek</span>
                         </div>
                         <div class="text-[10px] text-warm-400 font-semibold uppercase tracking-wider">Premium Collections · Est. 2005</div>
@@ -130,7 +130,7 @@
 
                 {{-- Slide 1 image --}}
                 <div x-show="slide === 1" x-transition:enter="transition ease-out duration-700 delay-200" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100" class="relative">
-                    <img src="{{ asset('images/products/premium-progressive-rx.png') }}" alt="Progressive RX" class="w-[380px] h-[380px] object-contain drop-shadow-2xl relative z-10" onerror="this.src='https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&h=600&fit=crop&auto=format';this.classList.add('rounded-full','object-cover')">
+                    <img src="{{ asset('images/products/premium-progressive-rx.avif') }}" alt="Progressive RX" class="w-[380px] h-[380px] object-contain drop-shadow-2xl relative z-10" onerror="this.src='https://images.unsplash.com/photo-1591076482161-42ce6da69f67?w=600&h=600&fit=crop&auto=format';this.classList.add('rounded-full','object-cover')">
                     <div class="absolute -top-6 -left-6 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 z-20">
                         <div class="text-white/50 text-[10px] font-bold uppercase tracking-widest">Eye Mek</div>
                         <div class="text-white font-display font-bold text-sm">Premium Progressive RX</div>
@@ -229,7 +229,7 @@
                 <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
                 <div class="absolute -bottom-20 -right-20 w-72 h-72 rounded-full bg-accent-500/10 blur-3xl group-hover:bg-accent-500/20 transition-all duration-700"></div>
                 <div class="absolute top-8 right-8">
-                    <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze" class="w-12 h-12 object-contain opacity-60 group-hover:opacity-90 transition-opacity group-hover:scale-110 transition-transform duration-500">
+                    <img src="{{ asset('images/logo-icon.avif') }}" alt="Lenz Breeze" class="w-12 h-12 object-contain opacity-60 group-hover:opacity-90 transition-opacity group-hover:scale-110 transition-transform duration-500">
                 </div>
                 <div class="relative z-10">
                     <div class="inline-block px-3 py-1 rounded-full bg-white/10 border border-white/20 text-accent-300 text-xs font-bold uppercase tracking-widest mb-6">Eye Mek Premium Range</div>

@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
-    <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.avif') }}" />
     
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="{{ asset('salepro-assets/vendor/bootstrap/css/bootstrap.min.css') }}" type="text/css">
@@ -18,7 +18,7 @@
 
     <style>
         body.login-page {
-            background: url("{{ asset('images/bg.jpeg') }}") no-repeat center center fixed;
+            background: url("{{ asset('images/bg.avif') }}") no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
             display: flex;
@@ -215,9 +215,9 @@
     <div class="container d-flex justify-content-center">
       <div class="glass-card">
         <div class="logo">
-            <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze Icon" class="logo-icon">
+            <img src="{{ asset('images/logo-icon.avif') }}" alt="Lenz Breeze Icon" class="logo-icon">
             <br>
-            <img src="{{ asset('images/logo-text.png') }}" alt="Lenz Breeze Text" class="logo-text">
+            <img src="{{ asset('images/logo-text.avif') }}" alt="Lenz Breeze Text" class="logo-text">
         </div>
         
         @if(session()->has('delete_message'))

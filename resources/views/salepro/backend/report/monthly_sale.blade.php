@@ -18,9 +18,9 @@
 					<table class="table table-bordered" style="border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;">
 						<thead>
 							<tr>
-								<th><a href="{{url('report/monthly_sale/'.($year-1))}}"><i class="fa fa-arrow-left"></i> {{trans('file.Previous')}}</a></th>
+								<th><a href="{{url('admin/report/monthly_sale/'.($year-1))}}"><i class="fa fa-arrow-left"></i> {{trans('file.Previous')}}</a></th>
 						    	<th colspan="10" class="text-center">{{$year}}</th>
-						    	<th><a href="{{url('report/monthly_sale/'.($year+1))}}">{{trans('file.Next')}} <i class="fa fa-arrow-right"></i></a></th>
+						    	<th><a href="{{url('admin/report/monthly_sale/'.($year+1))}}">{{trans('file.Next')}} <i class="fa fa-arrow-right"></i></a></th>
 						    </tr>
 						</thead>
 					    <tbody>

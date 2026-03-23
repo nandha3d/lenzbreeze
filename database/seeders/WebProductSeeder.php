@@ -27,79 +27,226 @@ class WebProductSeeder extends Seeder
                 'name' => 'Eye Mek Premium Progressive RX',
                 'slug' => 'premium-progressive-rx',
                 'tagline' => 'Seamless Sight, Absolute Protection.',
-                'description' => '<p>High-Performance Optics. EYE MEK Progressive lenses deliver superior multi-distance vision with our signature Drive X Technology for optimized road clarity. Available with Blue Cut, Photochromic, and Polarized options.</p><p>From the boardroom to the open road, experience crystal-clear vision at every distance with our premium progressive lens series.</p>',
-                'technologies' => json_encode(['Progressive', 'Photochromic', 'Blue Cut']),
+                'description' => '<p>High-Performance Optics. EYE MEK Progressive lenses deliver superior multi-distance vision with our signature Road Master Technology for optimized road clarity. Available with Blue Cut, Photochromic, and Polarized options.</p><p>From the boardroom to the open road, experience crystal-clear vision at every distance with our premium progressive lens series.</p>',
+                'features' => json_encode([
+                    'Road Master: Specialized filter to reduce night-time glare and sharpen road details for safer driving.',
+                    'HD Digital: Wider corridors and reduced "swim effect" for faster adaptation and edge-to-edge clarity.',
+                    'HMC: Choose Green for a natural look or Blue for a modern, tech-focused aesthetic with premium anti-reflective performance.',
+                    'Photochromic: Rapid darkening in Grey or Brown for seamless 2-in-1 indoor/outdoor protection.'
+                ]),
+                'technologies' => json_encode(['Progressive', 'Photochromic', 'Blue Cut', 'Polarized', 'Anti-Glare', 'Road Master']),
                 'specifications' => json_encode([
                     'variants' => [
                         [
-                            'name' => 'Multi-Distance',
+                            'name' => 'CR 39 white',
+                            'image' => 'images/variants/cr-39.avif',
                             'icon_type' => 'clear',
-                            'description' => 'Classic progressive design for seamless near, intermediate and distance vision.',
+                            'description' => 'Industry standard for "plastic" eyeglass lenses, providing a lightweight, shatter-resistant alternative to glass.',
                             'details' => [
-                                'summary' => 'Our signature progressive lens with smooth transition zones optimized for daily wear.',
+                                'summary' => 'The industry standard for lightweight, shatter-resistant optics.',
                                 'benefits' => [
-                                    'Vision: Seamless transition between near, intermediate and far distances',
-                                    'Comfort: Wide corridor design reduces peripheral distortion',
-                                    'Quality: Premium CR-39 material for lightweight comfort',
-                                    'Protection: Built-in UV400 protection'
+                                    'Superior Optics: High Abbe value for blur-free vision',
+                                    'Affordability: Budget-friendly premium lens material',
+                                    'Lightweight: 50% lighter than glass',
+                                    'Exceptional Tinting: Perfect for custom fashion gradients'
                                 ],
                                 'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'UV Protection', 'value' => 'UV400'],
-                                    ['label' => 'Corridor Width', 'value' => 'Wide'],
+                                    ['label' => 'Material', 'value' => 'ADC'],
+                                    ['label' => 'Refractive Index', 'value' => '1.498'],
+                                    ['label' => 'Abbe Value', 'value' => '58'],
+                                    ['label' => 'Specific Gravity', 'value' => '1.32']
                                 ],
-                                'highlight_title' => 'Drive X Technology',
-                                'highlight_desc' => 'Optimized peripheral clarity for confident driving. Wider distance zone with reduced swim effect.'
+                                'highlight_title' => 'Thermoset Durability',
+                                'highlight_desc' => 'Highly resistant to heat and household chemicals.'
                             ]
                         ],
                         [
-                            'name' => 'Driving',
+                            'name' => 'Uncoated',
+                            'image' => 'images/variants/cr-39.avif',
+                            'icon_type' => 'clear',
+                            'description' => 'Pure lens material without external treatments.',
+                            'details' => [
+                                'summary' => 'Pure optics without external coatings.',
+                                'benefits' => [
+                                    'Superior Optics: High Abbe value for blur-free vision',
+                                    'Affordability: Most budget-friendly premium lens',
+                                    'Lightweight: 50% lighter than glass',
+                                    'Natural Feel: No additional surface treatments'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Material', 'value' => 'ADC'],
+                                    ['label' => 'Refractive Index', 'value' => '1.498'],
+                                    ['label' => 'Abbe Value', 'value' => '58'],
+                                    ['label' => 'Coating', 'value' => 'None']
+                                ],
+                                'highlight_title' => 'Thermoset Durability',
+                                'highlight_desc' => 'Same durability characteristics as standard CR-39 material.'
+                            ]
+                        ],
+                        [
+                            'name' => 'Hard Coat',
+                            'image' => 'images/variants/hard-coat.avif',
+                            'icon_type' => 'hmc',
+                            'description' => 'Clear, durable protection layer applied to resist daily abrasions and extend lens life.',
+                            'details' => [
+                                'summary' => 'A tough shield against scratches and daily wear.',
+                                'benefits' => [
+                                    'Extended Lifespan: Resists daily abrasions',
+                                    'Surface Integrity: Prevents hairline scratches',
+                                    'Smooth Finish: Flat foundation for secondary coatings',
+                                    'Visual Longevity: Maintains clarity over time'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Base Treatment', 'value' => 'Polysiloxane Dip Coat'],
+                                    ['label' => 'Durability', 'value' => 'High Scratch Resistance'],
+                                    ['label' => 'Visibility', 'value' => '100% Optically Clear'],
+                                    ['label' => 'Foundation', 'value' => 'Required for ARC']
+                                ],
+                                'highlight_title' => 'Polysiloxane Barrier',
+                                'highlight_desc' => 'Durable layer cured with UV light to form a tough shield.'
+                            ]
+                        ],
+                        [
+                            'name' => 'Photochromic',
+                            'image' => 'images/variants/photochromic.avif',
+                            'icon_type' => 'photochromic',
+                            'description' => 'Rapid darkening adaptive lenses for seamless 2-in-1 indoor/outdoor protection.',
+                            'details' => [
+                                'summary' => 'Adapts automatically to changing light conditions.',
+                                'benefits' => [
+                                    '2-in-1 Convenience: No need for separate sunglasses',
+                                    'Reduced Fatigue: Less squinting in bright light',
+                                    'UV Shield: Constant protection against solar radiation',
+                                    'Rapid Transition: Fast darkening and fade-back'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Technology', 'value' => 'Naphthopyran Transition'],
+                                    ['label' => 'Activation', 'value' => 'UV-Responsive'],
+                                    ['label' => 'Protection', 'value' => '100% UVA & UVB'],
+                                    ['label' => 'Versatility', 'value' => 'Indoor/Outdoor']
+                                ],
+                                'highlight_title' => 'Molecule Adaptation',
+                                'highlight_desc' => 'Light-sensitive molecules undergo structural change when exposed to UV.'
+                            ]
+                        ],
+                        [
+                            'name' => 'Blue cut',
+                            'image' => 'images/variants/blu-cut.avif',
+                            'icon_type' => 'bluecut',
+                            'description' => 'Designed to protect eyes from digital strain by filtering high-energy visible (HEV) blue light.',
+                            'details' => [
+                                'summary' => 'Essential protection for digital lifestyles.',
+                                'benefits' => [
+                                    'Screen Comfort: Reduces dry eyes and headaches',
+                                    'Sleep Support: Preserves natural circadian rhythms',
+                                    'Sharp Contrast: Enhances visual comfort for small text',
+                                    'Digital Guard: Filters harmful HEV light'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Filtering Range', 'value' => '380nm – 450nm'],
+                                    ['label' => 'Method', 'value' => 'Monomer / Reflection'],
+                                    ['label' => 'Clarity', 'value' => 'HD Digital Viewing'],
+                                    ['label' => 'Protection', 'value' => 'HEV Blue Light Shield']
+                                ],
+                                'highlight_title' => 'Blue Shield Technology',
+                                'highlight_desc' => 'Selectively filters harmful high-energy blue light while allowing beneficial wavelengths through.'
+                            ]
+                        ],
+                        [
+                            'name' => 'HD digital',
+                            'image' => 'images/variants/hd.avif',
+                            'icon_type' => 'clear',
+                            'description' => 'Wider corridors and reduced "swim effect" for faster adaptation and edge-to-edge clarity.',
+                            'details' => [
+                                'summary' => 'Precision optics for maximum clarity and fast adaptation.',
+                                'benefits' => [
+                                    'Maximum Clarity: Crisp vision across entire surface',
+                                    'Zero Distortion: Eliminates the "swim effect"',
+                                    'Sharper Contrast: Brighter, high-definition vision',
+                                    'Quick Adapt: Reduces adaptation time'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Manufacturing', 'value' => 'Freeform 3D Digital'],
+                                    ['label' => 'Precision', 'value' => '1/100th Diopter'],
+                                    ['label' => 'Field of View', 'value' => 'Edge-to-Edge'],
+                                    ['label' => 'Customization', 'value' => 'Tailored Optics']
+                                ],
+                                'highlight_title' => 'Precision Surfacing',
+                                'highlight_desc' => 'CNC manufacturing carve prescription to 1/100th of a diopter accuracy.'
+                            ]
+                        ],
+                        [
+                            'name' => 'Polarized',
+                            'image' => 'images/variants/polarized.avif',
+                            'icon_type' => 'polarized',
+                            'description' => 'The gold standard for bright light, using microscopic vertical filters to block intense horizontal glare.',
+                            'details' => [
+                                'summary' => 'Ultimate glare elimination for the brightest conditions.',
+                                'benefits' => [
+                                    'Visual Comfort: Reduces glare in brightest sun',
+                                    'Driving Safety: Removes reflections from roads',
+                                    'True Colors: Accurate outdoor color perception',
+                                    'Eye Relaxation: Drastically reduces squinting'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Filter Type', 'value' => 'Polyvinyl Alcohol Film'],
+                                    ['label' => 'Glare Reduction', 'value' => 'Up to 99.9%'],
+                                    ['label' => 'Contrast', 'value' => 'Premium Outdoor Detail'],
+                                    ['label' => 'Ideal For', 'value' => 'Water, Snow, & Driving']
+                                ],
+                                'highlight_title' => 'Light Polarization',
+                                'highlight_desc' => 'Acts like a window blind, blocking horizontal glare while letting vertical light through.'
+                            ]
+                        ],
+                        [
+                            'name' => 'HMC (Antiglare)',
+                            'image' => 'images/variants/hmc.avif',
+                            'icon_type' => 'hmc',
+                            'description' => 'Premium anti-reflective multi-coat for clear vision and natural appearance.',
+                            'details' => [
+                                'summary' => 'Reduces reflections for both the wearer and others.',
+                                'benefits' => [
+                                    'Night Safety: Reduces halos around headlights',
+                                    'Invisible Look: People see your eyes clearly',
+                                    'Crisper View: Sharpens vision by reducing ghost images',
+                                    'Cosmetic Appeal: Eliminates distracting lens glare'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Light Transmission', 'value' => 'Up to 99%'],
+                                    ['label' => 'Technology', 'value' => 'Vacuum Metallic Oxides'],
+                                    ['label' => 'Reflection Loss', 'value' => 'Reduced to < 1%'],
+                                    ['label' => 'Effect', 'value' => 'Anti-Reflective Purger']
+                                ],
+                                'highlight_title' => 'Destructive Interference',
+                                'highlight_desc' => 'Multiple layers neutralize light waves for maximum transmission.'
+                            ]
+                        ],
+                        [
+                            'name' => 'Road Master',
+                            'image' => 'images/variants/hmc.avif',
                             'icon_type' => 'driving',
-                            'description' => 'Drive X Technology for optimized road clarity.',
+                            'description' => 'Specialized filter to reduce night-time glare and sharpen road details for safer driving.',
                             'details' => [
-                                'summary' => 'Enhanced driving progressive with wider distance zone and reduced peripheral swim.',
+                                'summary' => 'Optimized performance for road clarity and night safety.',
                                 'benefits' => [
-                                    'Road Clarity: Extra-wide distance zone for dashboard-to-road vision',
-                                    'Low Distortion: Minimized swim effect during head turns',
-                                    'Night Vision: Enhanced contrast for low-light driving',
-                                    'Quick Adapt: Fast adaptation period for new wearers'
+                                    'Night Safety: Cuts halos and headlight glare',
+                                    'Driving Clarity: Sharpens dashboard and road detail',
+                                    'Crisper View: Eliminates internal haze and ghosting',
+                                    'Quick Focus: Faster visual switching during driving'
                                 ],
                                 'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Technology', 'value' => 'Drive X'],
-                                    ['label' => 'Corridor', 'value' => 'Extra Wide'],
+                                    ['label' => 'Transmission', 'value' => 'High-Contrast Optimized'],
+                                    ['label' => 'Coating', 'value' => 'Road Master ARC'],
+                                    ['label' => 'Night Performance', 'value' => 'Enhanced Visual Contrast'],
+                                    ['label' => 'Technology', 'value' => 'Glare Purge Filter']
                                 ],
-                                'highlight_title' => 'Drive X Optimized',
-                                'highlight_desc' => 'Specifically tuned for automotive use cases. Wider field of view and reduced lateral aberrations.'
-                            ]
-                        ],
-                        [
-                            'name' => 'Professionals',
-                            'icon_type' => 'office',
-                            'description' => 'Office and digital screen optimized progressive.',
-                            'details' => [
-                                'summary' => 'Designed for professionals who spend long hours on screens and documents.',
-                                'benefits' => [
-                                    'Screen Comfort: Optimized intermediate zone for monitor distance',
-                                    'Blue Light: Optional Blue Cut coating for digital eye strain',
-                                    'Workspace: Enhanced near and intermediate zones',
-                                    'All-Day: Lightweight design for extended wear'
-                                ],
-                                'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Coating', 'value' => 'HMC + Blue Cut'],
-                                    ['label' => 'Focus', 'value' => 'Near + Intermediate'],
-                                ],
-                                'highlight_title' => 'Digital Workspace',
-                                'highlight_desc' => 'Extended intermediate zone provides comfortable viewing at typical screen distances (50-70cm).'
+                                'highlight_title' => 'Road Optimization',
+                                'highlight_desc' => 'Specifically tailored for extreme road visibility and high-speed safety.'
                             ]
                         ]
                     ]
                 ]),
-                'image' => 'images/progressive-lens1.jpeg',
+                'image' => 'images/progressive-lens3.avif',
                 'is_featured' => true,
                 'display_order' => 1,
                 'is_active' => true,
@@ -110,169 +257,185 @@ class WebProductSeeder extends Seeder
                 'name' => 'Eye Mek Single Vision',
                 'slug' => 'single-vision-rx',
                 'tagline' => 'Your Vision, Upgraded.',
-                'description' => '<p>Welcome to the next level of visual clarity. EYE MEK SV isn\'t just a lens; it\'s a premium vision solution. Advanced HD Digital technology meets premium protection with our Blue Cut, Anti-Glare, and Photochromic options.</p><p>From the boardroom to the Great Outdoors, our lenses adapt to your world. See sharper. Live better.</p>',
-                'technologies' => json_encode(['Anti-Glare', 'Blue Cut', 'Polarized']),
+                'description' => '<p>Welcome to the next level of visual clarity. EYE MEK isn\'t just a lens; it’s a premium vision solution tailored to your lifestyle. Whether you\'re navigating a digital workspace, driving under the sun, or looking for everyday durability, we have the perfect fit.</p>',
+                'features' => json_encode([
+                    'Ultra-lightweight & crystal clear.',
+                    'Enhanced durability & scratch resistance.',
+                    'Seamlessly tints to Grey or Brown.',
+                    'Filters harmful high-energy blue light.',
+                    'Precision-surfaced for edge-to-edge clarity.',
+                    'Eliminates blinding glare and reflections.',
+                    'Available in Emerald Green or Sapphire Blue.',
+                    'Road Master: Specialized filter to reduce night-time glare and sharpen road details.'
+                ]),
+                'technologies' => json_encode(['HD Digital Technology', 'Photochromic Technology', 'Blue Cut Protection', 'Polarized Precision', 'HMC (Hard Multi-Coat)', 'Road Master']),
                 'specifications' => json_encode([
                     'variants' => [
                         [
-                            'name' => 'HD Clear',
+                            'name' => 'CR 39 white',
+                            'image' => 'images/variants/cr-39.avif',
                             'icon_type' => 'clear',
-                            'description' => 'Crystal clear HD Digital optics with premium HMC Anti-Glare.',
+                            'description' => 'Industry standard lightweight/shatter-resistant plastic.',
                             'details' => [
-                                'summary' => 'Our foundational single vision lens with HD Digital clarity and premium multi-coat for everyday wear.',
+                                'summary' => 'The industry standard for lightweight, shatter-resistant optics.',
                                 'benefits' => [
-                                    'Clarity: HD Digital optics for edge-to-edge sharpness',
-                                    'Protection: UV400 blocks 99.9% of harmful UV rays',
-                                    'Durability: Hard multi-coat resists scratches and smudges',
-                                    'Comfort: Lightweight CR-39 for all-day wear'
+                                    'Superior Optics: High Abbe value for blur-free vision',
+                                    'Affordability: Budget-friendly premium lens material',
+                                    'Lightweight: 50% lighter than glass',
+                                    'Exceptional Tinting: Perfect for custom fashion gradients'
                                 ],
                                 'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Coating', 'value' => 'HMC Anti-Glare'],
-                                    ['label' => 'UV Protection', 'value' => 'UV400'],
+                                    ['label' => 'Material', 'value' => 'ADC'],
+                                    ['label' => 'Refractive Index', 'value' => '1.498'],
+                                    ['label' => 'Abbe Value', 'value' => '58'],
+                                    ['label' => 'Specific Gravity', 'value' => '1.32']
                                 ],
-                                'highlight_title' => 'HD Digital Technology',
-                                'highlight_desc' => 'Precision-surfaced for superior optical clarity across the entire lens surface.'
+                                'highlight_title' => 'Thermoset Durability',
+                                'highlight_desc' => 'Highly resistant to heat and household chemicals.'
                             ]
                         ],
                         [
-                            'name' => 'Blue Cut',
-                            'icon_type' => 'bluecut',
-                            'description' => 'Advanced blue light filtering for digital lifestyles.',
+                            'name' => 'Hard Coat',
+                            'image' => 'images/variants/cr-39.avif',
+                            'icon_type' => 'clear',
+                            'description' => 'Durable protection layer to extend lens lifespan.',
                             'details' => [
-                                'summary' => 'Blue light filtering technology that reduces digital eye strain while maintaining color accuracy.',
+                                'summary' => 'A tough shield against scratches and daily wear.',
                                 'benefits' => [
-                                    'Digital Protection: Filters harmful blue light from screens',
-                                    'Reduced Strain: Minimizes digital eye fatigue',
-                                    'True Color: Maintains natural color perception',
-                                    'Sleep Quality: Reduces blue light exposure before bedtime'
+                                    'Extended Lifespan: Resists daily abrasions',
+                                    'Surface Integrity: Prevents hairline scratches',
+                                    'Smooth Finish: Flat foundation for secondary coatings',
+                                    'Visual Longevity: Maintains clarity over time'
                                 ],
                                 'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Blue Block', 'value' => '40-45%'],
-                                    ['label' => 'Coating', 'value' => 'HMC + Blue Cut'],
+                                    ['label' => 'Base Treatment', 'value' => 'Polysiloxane Dip Coat'],
+                                    ['label' => 'Durability', 'value' => 'High Scratch Resistance'],
+                                    ['label' => 'Visibility', 'value' => '100% Optically Clear'],
+                                    ['label' => 'Foundation', 'value' => 'Required for ARC']
                                 ],
-                                'highlight_title' => 'Blue Shield Technology',
+                                'highlight_title' => 'Polysiloxane Barrier',
+                                'highlight_desc' => 'Durable layer cured with UV light to form a tough shield.'
+                            ]
+                        ],
+                        [
+                            'name' => 'Photochromic',
+                            'image' => 'images/variants/photochromic.avif',
+                            'icon_type' => 'photochromic',
+                            'description' => 'Light-adaptive lenses (Grey/Brown).',
+                            'details' => [
+                                'summary' => 'Adapts automatically to changing light conditions.',
+                                'benefits' => [
+                                    '2-in-1 Convenience: No need for separate sunglasses',
+                                    'Reduced Fatigue: Less squinting in bright light',
+                                    'UV Shield: Constant protection against solar radiation',
+                                    'Rapid Transition: Fast darkening and fade-back'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Technology', 'value' => 'Naphthopyran Transition'],
+                                    ['label' => 'Activation', 'value' => 'UV-Responsive'],
+                                    ['label' => 'Protection', 'value' => '100% UVA & UVB'],
+                                    ['label' => 'Versatility', 'value' => 'Indoor/Outdoor']
+                                ],
+                                'highlight_title' => 'Molecule Adaptation',
+                                'highlight_desc' => 'Light-sensitive molecules undergo structural change when exposed to UV.'
+                            ],
+                            'sub_variants' => ['Photo Grey', 'Photo Brown']
+                        ],
+                        [
+                            'name' => 'Blue cut',
+                            'image' => 'images/variants/blu-cut.avif',
+                            'icon_type' => 'bluecut',
+                            'description' => 'Protects from digital strain/HEV blue light.',
+                            'details' => [
+                                'summary' => 'Essential protection for digital lifestyles.',
+                                'benefits' => [
+                                    'Screen Comfort: Reduces dry eyes and headaches',
+                                    'Sleep Support: Preserves natural circadian rhythms',
+                                    'Sharp Contrast: Enhances visual comfort for small text',
+                                    'Digital Guard: Filters harmful HEV light'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Filtering Range', 'value' => '380nm – 450nm'],
+                                    ['label' => 'Method', 'value' => 'Monomer / Reflection'],
+                                    ['label' => 'Clarity', 'value' => 'HD Digital Viewing'],
+                                    ['label' => 'Protection', 'value' => 'HEV Blue Light Shield']
+                                ],
+                                'highlight_title' => 'Blue Light Shield',
                                 'highlight_desc' => 'Selectively filters harmful high-energy blue light while allowing beneficial wavelengths through.'
                             ]
                         ],
                         [
-                            'name' => 'Photochromic Grey',
-                            'icon_type' => 'photochromic',
-                            'description' => 'Adaptive tint that darkens in sunlight.',
-                            'sub_variants' => ['Grey'],
+                            'name' => 'HD digital',
+                            'image' => 'images/variants/hd.avif',
+                            'icon_type' => 'clear',
+                            'description' => '3D computer-aided laser surfacing for precision.',
                             'details' => [
-                                'summary' => 'Automatically adapts from clear indoors to dark grey outdoors for seamless sun protection.',
+                                'summary' => 'Precision optics for maximum clarity and fast adaptation.',
                                 'benefits' => [
-                                    'Adaptive: Automatically adjusts to light conditions',
-                                    'Sun Protection: Darkens to sunglass-level tint outdoors',
-                                    'Convenience: No need to switch between glasses',
-                                    'UV Shield: Complete UV400 protection at all tint levels'
+                                    'Maximum Clarity: Crisp vision across entire surface',
+                                    'Zero Distortion: Eliminates the "swim effect"',
+                                    'Sharper Contrast: Brighter, high-definition vision',
+                                    'Quick Adapt: Reduces adaptation time'
                                 ],
                                 'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Tint Color', 'value' => 'Grey'],
-                                    ['label' => 'Activation', 'value' => 'UV-Responsive'],
+                                    ['label' => 'Manufacturing', 'value' => 'Freeform 3D Digital'],
+                                    ['label' => 'Precision', 'value' => '1/100th Diopter'],
+                                    ['label' => 'Field of View', 'value' => 'Edge-to-Edge'],
+                                    ['label' => 'Customization', 'value' => 'Tailored Optics']
                                 ],
-                                'highlight_title' => 'Adaptive Photochromic',
-                                'highlight_desc' => 'High-speed activation with fade-back in under 3 minutes for seamless indoor-outdoor transitions.'
-                            ]
-                        ],
-                        [
-                            'name' => 'Photochromic Brown',
-                            'icon_type' => 'photochromic',
-                            'description' => 'Warm brown adaptive tint for enhanced contrast.',
-                            'sub_variants' => ['Brown'],
-                            'details' => [
-                                'summary' => 'Brown photochromic tint that enhances contrast and depth perception, ideal for outdoor activities.',
-                                'benefits' => [
-                                    'Contrast: Enhanced depth perception with warm brown tint',
-                                    'Outdoor Ready: Perfect for sports and outdoor activities',
-                                    'Natural Vision: Warm tone reduces glare without color distortion',
-                                    'Full Protection: UV400 at all tint levels'
-                                ],
-                                'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Tint Color', 'value' => 'Brown'],
-                                    ['label' => 'Best For', 'value' => 'Outdoor Activities'],
-                                ],
-                                'highlight_title' => 'Warm Contrast Boost',
-                                'highlight_desc' => 'Brown tint enhances contrast and depth perception, particularly effective in variable light conditions.'
-                            ]
-                        ],
-                        [
-                            'name' => 'HMC Green',
-                            'icon_type' => 'hmc',
-                            'description' => 'Premium green multi-coat anti-reflective coating.',
-                            'details' => [
-                                'summary' => 'Our classic green-tinted HMC anti-reflective coating for reduced glare and natural color rendering.',
-                                'benefits' => [
-                                    'Anti-Reflective: Reduces glare from artificial lighting',
-                                    'Natural Colors: Green tint maintains warm natural tones',
-                                    'Easy Clean: Hydrophobic top coat repels water and oil',
-                                    'Scratch Guard: Hard coat layer for extended lens life'
-                                ],
-                                'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Coating', 'value' => 'HMC Green'],
-                                    ['label' => 'Type', 'value' => 'Anti-Reflective'],
-                                ],
-                                'highlight_title' => 'Classic Green Coat',
-                                'highlight_desc' => 'Time-tested green multi-coat formula for superior anti-reflective performance and natural color balance.'
-                            ]
-                        ],
-                        [
-                            'name' => 'Night Vision',
-                            'icon_type' => 'night',
-                            'description' => 'Anti-glare coating optimized for night driving.',
-                            'details' => [
-                                'summary' => 'Specialized anti-glare technology that reduces headlight glare and improves contrast for night driving.',
-                                'benefits' => [
-                                    'Night Driving: Reduces oncoming headlight glare by up to 80%',
-                                    'Enhanced Contrast: Clearer vision in low-light conditions',
-                                    'Halo Reduction: Minimizes light halos around street lights',
-                                    'Safety: Improved reaction time with clearer night vision'
-                                ],
-                                'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Coating', 'value' => 'Night Drive AR'],
-                                    ['label' => 'Glare Reduction', 'value' => 'Up to 80%'],
-                                ],
-                                'highlight_title' => 'Night Drive Clarity',
-                                'highlight_desc' => 'Specialized wavelength filtering reduces the scattering effect of LED and HID headlights for safer night driving.'
+                                'highlight_title' => 'Precision Surfacing',
+                                'highlight_desc' => 'CNC manufacturing carve prescription to 1/100th of a diopter accuracy.'
                             ]
                         ],
                         [
                             'name' => 'Polarized',
+                            'image' => 'images/variants/polarized.avif',
                             'icon_type' => 'polarized',
-                            'description' => 'Premium polarization for ultimate glare elimination.',
+                            'description' => 'Blocks intense horizontal glare for bright light.',
                             'details' => [
-                                'summary' => 'True polarized lens technology that eliminates reflected glare for the clearest outdoor vision.',
+                                'summary' => 'Ultimate glare elimination for the brightest conditions.',
                                 'benefits' => [
-                                    'Glare Elimination: Blocks 99% of reflected horizontal glare',
-                                    'Color Enhancement: Richer, more vivid colors outdoors',
-                                    'Eye Comfort: Reduces squinting in bright conditions',
-                                    'Water Sports: Eliminates surface glare on water'
+                                    'Visual Comfort: Reduces glare in brightest sun',
+                                    'Driving Safety: Removes reflections from roads',
+                                    'True Colors: Accurate outdoor color perception',
+                                    'Eye Relaxation: Drastically reduces squinting'
                                 ],
                                 'specs' => [
-                                    ['label' => 'Material', 'value' => 'CR-39 Polarized'],
-                                    ['label' => 'Index', 'value' => '1.56'],
-                                    ['label' => 'Polarization', 'value' => '99% Efficiency'],
-                                    ['label' => 'Best For', 'value' => 'Outdoor / Driving'],
+                                    ['label' => 'Filter Type', 'value' => 'Polyvinyl Alcohol Film'],
+                                    ['label' => 'Glare Reduction', 'value' => 'Up to 99.9%'],
+                                    ['label' => 'Contrast', 'value' => 'Premium Outdoor Detail'],
+                                    ['label' => 'Ideal For', 'value' => 'Water, Snow, & Driving']
                                 ],
-                                'highlight_title' => 'True Polarization',
-                                'highlight_desc' => 'Multi-layer polarization film bonded between lens layers for distortion-free glare elimination.'
+                                'highlight_title' => 'Light Polarization',
+                                'highlight_desc' => 'Acts like a window blind, blocking horizontal glare while letting vertical light through.'
                             ]
-                        ]
+                        ],
+                        [
+                            'name' => 'HMC (Antiglare)',
+                            'image' => 'images/variants/hmc.avif',
+                            'icon_type' => 'hmc',
+                            'description' => 'Neutralizes light waves using oxide layers.',
+                            'details' => [
+                                'summary' => 'Reduces reflections for both the wearer and others.',
+                                'benefits' => [
+                                    'Night Safety: Reduces halos around headlights',
+                                    'Invisible Look: People see your eyes clearly',
+                                    'Crisper View: Sharpens vision by reducing ghost images',
+                                    'Cosmetic Appeal: Eliminates distracting lens glare'
+                                ],
+                                'specs' => [
+                                    ['label' => 'Light Transmission', 'value' => 'Up to 99%'],
+                                    ['label' => 'Technology', 'value' => 'Vacuum Metallic Oxides'],
+                                    ['label' => 'Reflection Loss', 'value' => 'Reduced to < 1%'],
+                                    ['label' => 'Effect', 'value' => 'Anti-Reflective Purger']
+                                ],
+                                'highlight_title' => 'Destructive Interference',
+                                'highlight_desc' => 'Multiple layers neutralize light waves for maximum transmission.'
+                            ]
+                        ],
                     ]
                 ]),
-                'image' => 'images/single-vision-banner1.jpeg',
+                'image' => 'images/single-vision.avif',
                 'is_featured' => true,
                 'display_order' => 2,
                 'is_active' => true,
@@ -355,7 +518,7 @@ class WebProductSeeder extends Seeder
                         ]
                     ]
                 ]),
-                'image' => 'images/kryptok-bi-focal.jpg',
+                'image' => 'images/kryptok-bi-focal1.avif',
                 'is_featured' => false,
                 'display_order' => 3,
                 'is_active' => true,
@@ -438,7 +601,7 @@ class WebProductSeeder extends Seeder
                         ]
                     ]
                 ]),
-                'image' => 'images/bifocal-lens.jpeg',
+                'image' => 'images/bifocal-lens.avif',
                 'is_featured' => false,
                 'display_order' => 4,
                 'is_active' => true,

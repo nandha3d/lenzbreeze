@@ -19,25 +19,33 @@ class LoadSaleProPermissions
     {
         if (Auth::check()) {
             try {
-                $role = Cache::remember('user_role', 60*60*24*365, function () {
+                // Reduce cache time to 1 hour for better responsiveness during changes
+                $cacheTTL = 3600; 
+
+                $role = Cache::remember('user_role_' . Auth::id(), $cacheTTL, function () {
                     return DB::connection('salepro')->table('roles')->find(Auth::user()->role_id);
                 });
                 View::share('role', $role);
 
                 $role_has_permissions_list = Cache::remember(
                     'role_has_permissions_list' . Auth::user()->role_id,
-                    60*60*24*365,
+                    $cacheTTL,
                     function () {
-                        return DB::connection('salepro')
-                            ->table('permissions')
+                        return DB::table('permissions')
                             ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
                             ->where('role_id', Auth::user()->role_id)
                             ->select('permissions.name')
                             ->get();
                     }
                 );
+                
+                if (!$role_has_permissions_list || $role_has_permissions_list->isEmpty()) {
+                    \Log::warning("LoadSaleProPermissions: No permissions found for role_id " . Auth::user()->role_id);
+                }
+
                 View::share('role_has_permissions_list', $role_has_permissions_list);
             } catch (\Exception $e) {
+                \Log::error("LoadSaleProPermissions Error: " . $e->getMessage());
                 // If SalePro DB is unreachable, sidebar will use fallback (simple links)
             }
         }

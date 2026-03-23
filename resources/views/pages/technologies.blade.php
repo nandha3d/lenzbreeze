@@ -369,7 +369,7 @@
                     </div>
                 </div>
                 <div class="lg:col-span-8 relative rounded-[2rem] overflow-hidden shadow-inner bg-warm-50">
-                    <img src="{{ asset('images/bluelight.png') }}" alt="Blue Light Effect on Eye Detailed" class="w-full h-auto object-cover filter brightness-95 contrast-105 transition-transform duration-1000 group-hover:scale-110">
+                    <img src="{{ asset('images/bluelight.avif') }}" alt="Blue Light Effect on Eye Detailed" class="w-full h-auto object-cover filter brightness-95 contrast-105 transition-transform duration-1000 group-hover:scale-110">
                     <div class="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/20 to-transparent"></div>
                 </div>
             </div>
@@ -475,15 +475,15 @@
                             <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-60 pointer-events-none"></div>
 
                             {{-- Spectacles images with crossfade --}}
-                            <img src="{{ asset('images/spectacles-black.png') }}"
+                            <img src="{{ asset('images/spectacles-black.avif') }}"
                                  alt="Black tinted polarized spectacles"
                                  class="absolute inset-0 w-full h-full object-contain p-6 md:p-10 transition-opacity duration-700 ease-in-out"
                                  :class="activeColor === 'black' ? 'opacity-100' : 'opacity-0'">
-                            <img src="{{ asset('images/spectacles-brown.png') }}"
+                            <img src="{{ asset('images/spectacles-brown.avif') }}"
                                  alt="Brown tinted polarized spectacles"
                                  class="absolute inset-0 w-full h-full object-contain p-6 md:p-10 transition-opacity duration-700 ease-in-out"
                                  :class="activeColor === 'brown' ? 'opacity-100' : 'opacity-0'">
-                            <img src="{{ asset('images/spectacles-green.png') }}"
+                            <img src="{{ asset('images/spectacles-green.avif') }}"
                                  alt="Green tinted polarized spectacles"
                                  class="absolute inset-0 w-full h-full object-contain p-6 md:p-10 transition-opacity duration-700 ease-in-out"
                                  :class="activeColor === 'green' ? 'opacity-100' : 'opacity-0'">
@@ -588,7 +588,7 @@
 
                 {{-- The Actual Chart Image --}}
                 <div class="relative rounded-2xl overflow-hidden shadow-sm border border-gray-50">
-                    <img src="{{ asset('images/Layout Chart.jpg') }}" alt="Eye Mek Detailed Layout Chart" class="w-full h-auto">
+                    <img src="{{ asset('images/Layout Chart.avif') }}" alt="Eye Mek Detailed Layout Chart" class="w-full h-auto">
                 </div>
                 
                 {{-- Specification Metadata --}}

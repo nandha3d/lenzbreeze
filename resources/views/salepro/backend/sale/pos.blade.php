@@ -247,7 +247,7 @@
                                 @if($category->image)
                                 <img src="{{url('images/category', $category->image)}}" />
                                 @else
-                                <img src="{{url('/images/product/zummXD2dvAtI.png')}}" />
+                                <img src="{{url('/images/product/zummXD2dvAtI.avif')}}" />
                                 @endif
                                 <p class="text-center">{{$category->name}}</p>
                             </div>
@@ -269,7 +269,7 @@
                                 @if($brand->image)
                                 <img src="{{url('images/brand',$brand->image)}}" />
                                 @else
-                                <img src="{{url('/images/product/zummXD2dvAtI.png')}}" />
+                                <img src="{{url('/images/product/zummXD2dvAtI.avif')}}" />
                                 @endif
                                 <p class="text-center">{{$brand->title}}</p>
                             </div>
@@ -2129,7 +2129,7 @@ function getProduct(warehouse_id){
             if(response.data['image'][index])
                 image = response.data['image'][index];
             else
-                image = 'zummXD2dvAtI.png';
+                image = 'zummXD2dvAtI.avif';
             tableData += '<div class="product-img sound-btn" title="'+response.data['name'][index]+'" data-product = "'+product_info+'"><img  src="{{url("/images/product")}}/'+image+'" width="100%" /><p>'+response.data['name'][index]+'</p><span>'+response.data['code'][index]+'</span></div>';
         });
         tableData += '</div><button class="btn btn-primary btn-block load-more"><i class="dripicons-arrow-thin-down"</button>';
@@ -2152,7 +2152,7 @@ function getProduct(warehouse_id){
             if(data['image'][index])
                 image = data['image'][index];
             else
-                image = 'zummXD2dvAtI.png';
+                image = 'zummXD2dvAtI.avif';
             tableData += '<div class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="{{url("/images/product")}}/'+image+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></div>';
         });
         $(".table-container .product-grid").append(tableData);
@@ -2924,7 +2924,7 @@ function getProduct(warehouse_id){
         $.ajax({
             type: 'GET',
             async: false,
-            url: '{{url("sales/lims_product_search")}}',
+            url: '{{url("/admin/sales/lims_product_search")}}',
             data: {
                 data: data
             },
@@ -3549,7 +3549,7 @@ function getProduct(warehouse_id){
 
                         getProduct($("#warehouse_id").val());
 
-                        let link = "{{url('sales/gen_invoice/')}}" +'/'+ response;
+                        let link = "{{url('admin/sales/gen_invoice/')}}" +'/'+ response;
 
                         $('#pos-layout').css('display','none');
                         var head = $('head').html();

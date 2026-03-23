@@ -83,7 +83,7 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
                 footer:true
@@ -92,7 +92,7 @@
                 extend: 'excel',
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
                 footer:true
@@ -101,7 +101,7 @@
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
                 footer:true
@@ -110,7 +110,7 @@
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
                 footer:true

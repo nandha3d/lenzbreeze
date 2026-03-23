@@ -124,7 +124,7 @@
             @endphp
             @if($cash_flow)
             <div class="col-md-7 mt-5">
-              <div class="card line-chart-example" style="border-radius: 16px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+              <div class="card line-chart-example" style="border-radius: 16px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05); height: 100%;">
                 <div class="card-header d-flex align-items-center" style="background: transparent; border-bottom: 1px solid #f3f4f6; padding: 20px 24px;">
                   <h4 style="font-weight: 600; font-size: 15px; color: #374151;">{{trans('file.Cash Flow')}}</h4>
                 </div>
@@ -139,13 +139,13 @@
             @endphp
             @if($monthly_summary)
             <div class="col-md-5 mt-5">
-              <div class="card" style="border-radius: 16px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+              <div class="card" style="border-radius: 16px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05); height: 100%;">
                 <div class="card-header d-flex justify-content-between align-items-center" style="background: transparent; border-bottom: 1px solid #f3f4f6; padding: 20px 24px;">
                   <h4 style="font-weight: 600; font-size: 15px; color: #374151;">{{date('F')}} {{date('Y')}}</h4>
                 </div>
-                <div class="card-body" style="padding: 24px;">
-                    <div class="pie-chart mb-2">
-                        <canvas id="transactionChart" data-color = "{{$color}}" data-color_rgba = "{{$color_rgba}}" data-revenue={{$revenue}} data-purchase={{$purchase}} data-expense={{$expense}} data-label1="{{trans('file.Purchase')}}" data-label2="{{trans('file.revenue')}}" data-label3="{{trans('file.Expense')}}" width="100" height="95"> </canvas>
+                <div class="card-body d-flex align-items-center justify-content-center" style="padding: 24px;">
+                    <div class="pie-chart mb-2" style="position: relative; width: 100%; max-width: 380px; margin: 0 auto;">
+                        <canvas id="transactionChart" data-color = "{{$color}}" data-color_rgba = "{{$color_rgba}}" data-revenue={{$revenue}} data-purchase={{$purchase}} data-expense={{$expense}} data-label1="{{trans('file.Purchase')}}" data-label2="{{trans('file.revenue')}}" data-label3="{{trans('file.Expense')}}"> </canvas>
                     </div>
                 </div>
               </div>
@@ -161,11 +161,11 @@
             @endphp
             @if($yearly_report)
             <div class="col-md-12">
-              <div class="card">
-                <div class="card-header d-flex align-items-center">
-                  <h4>{{trans('file.yearly report')}}</h4>
+              <div class="card" style="border-radius: 16px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                <div class="card-header d-flex align-items-center" style="background: transparent; border-bottom: 1px solid #f3f4f6; padding: 20px 24px;">
+                  <h4 style="font-weight: 600; font-size: 15px; color: #374151;">{{trans('file.yearly report')}}</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="padding: 24px; min-height: 400px;">
                   <canvas id="saleChart" data-sale_chart_value = "{{json_encode($yearly_sale_amount)}}" data-purchase_chart_value = "{{json_encode($yearly_purchase_amount)}}" data-label1="{{trans('file.Purchased Amount')}}" data-label2="{{trans('file.Sold Amount')}}"></canvas>
                 </div>
               </div>
@@ -316,7 +316,7 @@
             <div class="col-md-6">
               <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                  <h4>{{trans('file.Best Seller').' '.date('Y') . '('.trans('file.price').')'}}</h4>
+                  <h4>{{trans('file.Best Seller').' '.date('Y') . '('.trans('file.Price').')'}}</h4>
                   <div class="right-column">
                     <div class="badge badge-primary">{{trans('file.top')}} 5</div>
                   </div>
@@ -356,7 +356,7 @@
               if(item.product_images)
                 var images = item.product_images.split(',');
               else
-                var images = ['zummXD2dvAtI.png'];
+                var images = ['zummXD2dvAtI.avif'];
               $('#yearly-best-selling-price').find('tbody').append('<tr><td> '+item.product_name+' ['+item.product_code+']</td><td>'+item.total_price+'</td></tr>');
             })
         }
@@ -374,7 +374,7 @@
               if(item.product_images)
                 var images = item.product_images.split(',');
               else
-                var images = ['zummXD2dvAtI.png'];
+                var images = ['zummXD2dvAtI.avif'];
               $('#yearly-best-selling-qty').find('tbody').append('<tr><td> '+item.product_name+' ['+item.product_code+']</td><td>'+item.sold_qty+'</td></tr>');
             })
         }
@@ -392,7 +392,7 @@
               if(item.product_images)
                 var images = item.product_images.split(',');
               else
-                var images = ['zummXD2dvAtI.png'];
+                var images = ['zummXD2dvAtI.avif'];
               $('#monthly-best-selling-qty').find('tbody').append('<tr><td> '+item.product_name+' ['+item.product_code+']</td><td>'+item.sold_qty+'</td></tr>');
             })
         }

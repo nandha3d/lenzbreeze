@@ -57,7 +57,7 @@ class AccountsController extends Controller
             $data['is_default'] = 1;
         $data['is_active'] = true;
         Account::create($data);
-        return redirect('accounts')->with('message', 'Account created successfully');
+        return redirect('admin/accounts')->with('message', 'Account created successfully');
     }
 
     public function makeDefault($id)
@@ -96,7 +96,7 @@ class AccountsController extends Controller
         else
             $data['total_balance'] = 0;
         $lims_account_data->update($data);
-        return redirect('accounts')->with('message', 'Account updated successfully');
+        return redirect('admin/accounts')->with('message', 'Account updated successfully');
     }
 
     public function balanceSheet()
@@ -210,10 +210,10 @@ class AccountsController extends Controller
         if(!$lims_account_data->is_default){
             $lims_account_data->is_active = false;
             $lims_account_data->save();
-            return redirect('accounts')->with('not_permitted', 'Account deleted successfully!');
+            return redirect('admin/accounts')->with('not_permitted', 'Account deleted successfully!');
         }
         else
-            return redirect('accounts')->with('not_permitted', 'Please make another account default first!');
+            return redirect('admin/accounts')->with('not_permitted', 'Please make another account default first!');
     }
 
     public function accountsAll()

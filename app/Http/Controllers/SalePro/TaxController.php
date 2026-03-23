@@ -44,7 +44,7 @@ class TaxController extends Controller
         if(isset($input['ajax']))
             return $tax;
         else
-            return redirect('tax')->with('message', 'Data inserted successfully');
+            return redirect('admin/tax')->with('message', 'Data inserted successfully');
     }
 
     public function limsTaxSearch()
@@ -78,7 +78,7 @@ class TaxController extends Controller
         $lims_tax_data = Tax::where('id', $input['tax_id'])->first();
         $lims_tax_data->update($input);
         $this->cacheForget('tax_list');
-        return redirect('tax')->with('message', 'Data updated successfully');
+        return redirect('admin/tax')->with('message', 'Data updated successfully');
     }
 
     public function importTax(Request $request)
@@ -116,7 +116,7 @@ class TaxController extends Controller
            $tax->is_active = true;
            $tax->save();
         }
-        return redirect('tax')->with('message', 'Tax imported successfully');
+        return redirect('admin/tax')->with('message', 'Tax imported successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -137,6 +137,6 @@ class TaxController extends Controller
         $lims_tax_data->is_active = false;
         $lims_tax_data->save();
         $this->cacheForget('tax_list');
-        return redirect('tax')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/tax')->with('not_permitted', 'Data deleted successfully');
     }
 }

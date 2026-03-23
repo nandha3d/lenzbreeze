@@ -143,6 +143,7 @@ class SaleController extends Controller
             $lims_pos_setting_data = PosSetting::latest()->first();
             $lims_reward_point_setting_data = RewardPointSetting::latest()->first();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
+            $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_account_list = Account::where('is_active', true)->get();
             $lims_courier_list = Courier::where('is_active', true)->get();
             $lims_customer_list = Customer::where('is_active', true)->get();
@@ -163,7 +164,7 @@ class SaleController extends Controller
                 $field_name[] = str_replace(" ", "_", strtolower($fieldName));
             }
             $smsTemplates = SmsTemplate::all();
-            return view('backend.sale.index', compact('starting_date', 'ending_date', 'warehouse_id', 'sale_status', 'payment_status', 'sale_type', 'payment_method', 'lims_gift_card_list', 'lims_pos_setting_data', 'lims_reward_point_setting_data', 'lims_account_list', 'lims_warehouse_list', 'all_permission','options', 'numberOfInvoice', 'custom_fields', 'field_name', 'lims_courier_list','smsTemplates', 'lims_customer_list', 'customer_id', 'lims_category_list'));
+            return view('backend.sale.index', compact('starting_date', 'ending_date', 'warehouse_id', 'sale_status', 'payment_status', 'sale_type', 'payment_method', 'lims_gift_card_list', 'lims_pos_setting_data', 'lims_reward_point_setting_data', 'lims_account_list', 'lims_warehouse_list', 'all_permission','options', 'numberOfInvoice', 'custom_fields', 'field_name', 'lims_courier_list','smsTemplates', 'lims_customer_list', 'customer_id', 'lims_category_list', 'lims_biller_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -528,6 +529,7 @@ class SaleController extends Controller
 
         $warehouse_id = $request->input('warehouse_id');
         $customer_id = $request->input('customer_id');
+        $biller_id = $request->input('biller_id');
         $sale_status = $request->input('sale_status');
         $payment_status = $request->input('payment_status');
         $sale_type = $request->input('sale_type');
@@ -553,6 +555,8 @@ class SaleController extends Controller
         //     $q = $q->where('warehouse_id', Auth::user()->warehouse_id);
         if($warehouse_id)
             $q = $q->where('warehouse_id', $warehouse_id);
+        if($biller_id)
+            $q = $q->where('biller_id', $biller_id);
         if($sale_status)
             $q = $q->where('sale_status', $sale_status);
         if($payment_status)
@@ -583,7 +587,7 @@ class SaleController extends Controller
             ->orwhere('billers.name', 'LIKE', "%{$search}%");
         }
 
-        $totalFiltered = $totalData = $q->count();
+        $totalFiltered = $totalData = $q->distinct('sales.id')->count();
 
         // $totalFiltered = $q->groupBy('sales.id')->count();
 
@@ -592,11 +596,11 @@ class SaleController extends Controller
     else
         $limit = $totalData;
 
-        $start = $request->input('start');
+        $start_index = $request->input('start');
         $order = 'sales.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
-        $q = $q->offset($start)
+        $q = $q->offset($start_index)
                     ->limit($limit)
                     ->orderBy($order, $dir);
 
@@ -611,11 +615,15 @@ class SaleController extends Controller
         // Bulk fetch categories for all sales in one query
         $categoryMap = [];
         if (!empty($saleIds)) {
-            $psData = Product_Sale::select("product_sales.sale_id", "categories.name")
-                ->join('products', 'product_sales.product_id', '=', 'products.id')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->whereIn('product_sales.sale_id', $saleIds)
-                ->get();
+            $psData = collect();
+            foreach(array_chunk($saleIds, 5000) as $chunk) {
+                $chunkData = Product_Sale::select("product_sales.sale_id", "categories.name")
+                    ->join('products', 'product_sales.product_id', '=', 'products.id')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->whereIn('product_sales.sale_id', $chunk)
+                    ->get();
+                $psData = $psData->concat($chunkData);
+            }
             
             foreach ($psData as $row) {
                 // Keep the last one found per sale (simulating the 'orderBy categories.id desc limit 1' logic roughly)
@@ -626,31 +634,45 @@ class SaleController extends Controller
         // Bulk fetch payments
         $paymentMap = [];
         if (!empty($saleIds)) {
-            $paymentData = Payment::whereIn('sale_id', $saleIds)
-                ->select('sale_id', 'paying_method')
-                ->get()
-                ->groupBy('sale_id');
+            $paymentData = collect();
+            foreach(array_chunk($saleIds, 5000) as $chunk) {
+                $chunkData = Payment::whereIn('sale_id', $chunk)
+                    ->select('sale_id', 'paying_method')
+                    ->get();
+                $paymentData = $paymentData->concat($chunkData);
+            }
+            $paymentData = $paymentData->groupBy('sale_id');
             foreach($paymentData as $sid => $pMethods) {
                 $paymentMap[$sid] = $pMethods->pluck('paying_method')->toArray();
             }
         }
 
         // Bulk fetch deliveries
-        $deliveryMap = DB::table('deliveries')
-            ->whereIn('sale_id', $saleIds)
-            ->select('sale_id', 'status')
-            ->get()
-            ->pluck('status', 'sale_id')
-            ->toArray();
+        $deliveryMapResults = collect();
+        if (!empty($saleIds)) {
+            foreach(array_chunk($saleIds, 5000) as $chunk) {
+                $chunkData = DB::table('deliveries')
+                    ->whereIn('sale_id', $chunk)
+                    ->select('sale_id', 'status')
+                    ->get();
+                $deliveryMapResults = $deliveryMapResults->concat($chunkData);
+            }
+        }
+        $deliveryMap = $deliveryMapResults->pluck('status', 'sale_id')->toArray();
 
         // Bulk fetch returned amounts
-        $returnMap = DB::table('returns')
-            ->whereIn('sale_id', $saleIds)
-            ->select('sale_id', DB::raw('SUM(grand_total) as total'))
-            ->groupBy('sale_id')
-            ->get()
-            ->pluck('total', 'sale_id')
-            ->toArray();
+        $returnMapResults = collect();
+        if (!empty($saleIds)) {
+            foreach(array_chunk($saleIds, 5000) as $chunk) {
+                $chunkData = DB::table('returns')
+                    ->whereIn('sale_id', $chunk)
+                    ->select('sale_id', DB::raw('SUM(grand_total) as total'))
+                    ->groupBy('sale_id')
+                    ->get();
+                $returnMapResults = $returnMapResults->concat($chunkData);
+            }
+        }
+        $returnMap = $returnMapResults->pluck('total', 'sale_id')->toArray();
 
         // Bulk fetch coupons and currencies if needed
         $couponIds = $sales->pluck('coupon_id')->filter()->unique();
@@ -679,76 +701,66 @@ class SaleController extends Controller
             {
                 foreach ($sales as $key=>$sale)
                 {
-                    $category_name_val = $categoryMap[$sale->id] ?? null;
-                    $category_name = '';
-                    if($category_name_val){
-                        if($category_name_val == 'RX Lens'){
-                            $category_name = '<div class="badge badge-success">'.$category_name_val.'</div>';
-                        }else if($category_name_val == 'Stock Lens'){
-                            $category_name = '<div class="badge badge-warning">'.$category_name_val.'</div>';
-                        }else if($category_name_val == 'Others'){
-                            $category_name = '<div class="badge badge-info">'.$category_name_val.'</div>';
-                        }
-                    }
+                    $category_name = $categoryMap[$sale->id] ?? null;
+                    $nestedData['category_name'] = strip_tags($category_name);
 
 
                     $nestedData['id'] = $sale->id;
                     $nestedData['key'] = $key;
                     $nestedData['order_tax'] = $sale->order_tax;
                     $nestedData['order_no'] = $sale->order_no;
-                    $nestedData['category_name'] = $category_name;
 
 
                     $order_tax = $sale->order_tax > 0 ? "Gst" :"Estimate";
 
 
-                    $nestedData['date'] = date(config('date_format').' h:i:s', strtotime($sale->created_at)) .'<br><div class="badge badge-info">'.$order_tax.'</div>';
+                    $nestedData['date'] = date(config('date_format').' h:i:s', strtotime($sale->created_at));
                     //$nestedData['date'] = $sale->created_at;
                     $nestedData['reference_no'] = $sale->reference_no;
                     $nestedData['biller'] = $sale->biller->name;
-                    $nestedData['customer'] = $sale->customer->name.'<br>'.$sale->customer->place.'<input type="hidden" class="deposit" value="'.($sale->customer->deposit - $sale->customer->expense).'" />'.'<input type="hidden" class="points" value="'.$sale->customer->points.'" />';
+                    $nestedData['customer'] = $sale->customer->name.' ('.$sale->customer->place.')';
                     
                     $payments = $paymentMap[$sale->id] ?? [];
                     $nestedData['payment_method'] = implode(",", $payments);
                     
                     if($sale->sale_status == 1){
-                        $nestedData['sale_status'] = '<div class="badge badge-success">'.trans('file.Completed').'</div>';
+                        $nestedData['sale_status'] = trans('file.Completed');
                         $sale_status = trans('file.Completed');
                     }
                     elseif($sale->sale_status == 2){
-                        $nestedData['sale_status'] = '<div class="badge badge-danger">'.trans('file.Pending').'</div>';
+                        $nestedData['sale_status'] = trans('file.Pending');
                         $sale_status = trans('file.Pending');
                     }
                     elseif($sale->sale_status == 3){
-                        $nestedData['sale_status'] = '<div class="badge badge-warning">'.trans('file.Draft').'</div>';
+                        $nestedData['sale_status'] = trans('file.Draft');
                         $sale_status = trans('file.Draft');
                     }
                     elseif($sale->sale_status == 4){
-                        $nestedData['sale_status'] = '<div class="badge badge-danger">'.trans('file.Returned').'</div>';
+                        $nestedData['sale_status'] = trans('file.Returned');
                         $sale_status = trans('file.Returned');
                     }
                     elseif($sale->sale_status == 5){
-                        $nestedData['sale_status'] = '<div class="badge badge-info">'.trans('file.Processing').'</div>';
+                        $nestedData['sale_status'] = trans('file.Processing');
                         $sale_status = trans('file.Processing');
                     }
 
                     if($sale->payment_status == 1)
-                        $nestedData['payment_status'] = '<div class="badge badge-danger">'.trans('file.Pending').'</div>';
+                        $nestedData['payment_status'] = trans('file.Pending');
                     elseif($sale->payment_status == 2)
-                        $nestedData['payment_status'] = '<div class="badge badge-danger">'.trans('file.Due').'</div>';
+                        $nestedData['payment_status'] = trans('file.Due');
                     elseif($sale->payment_status == 3)
-                        $nestedData['payment_status'] = '<div class="badge badge-warning">'.trans('file.Partial').'</div>';
+                        $nestedData['payment_status'] = trans('file.Partial');
                     else
-                        $nestedData['payment_status'] = '<div class="badge badge-success">'.trans('file.Paid').'</div>';
+                        $nestedData['payment_status'] = trans('file.Paid');
                     
                     $d_status = $deliveryMap[$sale->id] ?? null;
                     if($d_status) {
                         if($d_status == 1)
-                            $nestedData['delivery_status'] = '<div class="badge badge-primary">'.trans('file.Packing').'</div>';
+                            $nestedData['delivery_status'] = trans('file.Packing');
                         elseif($d_status == 2)
-                            $nestedData['delivery_status'] = '<div class="badge badge-info">'.trans('file.Delivering').'</div>';
+                            $nestedData['delivery_status'] = trans('file.Delivering');
                         elseif($d_status == 3)
-                            $nestedData['delivery_status'] = '<div class="badge badge-success">'.trans('file.Delivered').'</div>';
+                            $nestedData['delivery_status'] = trans('file.Delivered');
                     }
                     else
                         $nestedData['delivery_status'] = 'N/A';
@@ -797,7 +809,7 @@ class SaleController extends Controller
                     if(in_array("sale-payment-add", $all_permission))
                         $nestedData['options'] .=
                             '<li>
-                                <button type="button" class="add-payment btn btn-link" data-id = "'.$sale->id.'" data-toggle="modal" data-target="#add-payment"><i class="fa fa-plus"></i> '.trans('file.Add Payment').'</button>
+                                <button type="button" class="add-payment btn btn-link" data-id = "'.$sale->id.'" data-due = "'.$nestedData['due'].'" data-toggle="modal" data-target="#add-payment"><i class="fa fa-plus"></i> '.trans('file.Add Payment').'</button>
                             </li>';
                     if($sale->sale_status !== 4)
                         $nestedData['options'] .=
@@ -1446,9 +1458,12 @@ class SaleController extends Controller
         elseif($lims_sale_data->sale_status == '1')
             return $lims_sale_data->id;
         elseif($data['pos'])
-            return redirect('pos')->with('message', $message);
-        else
-            return redirect('sales')->with('message', $message);
+            return redirect('admin/pos')->with('message', $message);
+        else {
+            if($request->ajax())
+                return $lims_sale_data->id;
+            return redirect()->route('sales.index')->with('message', $message);
+        }
 
     }
 
@@ -1708,7 +1723,7 @@ class SaleController extends Controller
         $data['payment_id'] = $lims_payment_data->id;
         $data['transaction_id'] = $response['PAYMENTINFO_0_TRANSACTIONID'];
         PaymentWithPaypal::create($data);
-        return redirect('sales')->with('message', 'Sales created successfully');
+        return redirect('admin/sales')->with('message', 'Sales created successfully');
     }
 
     public function paypalPaymentSuccess(Request $request, $id)
@@ -1739,7 +1754,7 @@ class SaleController extends Controller
         $data['payment_id'] = $lims_payment_data->id;
         $data['transaction_id'] = $response['PAYMENTINFO_0_TRANSACTIONID'];
         PaymentWithPaypal::create($data);
-        return redirect('sales')->with('message', 'Payment created successfully');
+        return redirect('admin/sales')->with('message', 'Payment created successfully');
     }
 
     public function getProduct(Request $request, $id)
@@ -2706,7 +2721,8 @@ class SaleController extends Controller
             $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
             $numberOfInvoice = Sale::count();
-            return view('backend.sale.import',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_tax_list', 'numberOfInvoice'));
+            $general_setting = GeneralSetting::latest()->first();
+            return view('backend.sale.import',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_tax_list', 'numberOfInvoice', 'general_setting'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -2870,7 +2886,7 @@ class SaleController extends Controller
                 $message = 'Sale imported successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('sales')->with('message', $message);
+        return redirect()->route('sales.index')->with('message', $message);
     }
 
     public function edit(Request $request, $id)
@@ -3304,7 +3320,7 @@ class SaleController extends Controller
             $billService->customerBillUpdate($oldOrderDate, $lims_sale_data->customer_id);
         }
 
-        return redirect('sales')->with('message', $message);
+        return redirect()->route('sales.index')->with('message', $message);
     }
 
     public function printLastReciept()
@@ -3738,7 +3754,7 @@ class SaleController extends Controller
             }
 
         }
-        return redirect('sales')->with('message', $message);
+        return redirect('admin/sales')->with('message', $message);
     }
 
     public function getPayment($id)
@@ -4000,7 +4016,7 @@ class SaleController extends Controller
                 $message = 'Payment updated successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('sales')->with('message', $message);
+        return redirect('admin/sales')->with('message', $message);
     }
 
     public function deletePayment(Request $request)
@@ -4057,7 +4073,7 @@ class SaleController extends Controller
             $lims_customer_data->save();
         }
         $lims_payment_data->delete();
-        return redirect('sales')->with('not_permitted', 'Payment deleted successfully');
+        return redirect()->route('sales.index')->with('not_permitted', 'Payment deleted successfully');
     }
 
     public function todaySale()
@@ -4554,6 +4570,231 @@ class SaleController extends Controller
 
         return $token;
     }
+
+    public function exportStart(Request $request)
+    {
+        $warehouse_id = $request->input('warehouse_id');
+        $customer_id = $request->input('customer_id');
+        $biller_id = $request->input('biller_id');
+        $sale_status = $request->input('sale_status');
+        $payment_status = $request->input('payment_status');
+        $sale_type = $request->input('sale_type');
+        $payment_method = $request->input('payment_method');
+        $category_id = $request->input('category_id');
+        
+        $q = Sale::select('sales.id');
+
+        if($request->input('starting_date')){
+            $start = date('Y-m-d', strtotime($request->input('starting_date')));
+            $q = $q->whereDate('sales.created_at', '>=', $start);
+        }
+
+        if($request->input('ending_date')){
+            $end = date('Y-m-d', strtotime($request->input('ending_date')));
+            $q = $q->whereDate('sales.created_at', '<=', $end);
+        }
+
+        if($warehouse_id)
+            $q = $q->where('warehouse_id', $warehouse_id);
+        if($biller_id)
+            $q = $q->where('sales.biller_id', $biller_id);
+        if($sale_status)
+            $q = $q->where('sales.sale_status', $sale_status);
+        if($payment_status)
+            $q = $q->where('sales.payment_status', $payment_status);
+        if($sale_type)
+            $q = $q->where('sales.sale_type', $sale_type);
+        if($payment_method)
+            $q = $q->where('sales.paying_method', $payment_method);
+        if($customer_id && $customer_id != 'all')
+            $q = $q->where('sales.customer_id', $customer_id);
+
+        if($category_id && $category_id != 'all'){
+            $q = $q->leftJoin('product_sales', 'sales.id', '=', 'product_sales.sale_id')
+            ->join('products', 'product_sales.product_id', '=', 'products.id')
+            ->where('products.category_id', $category_id);
+        }
+
+        $search = $request->input('search');
+
+        if($search){
+            $q->join('customers', 'sales.customer_id', '=', 'customers.id')
+            ->join('billers', 'sales.biller_id', '=', 'billers.id')
+            ->where(function($query) use ($search) {
+                $query->where('sales.reference_no', 'LIKE', "%{$search}%")
+                      ->orWhere('customers.name', 'LIKE', "%{$search}%")
+                      ->orWhere('customers.phone_number', 'LIKE', "%{$search}%")
+                      ->orWhere('billers.name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $totalRecords = $q->distinct('sales.id')->count();
+        $chunkSize = 5000;
+        $totalChunks = ceil($totalRecords / $chunkSize);
+
+        $fileName = 'sales_export_' . time() . '.csv';
+        $filePath = public_path('downloads/' . $fileName);
+        
+        if (!file_exists(public_path('downloads'))) {
+            mkdir(public_path('downloads'), 0777, true);
+        }
+        
+        $file = fopen($filePath, 'w');
+        fputs($file, "\xEF\xBB\xBF");
+        
+        fputcsv($file, [
+            trans('file.Date'),
+            'Order No',
+            trans('file.Biller'),
+            trans('file.customer'),
+            trans('file.Sale Status'),
+            trans('file.Payment Status'),
+            trans('file.Delivery Status'),
+            trans('file.grand total'),
+            trans('file.Paid'),
+            trans('file.Due'),
+            'Products'
+        ]);
+        fclose($file);
+
+        return response()->json([
+            'total_chunks' => $totalChunks,
+            'file_name' => $fileName,
+            'total_rows' => $totalRecords
+        ]);
+    }
+
+    public function exportProcess(Request $request)
+    {
+        $chunkIndex = $request->input('chunk_index');
+        $fileName = $request->input('file_name');
+        $chunkSize = 5000;
+        $offset = $chunkIndex * $chunkSize;
+        
+        $warehouse_id = $request->input('warehouse_id');
+        $customer_id = $request->input('customer_id');
+        $biller_id = $request->input('biller_id');
+        $sale_status = $request->input('sale_status');
+        $payment_status = $request->input('payment_status');
+        $sale_type = $request->input('sale_type');
+        $payment_method = $request->input('payment_method');
+        $category_id = $request->input('category_id');
+        $search = $request->input('search');
+
+        $q = Sale::with('biller', 'customer')->select('sales.*');
+
+        if($request->input('starting_date')){
+            $start = date('Y-m-d', strtotime($request->input('starting_date')));
+            $q = $q->whereDate('sales.created_at', '>=', $start);
+        }
+
+        if($request->input('ending_date')){
+            $end = date('Y-m-d', strtotime($request->input('ending_date')));
+            $q = $q->whereDate('sales.created_at', '<=', $end);
+        }
+
+        if($warehouse_id)
+            $q = $q->where('warehouse_id', $warehouse_id);
+        if($biller_id)
+            $q = $q->where('sales.biller_id', $biller_id);
+        if($sale_status)
+            $q = $q->where('sales.sale_status', $sale_status);
+        if($payment_status)
+            $q = $q->where('sales.payment_status', $payment_status);
+        if($sale_type)
+            $q = $q->where('sales.sale_type', $sale_type);
+        if($payment_method)
+            $q = $q->where('sales.paying_method', $payment_method);
+        if($customer_id && $customer_id != 'all')
+            $q = $q->where('sales.customer_id', $customer_id);
+
+        if($category_id && $category_id != 'all'){
+            $q = $q->leftJoin('product_sales', 'sales.id', '=', 'product_sales.sale_id')
+            ->join('products', 'product_sales.product_id', '=', 'products.id')
+            ->where('products.category_id', $category_id);
+        }
+
+        if($search){
+            $q->join('customers', 'sales.customer_id', '=', 'customers.id')
+            ->join('billers', 'sales.biller_id', '=', 'billers.id')
+            ->where(function($query) use ($search) {
+                $query->where('sales.reference_no', 'LIKE', "%{$search}%")
+                      ->orWhere('customers.name', 'LIKE', "%{$search}%")
+                      ->orWhere('customers.phone_number', 'LIKE', "%{$search}%")
+                      ->orWhere('billers.name', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $sales = $q->distinct('sales.id')
+                   ->orderBy('sales.id', 'desc')
+                   ->offset($offset)
+                   ->limit($chunkSize)
+                   ->get();
+
+        $filePath = public_path('downloads/' . $fileName);
+        $file = fopen($filePath, 'a');
+
+        foreach($sales as $sale) {
+            if($sale->sale_status == 1) $status = trans('file.Completed');
+            elseif($sale->sale_status == 2) $status = trans('file.Pending');
+            else $status = trans('file.Draft');
+
+            if($sale->payment_status == 1) $payment = trans('file.Pending');
+            elseif($sale->payment_status == 2) $payment = trans('file.Due');
+            elseif($sale->payment_status == 3) $payment = trans('file.Partial');
+            else $payment = trans('file.Paid');
+
+            if($sale->delivery_status == 1) $delivery = trans('file.Packing');
+            elseif($sale->delivery_status == 2) $delivery = trans('file.Delivering');
+            elseif($sale->delivery_status == 3) $delivery = trans('file.Delivered');
+            else $delivery = "N/A";
+
+            // Build product details string
+            $productDetails = [];
+            $productSales = Product_Sale::where('product_sales.sale_id', $sale->id)
+                ->join('products', 'product_sales.product_id', '=', 'products.id')
+                ->select('products.name', 'product_sales.qty', 'product_sales.sph', 'product_sales.cyl', 'product_sales.axis', 'product_sales.addition', 'product_sales.lr')
+                ->get();
+            foreach($productSales as $ps) {
+                $detail = $ps->name . ' (Qty:' . $ps->qty;
+                if($ps->sph) $detail .= ', SPH:' . $ps->sph;
+                if($ps->cyl) $detail .= ', CYL:' . $ps->cyl;
+                if($ps->axis) $detail .= ', AXIS:' . $ps->axis;
+                if($ps->addition) $detail .= ', ADD:' . $ps->addition;
+                if($ps->lr) $detail .= ', ' . $ps->lr;
+                $detail .= ')';
+                $productDetails[] = $detail;
+            }
+            $productString = implode(' | ', $productDetails);
+
+            fputcsv($file, [
+                date(config('date_format'), strtotime($sale->created_at->toDateString())),
+                $sale->order_no,
+                ((isset($sale->biller->name)) ? $sale->biller->name : ''),
+                ((isset($sale->customer->name)) ? $sale->customer->name : ''),
+                $status,
+                $payment,
+                $delivery,
+                $sale->grand_total,
+                $sale->paid_amount,
+                $sale->grand_total - $sale->paid_amount,
+                $productString
+            ]);
+        }
+        fclose($file);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function exportDownload(Request $request)
+    {
+        $fileName = $request->input('file_name');
+        $filePath = public_path('downloads/' . $fileName);
+        if(file_exists($filePath)) {
+            return response()->download($filePath)->deleteFileAfterSend(true);
+        }
+        return redirect()->back()->with('not_permitted', 'File not found');
+    }
     public function submitOrderRequest($data,$amount)
     {
         $pg = DB::table('external_services')->where('name','Pesapal')->where('type','payment')->first();
@@ -4631,4 +4872,5 @@ class SaleController extends Controller
         return $redirectUrl;
         // echo "<script>window.location.href='$redirectUrl'</script>";
     }
+
 }

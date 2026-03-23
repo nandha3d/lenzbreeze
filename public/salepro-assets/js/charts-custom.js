@@ -68,6 +68,10 @@ $(document).ready(function () {
                         spanGaps: false
                     }
                 ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
             }
         });
     };
@@ -113,7 +117,7 @@ $(document).ready(function () {
         });
     };
 
-    var SALECHART    = $('#saleChart');
+    var SALECHART = $('#saleChart');
 
     if (SALECHART.length > 0) {
         var yearly_sale_amount = SALECHART.data('sale_chart_value');
@@ -158,13 +162,13 @@ $(document).ready(function () {
                             brandPrimary
                         ],
                         borderWidth: 1,
-                        data: [ yearly_purchase_amount[0], yearly_purchase_amount[1],
-                                yearly_purchase_amount[2], yearly_purchase_amount[3],
-                                yearly_purchase_amount[4], yearly_purchase_amount[5],
-                                yearly_purchase_amount[6], yearly_purchase_amount[7],
-                                yearly_purchase_amount[8], yearly_purchase_amount[9],
-                                yearly_purchase_amount[10], yearly_purchase_amount[11],
-                                0],
+                        data: [yearly_purchase_amount[0], yearly_purchase_amount[1],
+                        yearly_purchase_amount[2], yearly_purchase_amount[3],
+                        yearly_purchase_amount[4], yearly_purchase_amount[5],
+                        yearly_purchase_amount[6], yearly_purchase_amount[7],
+                        yearly_purchase_amount[8], yearly_purchase_amount[9],
+                        yearly_purchase_amount[10], yearly_purchase_amount[11],
+                            0],
                     },
                     {
                         label: label2,
@@ -199,20 +203,24 @@ $(document).ready(function () {
                             'rgba(255, 137, 82, 1)'
                         ],
                         borderWidth: 1,
-                        data: [ yearly_sale_amount[0], yearly_sale_amount[1],
-                                yearly_sale_amount[2], yearly_sale_amount[3],
-                                yearly_sale_amount[4], yearly_sale_amount[5],
-                                yearly_sale_amount[6], yearly_sale_amount[7],
-                                yearly_sale_amount[8], yearly_sale_amount[9],
-                                yearly_sale_amount[10], yearly_sale_amount[11],
-                                0],
+                        data: [yearly_sale_amount[0], yearly_sale_amount[1],
+                        yearly_sale_amount[2], yearly_sale_amount[3],
+                        yearly_sale_amount[4], yearly_sale_amount[5],
+                        yearly_sale_amount[6], yearly_sale_amount[7],
+                        yearly_sale_amount[8], yearly_sale_amount[9],
+                        yearly_sale_amount[10], yearly_sale_amount[11],
+                            0],
                     },
                 ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
             }
         });
     };
 
-    var BESTSELLER    = $('#bestSeller');
+    var BESTSELLER = $('#bestSeller');
 
     if (BESTSELLER.length > 0) {
         var sold_qty = BESTSELLER.data('sold_qty');
@@ -222,7 +230,7 @@ $(document).ready(function () {
         var bestSeller = new Chart(BESTSELLER, {
             type: 'bar',
             data: {
-                labels: [ product_info[0], product_info[1], product_info[2]],
+                labels: [product_info[0], product_info[1], product_info[2]],
                 datasets: [
                     {
                         label: "Sale Qty",
@@ -239,9 +247,9 @@ $(document).ready(function () {
                             brandPrimary
                         ],
                         borderWidth: 1,
-                        data: [ 
-                                sold_qty[0], sold_qty[1],
-                                sold_qty[2], 0],
+                        data: [
+                            sold_qty[0], sold_qty[1],
+                            sold_qty[2], 0],
                     }
                 ]
             }
@@ -267,7 +275,7 @@ $(document).ready(function () {
                 ],
                 datasets: [
                     {
-                        data: [price, cost, price-cost],
+                        data: [price, cost, price - cost],
                         borderWidth: [1, 1, 1],
                         backgroundColor: [
                             brandPrimary,
@@ -284,7 +292,7 @@ $(document).ready(function () {
                             brandPrimaryRgba,
                             "rgba(255, 137, 82, 0.8)",
                             "rgb(133, 140, 133, 0.8)",
-                            
+
                         ],
                     }]
             },
@@ -320,22 +328,26 @@ $(document).ready(function () {
                             brandPrimary,
                             "#ff8952",
                             "#858c85",
-                            
+
                         ],
                         hoverBackgroundColor: [
                             brandPrimaryRgba,
                             "rgba(255, 137, 82, 0.8)",
                             "rgb(133, 140, 133, 0.8)",
-                            
+
                         ],
-                       hoverBorderWidth: [4, 4, 4],
-                       hoverBorderColor: [
+                        hoverBorderWidth: [4, 4, 4],
+                        hoverBorderColor: [
                             brandPrimaryRgba,
                             "rgba(255, 137, 82, 0.8)",
                             "rgb(133, 140, 133, 0.8)",
-                            
+
                         ],
                     }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true
             }
         });
     }

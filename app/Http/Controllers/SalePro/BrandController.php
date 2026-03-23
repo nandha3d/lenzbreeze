@@ -59,7 +59,7 @@ class BrandController extends Controller
         if(isset($input['ajax']))
             return $brand;
         else 
-            return redirect('brand');
+            return redirect('admin/brand');
     }
 
     public function edit($id)
@@ -102,7 +102,7 @@ class BrandController extends Controller
         }
         $lims_brand_data->save();
         $this->cacheForget('brand_list');
-        return redirect('brand');
+        return redirect('admin/brand');
     }
 
     public function importBrand(Request $request)
@@ -141,7 +141,7 @@ class BrandController extends Controller
            $brand->save();
         }
         $this->cacheForget('brand_list');
-        return redirect('brand')->with('message', 'Brand imported successfully');
+        return redirect('admin/brand')->with('message', 'Brand imported successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -174,7 +174,7 @@ class BrandController extends Controller
         }
         $lims_brand_data->save();
         $this->cacheForget('brand_list');
-        return redirect('brand')->with('not_permitted', 'Brand deleted successfully!');
+        return redirect('admin/brand')->with('not_permitted', 'Brand deleted successfully!');
     }
 
     public function exportBrand(Request $request)

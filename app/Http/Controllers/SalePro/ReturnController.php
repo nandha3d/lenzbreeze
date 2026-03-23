@@ -707,7 +707,7 @@ class ReturnController extends Controller
                 $message = 'Return created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('return-sale')->with('message', $message);
+        return redirect('admin/return-sale')->with('message', $message);
     }
 
     public function sendMail(Request $request)
@@ -1116,7 +1116,7 @@ class ReturnController extends Controller
                 $message = $e->getMessage();
             }
         }
-        return redirect('return-sale')->with('message', $message);
+        return redirect('admin/return-sale')->with('message', $message);
     }
 
     public function deleteBySelection(Request $request)
@@ -1315,6 +1315,6 @@ class ReturnController extends Controller
         $lims_return_data->delete();
         $this->fileDelete(public_path('documents/sale_return/'), $lims_return_data->document);
 
-        return redirect('return-sale')->with('not_permitted', 'Data deleted successfully');;
+        return redirect('admin/return-sale')->with('not_permitted', 'Data deleted successfully');;
     }
 }

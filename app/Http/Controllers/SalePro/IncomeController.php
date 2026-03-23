@@ -190,7 +190,7 @@ class IncomeController extends Controller
         if($cash_register_data)
             $data['cash_register_id'] = $cash_register_data->id;
         Income::create($data);
-        return redirect('incomes')->with('message', 'Data inserted successfully');
+        return redirect('admin/incomes')->with('message', 'Data inserted successfully');
     }
 
     public function show(string $id)
@@ -216,7 +216,7 @@ class IncomeController extends Controller
         $lims_income_data = Income::find($data['income_id']);
         $data['created_at'] = date("Y-m-d H:i:s", strtotime($data['created_at']));
         $lims_income_data->update($data);
-        return redirect('incomes')->with('message', 'Data updated successfully');
+        return redirect('admin/incomes')->with('message', 'Data updated successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -233,6 +233,6 @@ class IncomeController extends Controller
     {
         $lims_income_data = Income::find($id);
         $lims_income_data->delete();
-        return redirect('incomes')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/incomes')->with('not_permitted', 'Data deleted successfully');
     }
 }

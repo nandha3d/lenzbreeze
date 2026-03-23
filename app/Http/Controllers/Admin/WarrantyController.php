@@ -17,7 +17,7 @@ class WarrantyController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Warranty::with('retailer')->latest();
+        $query = Warranty::with('store')->latest();
 
         // Search
         if ($request->filled('search')) {
@@ -29,9 +29,9 @@ class WarrantyController extends Controller
             $query->where('status', $request->status);
         }
 
-        // Filter by retailer
-        if ($request->filled('retailer_id')) {
-            $query->where('retailer_id', $request->retailer_id);
+        // Filter by store (Retail Store)
+        if ($request->filled('store_id')) {
+            $query->where('store_id', $request->store_id);
         }
 
         // Filter by date range
@@ -52,9 +52,10 @@ class WarrantyController extends Controller
             'resolved'      => Warranty::where('status', Warranty::STATUS_RESOLVED)->count(),
         ];
 
-        $retailers = Retailer::active()->orderBy('name')->get();
+        // Fetch stores from SalePro Customers
+        $stores = \App\Models\Customer::orderBy('name')->get();
 
-        return view('admin.warranties.index', compact('warranties', 'stats', 'retailers'));
+        return view('admin.warranties.index', compact('warranties', 'stats', 'stores'));
     }
 
     /**
@@ -62,8 +63,8 @@ class WarrantyController extends Controller
      */
     public function create()
     {
-        $retailers = Retailer::active()->orderBy('name')->get();
-        return view('admin.warranties.form', compact('retailers'));
+        $stores = \App\Models\Customer::orderBy('name')->get();
+        return view('admin.warranties.form', compact('stores'));
     }
 
     /**
@@ -82,9 +83,9 @@ class WarrantyController extends Controller
         $purchaseDate = Carbon::parse($validated['purchase_date']);
         $validated['expiry_date'] = $purchaseDate->copy()->addMonths((int) $validated['warranty_months']);
 
-        // Denormalize retailer name
-        $retailer = Retailer::find($validated['retailer_id']);
-        $validated['retailer_name'] = $retailer?->name;
+        // Denormalize Store name from SalePro Customers
+        $store = \App\Models\Customer::find($validated['store_id']);
+        $validated['retailer_name'] = $store?->name;
 
         // Set status
         $validated['status'] = Warranty::STATUS_ACTIVE;
@@ -99,7 +100,7 @@ class WarrantyController extends Controller
      */
     public function show(Warranty $warranty)
     {
-        $warranty->load('retailer');
+        $warranty->load('store');
         return view('admin.warranties.show', compact('warranty'));
     }
 
@@ -108,8 +109,8 @@ class WarrantyController extends Controller
      */
     public function edit(Warranty $warranty)
     {
-        $retailers = Retailer::active()->orderBy('name')->get();
-        return view('admin.warranties.form', compact('warranty', 'retailers'));
+        $stores = \App\Models\Customer::orderBy('name')->get();
+        return view('admin.warranties.form', compact('warranty', 'stores'));
     }
 
     /**
@@ -128,9 +129,9 @@ class WarrantyController extends Controller
         $purchaseDate = Carbon::parse($validated['purchase_date']);
         $validated['expiry_date'] = $purchaseDate->copy()->addMonths((int) $validated['warranty_months']);
 
-        // Denormalize retailer name
-        $retailer = Retailer::find($validated['retailer_id']);
-        $validated['retailer_name'] = $retailer?->name;
+        // Denormalize Store name from SalePro Customers
+        $store = \App\Models\Customer::find($validated['store_id']);
+        $validated['retailer_name'] = $store?->name;
 
         // Auto-set claim_date when status moves to under_claim for the first time
         if ($validated['status'] === Warranty::STATUS_UNDER_CLAIM && !$warranty->claim_date) {
@@ -193,12 +194,16 @@ class WarrantyController extends Controller
             
             return response()->json([
                 'found'           => true,
-                'customer_name'   => $sale->customer->name ?? '',
-                'customer_phone'  => $sale->customer->phone_number ?? '',
-                'customer_email'  => $sale->customer->email ?? '',
-                'customer_address'=> $sale->customer->address ?? '',
+                'store_id'        => $sale->customer_id,
+                'store_name'      => $sale->customer->name ?? '',
+                'grand_total'     => $sale->grand_total,
+                'sale_status'     => $sale->sale_status,
                 'product_name'    => implode(', ', $productNames),
                 'purchase_date'   => $sale->created_at->format('Y-m-d'),
+                'end_user_name'   => $sale->end_user_name ?? '',
+                'end_user_phone'  => $sale->end_user_phone ?? '',
+                'end_user_email'  => $sale->end_user_email ?? '',
+                'end_user_address'=> $sale->end_user_address ?? '',
             ]);
         }
 

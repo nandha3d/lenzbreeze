@@ -95,7 +95,7 @@ class GiftCardController extends Controller
                 }
             }
         }
-        return redirect('gift_cards')->with('message', $message);
+        return redirect('admin/gift_cards')->with('message', $message);
     }
 
     public function show($id)
@@ -135,7 +135,7 @@ class GiftCardController extends Controller
         }
         $lims_gift_card_data->expired_date = $data['expired_date_edit'];
         $lims_gift_card_data->save();
-        return redirect('gift_cards')->with('message', 'GiftCard updated successfully');
+        return redirect('admin/gift_cards')->with('message', 'GiftCard updated successfully');
     }
 
     public function recharge(Request $request, $id)
@@ -167,7 +167,7 @@ class GiftCardController extends Controller
                 $message = 'GiftCard recharged successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('gift_cards')->with('message', $message);
+        return redirect('admin/gift_cards')->with('message', $message);
     }
 
     public function deleteBySelection(Request $request)
@@ -186,6 +186,6 @@ class GiftCardController extends Controller
         $lims_gift_card_data = GiftCard::find($id);
         $lims_gift_card_data->is_active = false;
         $lims_gift_card_data->save();
-        return redirect('gift_cards')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/gift_cards')->with('not_permitted', 'Data deleted successfully');
     }
 }

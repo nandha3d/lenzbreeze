@@ -6,7 +6,7 @@
         </p>
     @else
         <form wire:submit="subscribe" class="flex gap-2">
-            <input type="email" wire:model="email" placeholder="Enter your email" class="flex-1 min-w-0 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-warm-400 focus:border-accent-400 focus:ring-2 focus:ring-accent-400/20 outline-none transition-all text-sm">
+            <input type="email" wire:model="email" aria-label="Email address" placeholder="Enter your email" class="flex-1 min-w-0 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-warm-400 focus:border-accent-400 focus:ring-2 focus:ring-accent-400/20 outline-none transition-all text-sm">
             <button type="submit" class="px-5 py-3 rounded-lg bg-accent-500 hover:bg-accent-600 text-white font-medium text-sm transition-colors shrink-0">
                 <span wire:loading.remove>Subscribe</span>
                 <span wire:loading>...</span>

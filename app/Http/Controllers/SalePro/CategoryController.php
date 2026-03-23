@@ -15,11 +15,20 @@ use App\Traits\TenantInfo;
 use App\Traits\CacheForget;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use App\Services\ImageService;
 
 class CategoryController extends Controller
 {
     use CacheForget;
     use TenantInfo;
+
+    protected $imageService;
+
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
 
     public function index()
     {
@@ -82,7 +91,7 @@ class CategoryController extends Controller
                 if($category->image)
                     $nestedData['name'] = '<img src="'.url('images/category', $category->image).'" height="80" width="80">'.$category->name;
                 else
-                    $nestedData['name'] = '<img src="'.url('images/zummXD2dvAtI.png').'" height="80" width="80">'.$category->name;
+                    $nestedData['name'] = '<img src="'.url('images/zummXD2dvAtI.avif').'" height="80" width="80">'.$category->name;
 
                 if($category->parent_id)
                     $nestedData['parent_id'] = Category::find($category->parent_id)->name;
@@ -143,49 +152,25 @@ class CategoryController extends Controller
 
         $image = $request->image;
         if ($image) {
-            $ext = pathinfo($image->getClientOriginalName(), PATHINFO_EXTENSION);
-            $imageName = date("Ymdhis");
-            if(!config('database.connections.saleprosaas_landlord')) {
-                $imageName = $imageName . '.' . $ext;
-                $image->move(public_path('images/category'), $imageName);
+            $baseName = date("Ymdhis");
+            if (config('database.connections.saleprosaas_landlord')) {
+                $baseName = $this->getTenantId() . '_' . $baseName;
             }
-            else {
-                $imageName = $this->getTenantId() . '_' . $imageName . '.' . $ext;
-                $image->move(public_path('images/category'), $imageName);
-            }
-            if (!file_exists(public_path('images/category/large/'))) {
-                mkdir(public_path('images/category/large/'), 0755, true);
-            }
-            $manager = new ImageManager(Driver::class);
-            $image = $manager->read(public_path('images/category/'). $imageName);
 
-            $image->cover(600, 750)->save(public_path('images/category/large/'). $imageName, 100);
-
-            $image->cover(300, 300)->save();
-
+            $imageName = $this->imageService->saveAsAvif($image, 'images/category', $baseName, [
+                'large' => [600, 750]
+            ]);
 
             $lims_category_data['image'] = $imageName;
         }
         $icon = $request->icon;
         if ($icon) {
-            if (!file_exists(public_path('images/category/icons/'))) {
-                mkdir(public_path('images/category/icons/'), 0755, true);
+            $baseName = date("Ymdhis");
+            if (config('database.connections.saleprosaas_landlord')) {
+                $baseName = $this->getTenantId() . '_' . $baseName;
             }
-            $ext = pathinfo($icon->getClientOriginalName(), PATHINFO_EXTENSION);
-            $iconName = date("Ymdhis");
-            if(!config('database.connections.saleprosaas_landlord')) {
-                $iconName = $iconName . '.' . $ext;
-                $icon->move(public_path('images/category/icons/'), $iconName);
-            }
-            else {
-                $iconName = $this->getTenantId() . '_' . $iconName . '.' . $ext;
-                $icon->move(public_path('images/category/icons/'), $iconName);
-            }
-            $manager = new ImageManager(Driver::class);
-            $image = $manager->read(public_path('images/category/icons/'). $iconName);
 
-            $image->cover(100, 100)->save();
-
+            $iconName = $this->imageService->saveAsAvif($icon, 'images/category/icons', $baseName);
             $lims_category_data['icon'] = $iconName;
         }
         $lims_category_data['name'] = preg_replace('/\s+/', ' ', $request->name);
@@ -215,7 +200,7 @@ class CategoryController extends Controller
         if($lims_category_data['ajax'])
             return $category;
         else
-            return redirect('category')->with('message', 'Category inserted successfully');
+            return redirect('admin/category')->with('message', 'Category inserted successfully');
     }
 
     public function edit($id)
@@ -315,7 +300,7 @@ class CategoryController extends Controller
 
         DB::table('categories')->where('id', $request->category_id)->update($input);
 
-        return redirect('category')->with('message', 'Category updated successfully');
+        return redirect('admin/category')->with('message', 'Category updated successfully');
     }
 
     public function import(Request $request)
@@ -363,7 +348,7 @@ class CategoryController extends Controller
             $category->save();
         }
         $this->cacheForget('category_list');
-        return redirect('category')->with('message', 'Category imported successfully');
+        return redirect('admin/category')->with('message', 'Category imported successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -401,6 +386,6 @@ class CategoryController extends Controller
 
         $lims_category_data->save();
         $this->cacheForget('category_list');
-        return redirect('category')->with('not_permitted', 'Category deleted successfully');
+        return redirect('admin/category')->with('not_permitted', 'Category deleted successfully');
     }
 }

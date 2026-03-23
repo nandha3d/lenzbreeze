@@ -379,40 +379,47 @@
                                 <div class="col-md-12 mt-3" id="variant-option">
                                     <h5><input name="is_variant" type="checkbox" id="is-variant" value="1">&nbsp; {{trans('file.This product has variant')}}</h5>
                                 </div>
-                                <div class="col-md-12" id="variant-section">
-                                    <div id="variant-input-section">
-                                        <div class="row">
-                                            <div class="col-md-4 form-group mt-2">
-                                                <label>{{trans('file.Option')}} *</label>
-                                                <input type="text" name="variant_option[]" class="form-control variant-field" placeholder="Size, Color etc...">
-                                            </div>
-                                            <div class="col-md-7 form-group mt-2">
-                                                <label>{{trans('file.Value')}} *</label>
-                                                <input type="text" name="variant_value[]" class="type-variant form-control variant-field">
-                                            </div>
-                                            <div class="col-sm-1 form-group mt-2" style="display:flex;flex-direction:column;align-items:center;justify-content:end;">
-                                                <button type="button" class="delVarOption btn btn-danger btn-sm mr-3"><i class="dripicons-cross"></i></button>
+                            </div>
+                            {{-- Variant section outside flex row to prevent overlap --}}
+                            <div id="variant-section" style="display:none;">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="variant-input-section">
+                                            <div class="row">
+                                                <div class="col-md-4 form-group mt-2">
+                                                    <label>{{trans('file.Option')}} *</label>
+                                                    <input type="text" name="variant_option[]" class="form-control variant-field" placeholder="Size, Color etc...">
+                                                </div>
+                                                <div class="col-md-7 form-group mt-2">
+                                                    <label>{{trans('file.Value')}} *</label>
+                                                    <input type="text" name="variant_value[]" class="type-variant form-control variant-field">
+                                                </div>
+                                                <div class="col-sm-1 form-group mt-2" style="display:flex;flex-direction:column;align-items:center;justify-content:end;">
+                                                    <button type="button" class="delVarOption btn btn-danger btn-sm mr-3"><i class="dripicons-cross"></i></button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-12 form-group">
-                                        <button type="button" class="btn btn-info add-more-variant"><i class="dripicons-plus"></i> {{trans('file.Add More Variant')}}</button>
-                                    </div>
-                                    <div class="table-responsive ml-2">
-                                        <table id="variant-table" class="table table-hover variant-list">
-                                            <thead>
-                                                <tr>
-                                                    <th>{{trans('file.name')}}</th>
-                                                    <th>{{trans('file.Item Code')}}</th>
-                                                    <th>{{trans('file.Additional Cost')}}</th>
-                                                    <th>{{trans('file.Additional Price')}}</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-info add-more-variant"><i class="dripicons-plus"></i> {{trans('file.Add More Variant')}}</button>
+                                        </div>
+                                        <div class="table-responsive ml-2">
+                                            <table id="variant-table" class="table table-hover variant-list">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{trans('file.name')}}</th>
+                                                        <th>{{trans('file.Item Code')}}</th>
+                                                        <th>{{trans('file.Additional Cost')}}</th>
+                                                        <th>{{trans('file.Additional Price')}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-12 mt-2" id="diffPrice-option">
                                     <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1">&nbsp; {{trans('file.This product has different price for different warehouse')}}</h5>
                                 </div>

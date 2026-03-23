@@ -34,7 +34,7 @@ class WarehouseController extends Controller
         $input['is_active'] = true;
         Warehouse::create($input);
         $this->cacheForget('warehouse_list');
-        return redirect('warehouse')->with('message', 'Data inserted successfully');
+        return redirect('admin/warehouse')->with('message', 'Data inserted successfully');
     }
 
     public function edit($id)
@@ -57,7 +57,7 @@ class WarehouseController extends Controller
         $lims_warehouse_data = Warehouse::find($input['warehouse_id']);
         $lims_warehouse_data->update($input);
         $this->cacheForget('warehouse_list');
-        return redirect('warehouse')->with('message', 'Data updated successfully');
+        return redirect('admin/warehouse')->with('message', 'Data updated successfully');
     }
 
     public function importWarehouse(Request $request)
@@ -99,7 +99,7 @@ class WarehouseController extends Controller
            $warehouse->save();
         }
         $this->cacheForget('warehouse_list');
-        return redirect('warehouse')->with('message', 'Warehouse imported successfully');
+        return redirect('admin/warehouse')->with('message', 'Warehouse imported successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -120,7 +120,7 @@ class WarehouseController extends Controller
         $lims_warehouse_data->is_active = false;
         $lims_warehouse_data->save();
         $this->cacheForget('warehouse_list');
-        return redirect('warehouse')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/warehouse')->with('not_permitted', 'Data deleted successfully');
     }
 
     public function warehouseAll()

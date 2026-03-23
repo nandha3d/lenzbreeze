@@ -183,8 +183,8 @@
 @endsection
 
 @push('scripts')
-@include('salepro.backend.report._export_helper')
 <script type="text/javascript">
+@include('salepro.backend.report._export_helper')
     $("ul#report").siblings('a').attr('aria-expanded','true');
     $("ul#report").addClass("show");
     $("ul#report #supplier-report-menu").addClass("active");
@@ -266,8 +266,7 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-sale)',
                 },
                 action: newexportaction,
                 footer:true
@@ -277,7 +276,6 @@
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
                 action: newexportaction,
                 footer:true
@@ -286,8 +284,7 @@
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-sale)',
                 },
                 action: newexportaction,
                 footer:true
@@ -296,8 +293,7 @@
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-sale)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-sale)',
                 },
                 action: newexportaction,
                 footer:true
@@ -390,8 +386,7 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-payment)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-payment)',
                 },
                 action: newexportaction,
                 footer:true
@@ -401,7 +396,6 @@
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
                 action: newexportaction,
                 footer:true
@@ -410,8 +404,7 @@
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-payment)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-payment)',
                 },
                 action: newexportaction,
                 footer:true
@@ -420,8 +413,7 @@
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-payment)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-payment)',
                 },
                 action: newexportaction,
                 footer:true
@@ -510,8 +502,7 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-return)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-return)',
                 },
                 action: newexportaction,
                 footer:true
@@ -521,7 +512,6 @@
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
                 action: newexportaction,
                 footer:true
@@ -530,8 +520,7 @@
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-return)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-return)',
                 },
                 action: newexportaction,
                 footer:true
@@ -540,8 +529,7 @@
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-return)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-return)',
                 },
                 action: newexportaction,
                 footer:true
@@ -632,8 +620,7 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-quotation)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-quotation)',
                 },
                 action: newexportaction,
                 footer:true
@@ -643,7 +630,6 @@
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
                 action: newexportaction,
                 footer:true
@@ -652,8 +638,7 @@
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-quotation)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-quotation)',
                 },
                 action: newexportaction,
                 footer:true
@@ -662,8 +647,7 @@
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported-quotation)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported-quotation)',
                 },
                 action: newexportaction,
                 footer:true

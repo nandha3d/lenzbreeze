@@ -66,6 +66,10 @@
   <noscript>
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css" rel="stylesheet">
   </noscript>
+  <link rel="preload" href="https://cdn.datatables.net/scroller/2.1.1/css/scroller.bootstrap4.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://cdn.datatables.net/scroller/2.1.1/css/scroller.bootstrap4.min.css" rel="stylesheet">
+  </noscript>
   @endif
 
   <link rel="stylesheet" href="<?php echo asset('css/style.default.css') ?>" id="theme-stylesheet" type="text/css">
@@ -1399,6 +1403,7 @@
   <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.1.1/js/dataTables.scroller.min.js"></script>
   @endif
   @else
   <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.min.js') ?>"></script>
@@ -1455,6 +1460,7 @@
   <script type="text/javascript" src="https://cdn.datatables.net/fixedheader/3.1.6/js/dataTables.fixedHeader.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
   <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/scroller/2.1.1/js/dataTables.scroller.min.js"></script>
   @endif
   @endif
   @stack('scripts')

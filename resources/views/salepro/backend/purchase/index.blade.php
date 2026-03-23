@@ -65,7 +65,7 @@
         </div>
         @if(in_array("purchases-add", $all_permission))
             <a href="{{route('purchases.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Purchase')}}</a>&nbsp;
-            <a href="{{url('purchases/purchase_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Purchase')}}</a>
+            <a href="{{url('admin/purchases/purchase_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Purchase')}}</a>
         @endif
     </div>
     <div class="table-responsive">
@@ -314,6 +314,7 @@
 
 @push('scripts')
 <script type="text/javascript">
+    @include('salepro.backend.report._export_helper')
 
     $(".daterangepicker-field").daterangepicker({
       callback: function(startDate, endDate, period){
@@ -632,14 +633,10 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -649,11 +646,7 @@
                     columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -663,11 +656,7 @@
                     columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {
@@ -677,11 +666,7 @@
                     columns: ':visible:not(.not-exported)',
                     rows: ':visible'
                 },
-                action: function(e, dt, button, config) {
-                    datatable_sum(dt, true);
-                    $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                    datatable_sum(dt, false);
-                },
+                action: newexportaction,
                 footer:true
             },
             {

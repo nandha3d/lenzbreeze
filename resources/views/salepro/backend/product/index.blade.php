@@ -117,7 +117,6 @@
 <div id="importProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
     <div role="document" class="modal-dialog">
       <div class="modal-content">
-        {!! Form::open(['route' => 'product.import', 'method' => 'post', 'files' => true]) !!}
         <div class="modal-header">
           <h5 id="exampleModalLabel" class="modal-title">Import Product</h5>
           <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
@@ -130,7 +129,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>{{trans('file.Upload CSV File')}} *</label>
-                        {{Form::file('file', array('class' => 'form-control','required'))}}
+                        <input type="file" id="import-csv-file" class="form-control" accept=".csv" required />
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -140,9 +139,22 @@
                     </div>
                 </div>
            </div>
-            {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
+
+           {{-- Progress bar (hidden initially) --}}
+           <div id="import-progress-section" style="display:none;">
+                <div class="progress mb-2" style="height: 25px;">
+                    <div id="import-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <div id="import-status-text" class="small text-muted mb-2"></div>
+                <div id="import-log" style="max-height:150px; overflow-y:auto; font-size:12px; background:#f8f9fa; padding:8px; border-radius:4px;"></div>
+           </div>
+
+           <div id="import-result-section" style="display:none;">
+                <div id="import-result-message" class="alert mt-2"></div>
+           </div>
+
+           <button type="button" id="import-submit-btn" class="btn btn-primary mt-2">Submit</button>
         </div>
-        {!! Form::close() !!}
       </div>
     </div>
 </div>
@@ -659,6 +671,232 @@
         $('.buttons-delete').addClass('d-none');
 
     $('select').selectpicker();
+
+    // ===================================================================
+    // CHUNKED CSV IMPORT (fixes 503 timeout on shared hosting)
+    // ===================================================================
+    $('#import-submit-btn').on('click', function() {
+        var fileInput = document.getElementById('import-csv-file');
+        if (!fileInput.files.length) {
+            alert('Please select a CSV file first.');
+            return;
+        }
+
+        var file = fileInput.files[0];
+        if (!file.name.toLowerCase().endsWith('.csv')) {
+            alert('Please upload a valid CSV file.');
+            return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var csvText = e.target.result;
+            var allRows = parseCSV(csvText);
+
+            if (allRows.length < 2) {
+                alert('CSV file is empty or has no data rows.');
+                return;
+            }
+
+            // First row is the header
+            var rawHeader = allRows[0];
+            var header = rawHeader.map(function(h) {
+                return h.toLowerCase().trim().replace(/[^a-z]/g, '');
+            });
+
+            // Data rows (skip header)
+            var dataRows = [];
+            for (var i = 1; i < allRows.length; i++) {
+                if (allRows[i].length === header.length) {
+                    var rowObj = {};
+                    for (var j = 0; j < header.length; j++) {
+                        rowObj[header[j]] = allRows[i][j];
+                    }
+                    dataRows.push(rowObj);
+                }
+            }
+
+            if (dataRows.length === 0) {
+                alert('No valid data rows found in the CSV.');
+                return;
+            }
+
+            // Start chunked upload
+            startChunkedImport(dataRows);
+        };
+        reader.readAsText(file);
+    });
+
+    function parseCSV(text) {
+        var rows = [];
+        var current = [];
+        var field = '';
+        var inQuotes = false;
+
+        for (var i = 0; i < text.length; i++) {
+            var c = text[i];
+            var next = (i + 1 < text.length) ? text[i + 1] : '';
+
+            if (inQuotes) {
+                if (c === '"' && next === '"') {
+                    field += '"';
+                    i++;
+                } else if (c === '"') {
+                    inQuotes = false;
+                } else {
+                    field += c;
+                }
+            } else {
+                if (c === '"') {
+                    inQuotes = true;
+                } else if (c === ',') {
+                    current.push(field.trim());
+                    field = '';
+                } else if (c === '\r' && next === '\n') {
+                    current.push(field.trim());
+                    field = '';
+                    rows.push(current);
+                    current = [];
+                    i++;
+                } else if (c === '\n') {
+                    current.push(field.trim());
+                    field = '';
+                    rows.push(current);
+                    current = [];
+                } else {
+                    field += c;
+                }
+            }
+        }
+        // Last field/row
+        if (field || current.length) {
+            current.push(field.trim());
+            rows.push(current);
+        }
+        return rows;
+    }
+
+    function startChunkedImport(dataRows) {
+        var CHUNK_SIZE = 25;
+        var totalRows = dataRows.length;
+        var totalChunks = Math.ceil(totalRows / CHUNK_SIZE);
+        var totalImported = 0;
+        var totalErrors = 0;
+        var chunkIndex = 0;
+
+        // Show progress, hide result, disable button
+        $('#import-progress-section').show();
+        $('#import-result-section').hide();
+        $('#import-submit-btn').prop('disabled', true).text('Importing...');
+        $('#import-log').html('');
+        updateProgress(0, totalRows, '');
+
+        function sendNextChunk() {
+            if (chunkIndex >= totalChunks) {
+                // All done
+                importComplete(totalImported, totalErrors, totalRows);
+                return;
+            }
+
+            var start = chunkIndex * CHUNK_SIZE;
+            var end = Math.min(start + CHUNK_SIZE, totalRows);
+            var chunk = dataRows.slice(start, end);
+
+            // Show what we're importing
+            var firstProduct = chunk[0] ? (chunk[0]['name'] || 'Unknown') : '';
+            var lastProduct = chunk[chunk.length - 1] ? (chunk[chunk.length - 1]['name'] || 'Unknown') : '';
+            var statusText = 'Batch ' + (chunkIndex + 1) + '/' + totalChunks + ' — importing "' + firstProduct + '"';
+            if (chunk.length > 1) {
+                statusText += ' to "' + lastProduct + '"';
+            }
+            statusText += ' (' + (end) + '/' + totalRows + ' rows)';
+            $('#import-status-text').text(statusText);
+
+            $.ajax({
+                url: '{{ route("product.import.chunk") }}',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ rows: chunk }),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                timeout: 60000,
+                success: function(resp) {
+                    if (resp.success) {
+                        totalImported += resp.imported;
+                        var logLine = '✅ Batch ' + (chunkIndex + 1) + ': ' + resp.imported + ' products imported';
+                        if (resp.errors && resp.errors.length) {
+                            totalErrors += resp.errors.length;
+                            logLine += ' (' + resp.errors.length + ' skipped)';
+                        }
+                        appendLog(logLine);
+                    } else {
+                        totalErrors += chunk.length;
+                        appendLog('❌ Batch ' + (chunkIndex + 1) + ' failed: ' + (resp.message || 'Unknown error'));
+                    }
+
+                    chunkIndex++;
+                    updateProgress(Math.min(chunkIndex * CHUNK_SIZE, totalRows), totalRows, statusText);
+                    // Small delay to avoid overwhelming the server
+                    setTimeout(sendNextChunk, 200);
+                },
+                error: function(xhr) {
+                    totalErrors += chunk.length;
+                    appendLog('❌ Batch ' + (chunkIndex + 1) + ' network error (status ' + xhr.status + ')');
+                    chunkIndex++;
+                    updateProgress(Math.min(chunkIndex * CHUNK_SIZE, totalRows), totalRows, statusText);
+                    setTimeout(sendNextChunk, 1000);
+                }
+            });
+        }
+
+        sendNextChunk();
+    }
+
+    function updateProgress(processed, total, statusText) {
+        var pct = Math.round((processed / total) * 100);
+        $('#import-progress-bar').css('width', pct + '%').attr('aria-valuenow', pct).text(pct + '%');
+    }
+
+    function appendLog(msg) {
+        var log = $('#import-log');
+        log.append('<div>' + msg + '</div>');
+        log.scrollTop(log[0].scrollHeight);
+    }
+
+    function importComplete(imported, errors, total) {
+        $('#import-submit-btn').prop('disabled', false).text('Submit');
+        $('#import-status-text').text('Import complete!');
+        $('#import-progress-bar').removeClass('progress-bar-animated');
+
+        var resultDiv = $('#import-result-message');
+        if (imported > 0) {
+            var msg = '✅ ' + imported + ' products imported successfully!';
+            if (errors > 0) {
+                msg += ' (' + errors + ' rows had errors)';
+            }
+            resultDiv.removeClass('alert-danger').addClass('alert-success').html(msg);
+        } else {
+            resultDiv.removeClass('alert-success').addClass('alert-danger').html('❌ Import failed. No products were imported.');
+        }
+        $('#import-result-section').show();
+
+        // Reload the DataTable to show new products
+        if ($.fn.DataTable.isDataTable('#product-data-table')) {
+            $('#product-data-table').DataTable().ajax.reload(null, false);
+        }
+    }
+
+    // Reset modal when closed
+    $('#importProduct').on('hidden.bs.modal', function() {
+        $('#import-csv-file').val('');
+        $('#import-progress-section').hide();
+        $('#import-result-section').hide();
+        $('#import-progress-bar').css('width', '0%').text('0%').addClass('progress-bar-animated');
+        $('#import-log').html('');
+        $('#import-status-text').text('');
+        $('#import-submit-btn').prop('disabled', false).text('Submit');
+    });
 
 </script>
 @endpush

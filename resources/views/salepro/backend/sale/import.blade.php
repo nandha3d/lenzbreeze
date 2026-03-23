@@ -61,7 +61,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label></label><br>
-                                            <a download href="../sample_file/sample_sale_products.csv" class="btn btn-primary btn-block btn-lg"><i class="dripicons-download"></i> {{trans('file.Download Sample File')}}</a>
+                                            <a download href="{{url('sample_file/sample_sale_products.csv')}}" class="btn btn-primary btn-block btn-lg"><i class="dripicons-download"></i> {{trans('file.Download Sample File')}}</a>
                                         </div>
                                     </div>
                                 </div>

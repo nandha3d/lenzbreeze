@@ -217,7 +217,7 @@ class AdjustmentController extends Controller
             $product_adjustment['action'] = $action[$key];
             ProductAdjustment::create($product_adjustment);
         }
-        return redirect('qty_adjustment')->with('message', 'Data inserted successfully');
+        return redirect('admin/qty_adjustment')->with('message', 'Data inserted successfully');
     }
 
     public function edit($id)
@@ -361,7 +361,7 @@ class AdjustmentController extends Controller
                 ProductAdjustment::create($product_adjustment);
         }
         $lims_adjustment_data->update($data);
-        return redirect('qty_adjustment')->with('message', 'Data updated successfully');
+        return redirect('admin/qty_adjustment')->with('message', 'Data updated successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -454,6 +454,6 @@ class AdjustmentController extends Controller
         $lims_adjustment_data->delete();
         $this->fileDelete(public_path('documents/adjustment/'), $lims_adjustment_data->document);
 
-        return redirect('qty_adjustment')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/qty_adjustment')->with('not_permitted', 'Data deleted successfully');
     }
 }

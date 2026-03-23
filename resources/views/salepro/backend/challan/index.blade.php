@@ -238,7 +238,7 @@
                 $( dt_selector.column( 7 ).footer() ).html(dt_selector.cells( rows, 7, { page: 'current' } ).data().sum().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             }
             else {
-                $( dt_selector.column( 7 ).footer() ).html(dt_selector.cells( rows, 7, { page: 'current' } ).data().sum().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $( dt_selector.column( 7 ).footer() ).html(dt_selector.column( 7, {page:'current'} ).data().sum().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             }
         }
 

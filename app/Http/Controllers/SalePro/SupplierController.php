@@ -160,7 +160,7 @@ class SupplierController extends Controller
                 $message .= ' created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('supplier')->with('message', $message);
+        return redirect('admin/supplier')->with('message', $message);
     }
 
     public function edit($id)
@@ -208,7 +208,7 @@ class SupplierController extends Controller
         }
 
         $lims_supplier_data->update($input);
-        return redirect('supplier')->with('message','Data updated successfully');
+        return redirect('admin/supplier')->with('message','Data updated successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -230,7 +230,7 @@ class SupplierController extends Controller
         $lims_supplier_data->save();
         $this->fileDelete(public_path('images/supplier/'), $lims_supplier_data->image);
 
-        return redirect('supplier')->with('not_permitted','Data deleted successfully');
+        return redirect('admin/supplier')->with('not_permitted','Data deleted successfully');
     }
 
     public function importSupplier(Request $request)
@@ -288,7 +288,7 @@ class SupplierController extends Controller
                 }
             }
         }
-        return redirect('supplier')->with('message', $message);
+        return redirect('admin/supplier')->with('message', $message);
     }
 
     public function suppliersAll()

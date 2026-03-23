@@ -69,7 +69,7 @@ class PayrollController extends Controller
                 $message = ' Payroll created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('payroll')->with('message', $message);
+        return redirect('admin/payroll')->with('message', $message);
     }
 
     public function edit($id)
@@ -86,7 +86,7 @@ class PayrollController extends Controller
             $data['created_at'] = date("Y-m-d");
         $lims_payroll_data = Payroll::find($data['payroll_id']);
         $lims_payroll_data->update($data);
-        return redirect('payroll')->with('message', 'Payroll updated succesfully');
+        return redirect('admin/payroll')->with('message', 'Payroll updated succesfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -103,6 +103,6 @@ class PayrollController extends Controller
     {
         $lims_payroll_data = Payroll::find($id);
         $lims_payroll_data->delete();
-        return redirect('payroll')->with('not_permitted', 'Payroll deleted succesfully');
+        return redirect('admin/payroll')->with('not_permitted', 'Payroll deleted succesfully');
     }
 }

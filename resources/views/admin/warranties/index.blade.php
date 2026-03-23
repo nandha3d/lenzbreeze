@@ -37,22 +37,22 @@
                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-warm-300 focus:ring-2 focus:ring-accent-500 focus:border-accent-500 outline-none"
                        style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke=%22%239ca3af%22 stroke-width=%222%22%3E%3Cpath stroke-linecap=%22round%22 stroke-linejoin=%22round%22 d=%22M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z%22/%3E%3C/svg%3E'); background-size: 20px; background-position: 10px center; background-repeat: no-repeat;">
             </div>
-            <select name="status" class="px-3 py-2 rounded-lg border border-warm-300 text-sm focus:ring-2 focus:ring-accent-500 outline-none">
+            <select name="status" onchange="this.form.submit()" class="px-3 py-2 rounded-lg border border-warm-300 text-sm focus:ring-2 focus:ring-accent-500 outline-none">
                 <option value="all">All Status</option>
                 @foreach(\App\Models\Warranty::STATUSES as $s)
                     <option value="{{ $s }}" {{ request('status') === $s ? 'selected' : '' }}>{{ ucwords(str_replace('_', ' ', $s)) }}</option>
                 @endforeach
             </select>
-            <select name="retailer_id" class="px-3 py-2 rounded-lg border border-warm-300 text-sm focus:ring-2 focus:ring-accent-500 outline-none">
-                <option value="">All Retailers</option>
-                @foreach($retailers as $retailer)
-                    <option value="{{ $retailer->id }}" {{ request('retailer_id') == $retailer->id ? 'selected' : '' }}>{{ $retailer->name }}</option>
+            <select name="store_id" onchange="this.form.submit()" class="px-3 py-2 rounded-lg border border-warm-300 text-sm focus:ring-2 focus:ring-accent-500 outline-none">
+                <option value="">All Retail Stores</option>
+                @foreach($stores as $store)
+                    <option value="{{ $store->id }}" {{ request('store_id') == $store->id ? 'selected' : '' }}>{{ $store->name }}</option>
                 @endforeach
             </select>
-            <input type="date" name="date_from" value="{{ request('date_from') }}" class="px-3 py-2 rounded-lg border border-warm-300 text-sm focus:ring-2 focus:ring-accent-500 outline-none" placeholder="From">
-            <input type="date" name="date_to" value="{{ request('date_to') }}" class="px-3 py-2 rounded-lg border border-warm-300 text-sm focus:ring-2 focus:ring-accent-500 outline-none" placeholder="To">
+            <input type="date" name="date_from" onchange="this.form.submit()" value="{{ request('date_from') }}" class="px-3 py-2 rounded-lg border border-warm-300 text-sm focus:ring-2 focus:ring-accent-500 outline-none" placeholder="From">
+            <input type="date" name="date_to" onchange="this.form.submit()" value="{{ request('date_to') }}" class="px-3 py-2 rounded-lg border border-warm-300 text-sm focus:ring-2 focus:ring-accent-500 outline-none" placeholder="To">
             <button type="submit" class="btn-primary !py-2 !px-4 text-sm">Filter</button>
-            @if(request()->hasAny(['search', 'status', 'retailer_id', 'date_from', 'date_to']))
+            @if(request()->hasAny(['search', 'status', 'store_id', 'date_from', 'date_to']))
                 <a href="{{ route('admin.warranties') }}" class="text-warm-500 hover:text-warm-700 font-medium text-sm py-2">Clear</a>
             @endif
         </div>
@@ -64,8 +64,8 @@
             <thead class="bg-warm-50 text-warm-600 text-xs uppercase">
                 <tr>
                     <th class="px-6 py-3 font-semibold">Serial</th>
-                    <th class="px-6 py-3 font-semibold">Customer</th>
-                    <th class="px-6 py-3 font-semibold">Retailer</th>
+                    <th class="px-6 py-3 font-semibold">End User</th>
+                    <th class="px-6 py-3 font-semibold">Retail Store</th>
                     <th class="px-6 py-3 font-semibold">Product</th>
                     <th class="px-6 py-3 font-semibold">Purchase</th>
                     <th class="px-6 py-3 font-semibold">Expiry</th>
@@ -87,7 +87,15 @@
                             <p class="text-warm-400 text-xs">{{ $warranty->customer_phone }}</p>
                         @endif
                     </td>
-                    <td class="px-6 py-4 text-sm text-warm-500">{{ $warranty->retailer?->name ?? $warranty->retailer_name ?? '—' }}</td>
+                    <td class="px-6 py-4 text-sm text-warm-500">
+                        @if($warranty->store && !empty($warranty->store->name))
+                            {{ $warranty->store->name }}
+                        @elseif(!empty($warranty->retailer_name))
+                            {{ $warranty->retailer_name }}
+                        @else
+                            —
+                        @endif
+                    </td>
                     <td class="px-6 py-4 text-sm text-warm-600">{{ Str::limit($warranty->product_name, 30) }}</td>
                     <td class="px-6 py-4 text-sm text-warm-500">{{ $warranty->purchase_date->format('M d, Y') }}</td>
                     <td class="px-6 py-4 text-sm {{ $warranty->expiry_date->isPast() ? 'text-red-500 font-bold' : 'text-warm-500' }}">

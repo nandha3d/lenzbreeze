@@ -26,7 +26,7 @@
                         $images = explode(",", $product->image);
                         $product->base_image = $images[0];
                     ?>
-                        <img src="{{url('images/product',$product->base_image)}}" height="80" width="80">
+                        <img src="{{asset('images/product/' . $product->base_image)}}" height="80" width="80">
                     </td>
                     <td>{{$product->name}}</td>
                     <td>{{$product->code}}</td>
@@ -52,6 +52,7 @@
 
 @push('scripts')
 <script type="text/javascript">
+@include('salepro.backend.report._export_helper')
     $("ul#report").siblings('a').attr('aria-expanded','true');
     $("ul#report").addClass("show");
     $("ul#report #qtyAlert-report-menu").addClass("active");
@@ -95,33 +96,37 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported)',
                 },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'excel',
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported)',
                 },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported)',
                 },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported)',
                 },
+                action: newexportaction,
+                footer:true
             },
             {
                 extend: 'colvis',

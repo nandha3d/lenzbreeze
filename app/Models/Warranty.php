@@ -35,15 +35,17 @@ class Warranty extends Model
     ];
 
     protected $fillable = [
+        'sale_id',
+        'sale_order_no',
         'serial_number',
         'product_name',
-        'customer_name',
-        'customer_phone',
-        'customer_email',
-        'customer_address',
+        'customer_name', // End User Name
+        'customer_phone', // End User Phone
+        'customer_email', // End User Email
+        'customer_address', // End User Address
         'customer_photo',
-        'retailer_id',
-        'retailer_name',
+        'store_id', // SalePro Customer ID (Store)
+        'retailer_name', // Denormalized Store Name
         'right_eye_sph', 'right_eye_cyl', 'right_eye_axis', 'right_eye_add',
         'left_eye_sph', 'left_eye_cyl', 'left_eye_axis', 'left_eye_add',
         'pupillary_distance',
@@ -73,7 +75,7 @@ class Warranty extends Model
         'left_eye_cyl'       => 'decimal:2',
         'left_eye_add'       => 'decimal:2',
         'pupillary_distance' => 'decimal:1',
-        'retailer_id'        => 'integer',
+        'store_id'           => 'integer',
         'warranty_months'    => 'integer',
     ];
 
@@ -88,9 +90,19 @@ class Warranty extends Model
     }
 
     // ─── Relationships ───────────────────────────────────────────────
+    public function store(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'store_id');
+    }
+
     public function retailer(): BelongsTo
     {
-        return $this->belongsTo(Retailer::class);
+        return $this->belongsTo(Customer::class, 'store_id');
+    }
+
+    public function sale(): BelongsTo
+    {
+        return $this->belongsTo(Sale::class)->withDefault();
     }
 
     // ─── Status Helpers ──────────────────────────────────────────────

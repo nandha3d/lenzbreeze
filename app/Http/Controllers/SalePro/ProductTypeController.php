@@ -196,7 +196,7 @@ class ProductTypeController extends Controller
         if($lims_category_data['ajax'])
             return $productType;
         else
-            return redirect('category')->with('message', 'Category inserted successfully');
+            return redirect('admin/category')->with('message', 'Category inserted successfully');
     }
 
     public function edit($id)
@@ -296,7 +296,7 @@ class ProductTypeController extends Controller
 
         DB::table('categories')->where('id', $request->category_id)->update($input);
 
-        return redirect('category')->with('message', 'Category updated successfully');
+        return redirect('admin/category')->with('message', 'Category updated successfully');
     }
 
     public function import(Request $request)
@@ -344,7 +344,7 @@ class ProductTypeController extends Controller
             $productType->save();
         }
         $this->cacheForget('category_list');
-        return redirect('category')->with('message', 'Category imported successfully');
+        return redirect('admin/category')->with('message', 'Category imported successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -382,6 +382,6 @@ class ProductTypeController extends Controller
 
         $lims_category_data->save();
         $this->cacheForget('category_list');
-        return redirect('category')->with('not_permitted', 'Category deleted successfully');
+        return redirect('admin/category')->with('not_permitted', 'Category deleted successfully');
     }
 }

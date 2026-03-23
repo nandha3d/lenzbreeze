@@ -37,14 +37,14 @@
 
         @php
             $colorGroups = [
-                ['name' => 'Black Series', 'code' => 'BL', 'image' => 'blacktint.jpg'],
-                ['name' => 'Brown Series', 'code' => 'BR', 'image' => 'browntint.jpg'],
-                ['name' => 'Pink Series', 'code' => 'PI', 'image' => 'pinktint.jpg'],
-                ['name' => 'Blue Series', 'code' => 'BU', 'image' => 'bluetint.jpg'],
-                ['name' => 'Green Series', 'code' => 'GR', 'image' => 'greenint.jpg'],
-                ['name' => 'Gray Series', 'code' => 'GY', 'image' => 'graytint.jpg'],
-                ['name' => 'Red Series', 'code' => 'RD', 'image' => 'redtint.jpg'],
-                ['name' => 'Yellow Series', 'code' => 'YE', 'image' => 'yellowtint.jpg'],
+                ['name' => 'Black Series', 'code' => 'BL', 'image' => 'blacktint.avif'],
+                ['name' => 'Brown Series', 'code' => 'BR', 'image' => 'browntint.avif'],
+                ['name' => 'Pink Series', 'code' => 'PI', 'image' => 'pinktint.avif'],
+                ['name' => 'Blue Series', 'code' => 'BU', 'image' => 'bluetint.avif'],
+                ['name' => 'Green Series', 'code' => 'GR', 'image' => 'greenint.avif'],
+                ['name' => 'Gray Series', 'code' => 'GY', 'image' => 'graytint.avif'],
+                ['name' => 'Red Series', 'code' => 'RD', 'image' => 'redtint.avif'],
+                ['name' => 'Yellow Series', 'code' => 'YE', 'image' => 'yellowtint.avif'],
             ];
         @endphp
 

@@ -476,7 +476,7 @@ class QuotationController extends Controller
                 $message = 'Quotation created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('quotations')->with('message', $message);
+        return redirect('admin/quotations')->with('message', $message);
     }
 
     public function sendMail(Request $request)
@@ -1043,7 +1043,7 @@ class QuotationController extends Controller
                 $message = 'Quotation updated successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('quotations')->with('message', $message);
+        return redirect('admin/quotations')->with('message', $message);
     }
 
     public function createSale($id)
@@ -1110,6 +1110,6 @@ class QuotationController extends Controller
         }
         $lims_quotation_data->delete();
         $this->fileDelete(public_path('documents/quotation/'), $lims_quotation_data->document);
-        return redirect('quotations')->with('not_permitted', 'Quotation deleted successfully');
+        return redirect('admin/quotations')->with('not_permitted', 'Quotation deleted successfully');
     }
 }

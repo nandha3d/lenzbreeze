@@ -234,7 +234,7 @@ class DeliveryController extends Controller
                 $message = 'Delivery created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('delivery')->with('message', $message);
+        return redirect('admin/delivery')->with('message', $message);
     }
 
     public function productDeliveryData($id)
@@ -375,7 +375,7 @@ class DeliveryController extends Controller
                 $message = 'Delivery updated successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('delivery')->with('message', $message);
+        return redirect('admin/delivery')->with('message', $message);
     }
 
     public function deleteBySelection(Request $request)
@@ -395,6 +395,6 @@ class DeliveryController extends Controller
         $this->fileDelete(public_path('documents/delivery/'), $lims_delivery_data->file);
         $lims_delivery_data->delete();
 
-        return redirect('delivery')->with('not_permitted', 'Delivery deleted successfully');
+        return redirect('admin/delivery')->with('not_permitted', 'Delivery deleted successfully');
     }
 }

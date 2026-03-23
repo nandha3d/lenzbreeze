@@ -25,3 +25,11 @@ Thumbs.db
 
 # Large Binaries
 *.zip
+
+# Lighthouse Reports & Temporary Artifacts
+/lighthouse-reports
+/lighthouse-report.html
+/urls_to_test.txt
+/routes.json
+/routes_utf8.json
+/tmp_check_avif.php

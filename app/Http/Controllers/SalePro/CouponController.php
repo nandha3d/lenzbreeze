@@ -44,7 +44,7 @@ class CouponController extends Controller
         $data['is_active'] = true;
         Coupon::create($data);
         $this->cacheForget('coupon_list');
-        return redirect('coupons')->with('message', 'Coupon created successfully');
+        return redirect('admin/coupons')->with('message', 'Coupon created successfully');
     }
 
     public function show($id)
@@ -65,7 +65,7 @@ class CouponController extends Controller
         $lims_coupon_data = Coupon::find($data['coupon_id']);
         $lims_coupon_data->update($data);
         $this->cacheForget('coupon_list');
-        return redirect('coupons')->with('message', 'Coupon updated successfully');
+        return redirect('admin/coupons')->with('message', 'Coupon updated successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -108,6 +108,6 @@ class CouponController extends Controller
         $lims_coupon_data->is_active = false;
         $lims_coupon_data->save();
         $this->cacheForget('coupon_list');
-        return redirect('coupons')->with('not_permitted', 'Coupon deleted successfully');
+        return redirect('admin/coupons')->with('not_permitted', 'Coupon deleted successfully');
     }
 }

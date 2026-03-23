@@ -934,36 +934,43 @@ class ReportController extends Controller
         $productIds = $lims_product_all->pluck('id')->toArray();
         
         // Bulk fetch product variants
-        $productVariantsGrouped = ProductVariant::whereIn('product_id', $productIds)
-            ->get()
-            ->groupBy('product_id');
+        $pvResults = collect();
+        foreach(array_chunk($productIds, 5000) as $chunk) {
+            $chunkRes = ProductVariant::whereIn('product_id', $chunk)->get();
+            $pvResults = $pvResults->concat($chunkRes);
+        }
+        $productVariantsGrouped = $pvResults->groupBy('product_id');
         
         $variants = Variant::all()->keyBy('id');
 
         // Stats fetching helper
         $getStats = function($model, $productIds, $warehouse_id, $start_date, $end_date, $unitCol) {
-            $query = $model::whereIn('product_id', $productIds)
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date);
-            
-            if ($warehouse_id != 0) {
-                // Determine warehouse join based on model
-                if ($model == 'App\Models\ProductPurchase') {
-                    $query->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.id')
-                          ->where('purchases.warehouse_id', $warehouse_id);
-                } elseif ($model == 'App\Models\Product_Sale') {
-                    $query->join('sales', 'product_sales.sale_id', '=', 'sales.id')
-                          ->where('sales.warehouse_id', $warehouse_id);
-                } elseif ($model == 'App\Models\ProductReturn') {
-                    $query->join('returns', 'product_returns.return_id', '=', 'returns.id')
-                          ->where('returns.warehouse_id', $warehouse_id);
-                } elseif ($model == 'App\Models\PurchaseProductReturn') {
-                    $query->join('return_purchases', 'purchase_product_return.return_id', '=', 'return_purchases.id')
-                          ->where('return_purchases.warehouse_id', $warehouse_id);
+            $results = collect();
+            foreach (array_chunk($productIds, 5000) as $chunk) {
+                $query = $model::whereIn('product_id', $chunk)
+                    ->whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date);
+                
+                if ($warehouse_id != 0) {
+                    // Determine warehouse join based on model
+                    if ($model == 'App\Models\ProductPurchase') {
+                        $query->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.id')
+                              ->where('purchases.warehouse_id', $warehouse_id);
+                    } elseif ($model == 'App\Models\Product_Sale') {
+                        $query->join('sales', 'product_sales.sale_id', '=', 'sales.id')
+                              ->where('sales.warehouse_id', $warehouse_id);
+                    } elseif ($model == 'App\Models\ProductReturn') {
+                        $query->join('returns', 'product_returns.return_id', '=', 'returns.id')
+                              ->where('returns.warehouse_id', $warehouse_id);
+                    } elseif ($model == 'App\Models\PurchaseProductReturn') {
+                        $query->join('return_purchases', 'purchase_product_return.return_id', '=', 'return_purchases.id')
+                              ->where('return_purchases.warehouse_id', $warehouse_id);
+                    }
                 }
-            }
 
-            $results = $query->select('product_id', 'variant_id', $unitCol, 'qty', 'total')->get();
+                $chunkResults = $query->select('product_id', 'variant_id', $unitCol, 'qty', 'total')->get();
+                $results = $results->concat($chunkResults);
+            }
             
             return [
                 'sums' => $results->groupBy(function($item) {
@@ -989,12 +996,16 @@ class ReportController extends Controller
         // Warehouse Stock Map
         $productWarehouseMap = collect();
         if ($warehouse_id != 0) {
-            $productWarehouseMap = Product_Warehouse::whereIn('product_id', $productIds)
-                ->where('warehouse_id', $warehouse_id)
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $pwResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkRes = Product_Warehouse::whereIn('product_id', $chunk)
+                    ->where('warehouse_id', $warehouse_id)
+                    ->get();
+                $pwResults = $pwResults->concat($chunkRes);
+            }
+            $productWarehouseMap = $pwResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
         }
 
         foreach ($lims_product_all as $product) {
@@ -1104,7 +1115,6 @@ class ReportController extends Controller
         );
 
         return response()->json($json_data);
-    }
     }
 
     public function purchaseReport(Request $request)
@@ -1251,56 +1261,76 @@ class ReportController extends Controller
 
         // Combined logic for purchased amount and quantity details to fetch in one go
         if ($warehouse_id == 0) {
-            $purchaseSums = ProductPurchase::whereIn('product_id', $productIds)
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->select('product_id', 'variant_id', DB::raw('SUM(total) as total_purchased_amount'))
-                ->groupBy('product_id', 'variant_id')
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $purchaseSumsResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = ProductPurchase::whereIn('product_id', $chunk)
+                    ->whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date)
+                    ->select('product_id', 'variant_id', DB::raw('SUM(total) as total_purchased_amount'))
+                    ->groupBy('product_id', 'variant_id')
+                    ->get();
+                $purchaseSumsResults = $purchaseSumsResults->concat($chunkData);
+            }
+            $purchaseSums = $purchaseSumsResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
 
-            $purchaseDetails = ProductPurchase::whereIn('product_id', $productIds)
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->select('product_id', 'variant_id', 'purchase_unit_id', 'qty')
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $purchaseDetailsResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = ProductPurchase::whereIn('product_id', $chunk)
+                    ->whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date)
+                    ->select('product_id', 'variant_id', 'purchase_unit_id', 'qty')
+                    ->get();
+                $purchaseDetailsResults = $purchaseDetailsResults->concat($chunkData);
+            }
+            $purchaseDetails = $purchaseDetailsResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
         } else {
-            $purchaseSums = DB::table('product_purchases')
-                ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.id')
-                ->whereIn('product_purchases.product_id', $productIds)
-                ->where('purchases.warehouse_id', $warehouse_id)
-                ->whereDate('purchases.created_at', '>=', $start_date)
-                ->whereDate('purchases.created_at', '<=', $end_date)
-                ->select('product_purchases.product_id', 'product_purchases.variant_id', DB::raw('SUM(product_purchases.total) as total_purchased_amount'))
-                ->groupBy('product_purchases.product_id', 'product_purchases.variant_id')
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $purchaseSumsResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = DB::table('product_purchases')
+                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.id')
+                    ->whereIn('product_purchases.product_id', $chunk)
+                    ->where('purchases.warehouse_id', $warehouse_id)
+                    ->whereDate('purchases.created_at', '>=', $start_date)
+                    ->whereDate('purchases.created_at', '<=', $end_date)
+                    ->select('product_purchases.product_id', 'product_purchases.variant_id', DB::raw('SUM(product_purchases.total) as total_purchased_amount'))
+                    ->groupBy('product_purchases.product_id', 'product_purchases.variant_id')
+                    ->get();
+                $purchaseSumsResults = $purchaseSumsResults->concat($chunkData);
+            }
+            $purchaseSums = $purchaseSumsResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
 
-            $purchaseDetails = DB::table('product_purchases')
-                ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.id')
-                ->whereIn('product_purchases.product_id', $productIds)
-                ->where('purchases.warehouse_id', $warehouse_id)
-                ->whereDate('purchases.created_at', '>=', $start_date)
-                ->whereDate('purchases.created_at', '<=', $end_date)
-                ->select('product_purchases.product_id', 'product_purchases.variant_id', 'product_purchases.purchase_unit_id', 'product_purchases.qty')
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $purchaseDetailsResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = DB::table('product_purchases')
+                    ->join('purchases', 'product_purchases.purchase_id', '=', 'purchases.id')
+                    ->whereIn('product_purchases.product_id', $chunk)
+                    ->where('purchases.warehouse_id', $warehouse_id)
+                    ->whereDate('purchases.created_at', '>=', $start_date)
+                    ->whereDate('purchases.created_at', '<=', $end_date)
+                    ->select('product_purchases.product_id', 'product_purchases.variant_id', 'product_purchases.purchase_unit_id', 'product_purchases.qty')
+                    ->get();
+                $purchaseDetailsResults = $purchaseDetailsResults->concat($chunkData);
+            }
+            $purchaseDetails = $purchaseDetailsResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
             
-            $productWarehouseMap = Product_Warehouse::whereIn('product_id', $productIds)
-                ->where('warehouse_id', $warehouse_id)
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $pwResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = Product_Warehouse::whereIn('product_id', $chunk)
+                    ->where('warehouse_id', $warehouse_id)
+                    ->get();
+                $pwResults = $pwResults->concat($chunkData);
+            }
+            $productWarehouseMap = $pwResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
         }
 
         foreach ($lims_product_all as $product) {
@@ -1472,56 +1502,77 @@ class ReportController extends Controller
 
         // Combined logic for sold amount and quantity details to fetch in one go
         if ($warehouse_id == 0) {
-            $saleSums = Product_Sale::whereIn('product_id', $productIds)
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->select('product_id', 'variant_id', DB::raw('SUM(total) as total_sold_amount'))
-                ->groupBy('product_id', 'variant_id')
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $saleSumsResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = Product_Sale::whereIn('product_id', $chunk)
+                    ->whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date)
+                    ->select('product_id', 'variant_id', DB::raw('SUM(total) as total_sold_amount'))
+                    ->groupBy('product_id', 'variant_id')
+                    ->get();
+                $saleSumsResults = $saleSumsResults->concat($chunkData);
+            }
+            $saleSums = $saleSumsResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
 
-            $saleDetails = Product_Sale::whereIn('product_id', $productIds)
-                ->whereDate('created_at', '>=', $start_date)
-                ->whereDate('created_at', '<=', $end_date)
-                ->select('product_id', 'variant_id', 'sale_unit_id', 'qty')
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $saleDetailsResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = Product_Sale::whereIn('product_id', $chunk)
+                    ->whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date)
+                    ->select('product_id', 'variant_id', 'sale_unit_id', 'qty')
+                    ->get();
+                $saleDetailsResults = $saleDetailsResults->concat($chunkData);
+            }
+            $saleDetails = $saleDetailsResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
+
         } else {
-            $saleSums = DB::table('product_sales')
-                ->join('sales', 'product_sales.sale_id', '=', 'sales.id')
-                ->whereIn('product_sales.product_id', $productIds)
-                ->where('sales.warehouse_id', $warehouse_id)
-                ->whereDate('sales.created_at', '>=', $start_date)
-                ->whereDate('sales.created_at', '<=', $end_date)
-                ->select('product_sales.product_id', 'product_sales.variant_id', DB::raw('SUM(product_sales.total) as total_sold_amount'))
-                ->groupBy('product_sales.product_id', 'product_sales.variant_id')
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $saleSumsResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = DB::table('product_sales')
+                    ->join('sales', 'product_sales.sale_id', '=', 'sales.id')
+                    ->whereIn('product_sales.product_id', $chunk)
+                    ->where('sales.warehouse_id', $warehouse_id)
+                    ->whereDate('sales.created_at', '>=', $start_date)
+                    ->whereDate('sales.created_at', '<=', $end_date)
+                    ->select('product_sales.product_id', 'product_sales.variant_id', DB::raw('SUM(product_sales.total) as total_sold_amount'))
+                    ->groupBy('product_sales.product_id', 'product_sales.variant_id')
+                    ->get();
+                $saleSumsResults = $saleSumsResults->concat($chunkData);
+            }
+            $saleSums = $saleSumsResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
 
-            $saleDetails = DB::table('product_sales')
-                ->join('sales', 'product_sales.sale_id', '=', 'sales.id')
-                ->whereIn('product_sales.product_id', $productIds)
-                ->where('sales.warehouse_id', $warehouse_id)
-                ->whereDate('sales.created_at', '>=', $start_date)
-                ->whereDate('sales.created_at', '<=', $end_date)
-                ->select('product_sales.product_id', 'product_sales.variant_id', 'product_sales.sale_unit_id', 'product_sales.qty')
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $saleDetailsResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = DB::table('product_sales')
+                    ->join('sales', 'product_sales.sale_id', '=', 'sales.id')
+                    ->whereIn('product_sales.product_id', $chunk)
+                    ->where('sales.warehouse_id', $warehouse_id)
+                    ->whereDate('sales.created_at', '>=', $start_date)
+                    ->whereDate('sales.created_at', '<=', $end_date)
+                    ->select('product_sales.product_id', 'product_sales.variant_id', 'product_sales.sale_unit_id', 'product_sales.qty')
+                    ->get();
+                $saleDetailsResults = $saleDetailsResults->concat($chunkData);
+            }
+            $saleDetails = $saleDetailsResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
             
-            $productWarehouseMap = Product_Warehouse::whereIn('product_id', $productIds)
-                ->where('warehouse_id', $warehouse_id)
-                ->get()
-                ->groupBy(function($item) {
-                    return $item->product_id . '-' . ($item->variant_id ?? '0');
-                });
+            $pwResults = collect();
+            foreach(array_chunk($productIds, 5000) as $chunk) {
+                $chunkData = Product_Warehouse::whereIn('product_id', $chunk)
+                    ->where('warehouse_id', $warehouse_id)
+                    ->get();
+                $pwResults = $pwResults->concat($chunkData);
+            }
+            $productWarehouseMap = $pwResults->groupBy(function($item) {
+                return $item->product_id . '-' . ($item->variant_id ?? '0');
+            });
         }
 
         foreach ($lims_product_all as $product) {
@@ -1669,8 +1720,8 @@ class ReportController extends Controller
     public function paymentReportByDate(Request $request)
     {
         $data = $request->all();
-        $start_date = $data['start_date'];
-        $end_date = $data['end_date'];
+        $start_date = $data['start_date'] ?? date("Y-m-01");
+        $end_date = $data['end_date'] ?? date("Y-m-d");
 
         $lims_payment_data = Payment::whereDate('created_at', '>=' , $start_date)->whereDate('created_at', '<=' , $end_date)->get();
         return view('backend.report.payment_report',compact('lims_payment_data', 'start_date', 'end_date'));
@@ -1791,11 +1842,11 @@ class ReportController extends Controller
                     $sale_status = trans('file.Completed');
                 }
                 elseif($sale->sale_status == 2){
-                    $nestedData['sale_status'] = '<div class="badge badge-danger">'.trans('file.Pending').'</div>';
+                    $nestedData['status'] = '<div class="badge badge-danger">'.trans('file.Pending').'</div>';
                     $sale_status = trans('file.Pending');
                 }
                 else{
-                    $nestedData['sale_status'] = '<div class="badge badge-warning">'.trans('file.Draft').'</div>';
+                    $nestedData['status'] = '<div class="badge badge-warning">'.trans('file.Draft').'</div>';
                     $sale_status = trans('file.Draft');
                 }
                 $data[] = $nestedData;
@@ -2366,11 +2417,11 @@ class ReportController extends Controller
                     $sale_status = trans('file.Completed');
                 }
                 elseif($sale->sale_status == 2){
-                    $nestedData['sale_status'] = '<div class="badge badge-danger">'.trans('file.Pending').'</div>';
+                    $nestedData['status'] = '<div class="badge badge-danger">'.trans('file.Pending').'</div>';
                     $sale_status = trans('file.Pending');
                 }
                 else{
-                    $nestedData['sale_status'] = '<div class="badge badge-warning">'.trans('file.Draft').'</div>';
+                    $nestedData['status'] = '<div class="badge badge-warning">'.trans('file.Draft').'</div>';
                     $sale_status = trans('file.Draft');
                 }
                 $data[] = $nestedData;
@@ -2685,11 +2736,11 @@ class ReportController extends Controller
                     $sale_status = trans('file.Completed');
                 }
                 elseif($sale->sale_status == 2){
-                    $nestedData['sale_status'] = '<div class="badge badge-danger">'.trans('file.Pending').'</div>';
+                    $nestedData['status'] = '<div class="badge badge-danger">'.trans('file.Pending').'</div>';
                     $sale_status = trans('file.Pending');
                 }
                 else{
-                    $nestedData['sale_status'] = '<div class="badge badge-warning">'.trans('file.Draft').'</div>';
+                    $nestedData['status'] = '<div class="badge badge-warning">'.trans('file.Draft').'</div>';
                     $sale_status = trans('file.Draft');
                 }
                 $data[] = $nestedData;

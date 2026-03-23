@@ -35,7 +35,7 @@
             </div>
             <div class="relative">
                 <div class="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-warm-100">
-                    <img src="{{ asset('images/aboutus.jpg') }}" alt="Eye Mek Advanced Lens Manufacturing Facility" width="800" height="600" class="w-full h-full object-cover">
+                    <img src="{{ asset('images/aboutus.avif') }}" alt="Eye Mek Advanced Lens Manufacturing Facility" width="800" height="600" class="w-full h-full object-cover">
                 </div>
                 <div class="absolute -bottom-6 -left-6 w-32 h-32 rounded-2xl gradient-accent flex items-center justify-center text-white shadow-lg">
                     <div class="text-center">

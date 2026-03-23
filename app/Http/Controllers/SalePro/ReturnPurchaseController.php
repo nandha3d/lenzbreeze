@@ -607,7 +607,7 @@ class ReturnPurchaseController extends Controller
                 $message = 'Return created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('return-purchase')->with('message', $message);
+        return redirect('admin/return-purchase')->with('message', $message);
     }
 
     public function productReturnData($id)
@@ -934,7 +934,7 @@ class ReturnPurchaseController extends Controller
                 $message = 'Return updated successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
         }
-        return redirect('return-purchase')->with('message', $message);
+        return redirect('admin/return-purchase')->with('message', $message);
     }
 
     public function deleteBySelection(Request $request)
@@ -1039,6 +1039,6 @@ class ReturnPurchaseController extends Controller
         $lims_return_data->delete();
         $this->fileDelete(public_path('documents/purchase_return/'), $lims_return_data->document);
 
-        return redirect('return-purchase')->with('not_permitted', 'Data deleted successfully');;
+        return redirect('admin/return-purchase')->with('not_permitted', 'Data deleted successfully');;
     }
 }

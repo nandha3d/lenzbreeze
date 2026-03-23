@@ -44,7 +44,7 @@ class UpdateWarrantyRequest extends FormRequest
             'batch_number'       => 'nullable|string|max:50',
 
             // Sale
-            'retailer_id'        => 'required|exists:retailers,id',
+            'store_id'           => 'required|exists:salepro.customers,id',
             'purchase_date'      => 'required|date',
             'warranty_months'    => 'required|in:6,12,24',
 

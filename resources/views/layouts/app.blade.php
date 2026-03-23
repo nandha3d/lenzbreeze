@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="@yield('meta_description', 'Lenz Breeze - India\'s premier optical lens manufacturer. Premium quality lenses with cutting-edge technology.')">
+    <meta name="description" content="@yield('meta_description', "Lenz Breeze - India's premier optical lens manufacturer. Premium quality lenses with cutting-edge technology.")">
     
     {{-- Open Graph / Facebook --}}
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:title" content="@yield('title', 'Lenz Breeze - Premium Optical Lenses')">
     <meta property="og:description" content="@yield('meta_description', 'Premium optical lenses by Lenz Breeze. Advanced technologies for crystal-clear vision.')">
-    <meta property="og:image" content="{{ asset('images/logo.png') }}">
+    <meta property="og:image" content="{{ asset('images/logo.avif') }}">
 
     {{-- Twitter --}}
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ url()->current() }}">
     <meta property="twitter:title" content="@yield('title', 'Lenz Breeze - Premium Optical Lenses')">
     <meta property="twitter:description" content="@yield('meta_description', 'Premium optical lenses by Lenz Breeze. Advanced technologies for crystal-clear vision.')">
-    <meta property="twitter:image" content="{{ asset('images/logo.png') }}">
+    <meta property="twitter:image" content="{{ asset('images/logo.avif') }}">
 
     <link rel="canonical" href="{{ url()->current() }}">
     <title>@yield('title', 'Lenz Breeze - Premium Optical Lenses')</title>
@@ -25,15 +25,15 @@
     {{-- JSON-LD Schema Markup --}}
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
+      "@@context": "https://schema.org",
+      "@@type": "LocalBusiness",
       "name": "Lenz Breeze",
-      "image": "{{ asset('images/logo.png') }}",
-      "@id": "{{ url('/') }}",
+      "image": "{{ asset('images/logo.avif') }}",
+      "@@id": "{{ url('/') }}",
       "url": "{{ url('/') }}",
       "telephone": "+919446059103",
       "address": {
-        "@type": "PostalAddress",
+        "@@type": "PostalAddress",
         "streetAddress": "MRA 54, Muttoli Road, near Muttoli Temple, Edappally, Kochi",
         "addressLocality": "Ernakulam",
         "addressRegion": "KL",
@@ -41,12 +41,12 @@
         "addressCountry": "IN"
       },
       "geo": {
-        "@type": "GeoCoordinates",
+        "@@type": "GeoCoordinates",
         "latitude": 10.0245,
         "longitude": 76.3079
       },
       "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
+        "@@type": "OpeningHoursSpecification",
         "dayOfWeek": [
           "Monday",
           "Tuesday",
@@ -65,8 +65,8 @@
     }
     </script>
 
-    <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-icon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-icon.avif') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo-icon.avif') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">

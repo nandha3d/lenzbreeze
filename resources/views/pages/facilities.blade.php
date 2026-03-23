@@ -51,7 +51,7 @@
                     </div>
                     <p class="text-warm-600 text-sm leading-relaxed mb-4">{{ $facility['desc'] }}</p>
                     <div class="border-t border-warm-100 pt-4">
-                        <h4 class="text-xs font-semibold text-warm-400 uppercase tracking-wider mb-2">Capabilities</h4>
+                        <h3 class="text-xs font-semibold text-warm-400 uppercase tracking-wider mb-2">Capabilities</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($facility['capabilities'] as $cap)
                                 <span class="px-2.5 py-1 rounded-md bg-warm-100 text-warm-600 text-xs font-medium">{{ $cap }}</span>
@@ -79,7 +79,7 @@
             <iframe
                 src="https://www.google.com/maps/d/u/0/embed?mid=1&ll=15.0,78.0&z=5"
                 width="100%" height="100%"
-                style="border:0;" allowfullscreen="" loading="lazy"
+                style="border:0;" allowfullscreen="" loading="lazy" title="Google Maps view of Lenz Breeze locations"
                 referrerpolicy="no-referrer-when-downgrade"
                 class="w-full h-full">
             </iframe>

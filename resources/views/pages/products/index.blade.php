@@ -28,14 +28,14 @@
 }" x-init="startAutoScroll()" @mouseenter="stopAutoScroll()" @mouseleave="startAutoScroll()"
 class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
     
-    {{-- Slide 1: Premium Progressive (Drive X) --}}
+    {{-- Slide 1: Premium Progressive (Road Master) --}}
     <div x-show="activeSlide === 1" 
          :class="{'active-slide': activeSlide === 1, 'leaving-slide': leaving && activeSlide === 1}"
          class="absolute inset-0 z-10 transition-opacity duration-1000">
         {{-- Stripe Transition Background --}}
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens1.jpeg') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens1.avif') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-950/40 to-transparent z-[11]"></div>
@@ -46,9 +46,9 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
         <div class="container-custom relative h-full flex items-center z-20">
             <div class="max-w-2xl text-white relative">
                 <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
-                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8 animate-slide-up">
+                <div class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8 animate-slide-up">
                     Eye Mek PROGRESSIVE SERIES
-                </h2>
+                </div>
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1] animate-slide-up" style="animation-delay: 0.2s">
                         Master Every Distance. <br/> Conquer Every Drive.
@@ -58,7 +58,7 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
                     </p>
                     <div class="pt-4 animate-slide-up" style="animation-delay: 0.6s">
                         <a href="{{ route('products.show', 'premium-progressive-rx') }}" class="btn-primary">Explore Details</a>
-                        <span class="ml-6 text-logo-yellow font-black uppercase tracking-[0.2em] text-xs">Drive X Technology</span>
+                        <span class="ml-6 text-logo-yellow font-black uppercase tracking-[0.2em] text-xs">Road Master Technology</span>
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
         {{-- Stripe Transition Background --}}
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner1.jpeg') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner1.avif') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-950/40 to-transparent z-[11]"></div>
@@ -83,9 +83,9 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
         <div class="container-custom relative h-full flex items-center z-20">
             <div class="max-w-2xl text-white relative">
                 <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
-                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                <div class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
                     Eye Mek SV Collection
-                </h2>
+                </div>
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
                         Precision in every pulse.
@@ -108,7 +108,7 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
          class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/bifocal-lens.jpeg') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/bifocal-lens.avif') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-950/20 to-transparent z-[11]"></div>
@@ -119,9 +119,9 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
         <div class="container-custom relative h-full flex items-center z-20">
             <div class="max-w-2xl text-white relative group">
                 <div class="absolute -top-10 -left-10 w-20 h-20 border-t-2 border-l-2 border-logo-yellow/30"></div>
-                <h2 class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
+                <div class="inline-block px-4 py-1.5 rounded-sm bg-logo-yellow/10 border-l-4 border-logo-yellow text-logo-yellow text-[10px] font-black uppercase tracking-[0.3em] mb-8">
                     ADVANCED // DBF_FLAT_TOP
-                </h2>
+                </div>
                 <div class="space-y-6">
                     <h1 class="font-display text-4xl md:text-6xl font-black leading-[1.1]">
                         D-Bifocal. <br/> (DBF) Precision.
@@ -265,7 +265,7 @@ class="relative h-[70vh] min-h-[600px] overflow-hidden bg-brand-950 group">
                         {{-- Content --}}
                         <div class="p-6 flex flex-col flex-1">
                             <div class="text-xs text-warm-400 font-bold uppercase tracking-widest mb-1.5">{{ $product->category?->name }}</div>
-                            <h3 class="font-display font-black text-xl text-brand-500 group-hover:text-accent-600 transition-colors mb-1.5 leading-tight">{{ $product->name }}</h3>
+                            <h2 class="font-display font-black text-xl text-brand-500 group-hover:text-accent-600 transition-colors mb-1.5 leading-tight">{{ $product->name }}</h2>
                             <p class="text-sm text-accent-700 font-semibold mb-3 italic">{{ $product->tagline }}</p>
                             <div class="text-sm text-warm-500 line-clamp-2 mb-4 leading-relaxed flex-1">
                                 {!! Str::limit(strip_tags($product->description), 110) !!}

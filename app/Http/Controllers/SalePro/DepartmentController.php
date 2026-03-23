@@ -36,7 +36,7 @@ class DepartmentController extends Controller
         $data = $request->all();
         $data['is_active'] = true;
         Department::create($data);
-        return redirect('departments')->with('message', 'Department created successfully');
+        return redirect('admin/departments')->with('message', 'Department created successfully');
     }
 
     public function update(Request $request, $id)
@@ -53,7 +53,7 @@ class DepartmentController extends Controller
         $data = $request->all();
         $lims_department_data = Department::find($data['department_id']);
         $lims_department_data->update($data);
-        return redirect('departments')->with('message', 'Department updated successfully');
+        return redirect('admin/departments')->with('message', 'Department updated successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -72,6 +72,6 @@ class DepartmentController extends Controller
         $lims_department_data = Department::find($id);
         $lims_department_data->is_active = false;
         $lims_department_data->save();
-        return redirect('departments')->with('message', 'Department deleted successfully');
+        return redirect('admin/departments')->with('message', 'Department deleted successfully');
     }
 }

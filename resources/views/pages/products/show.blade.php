@@ -49,10 +49,9 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     <div x-show="activeSlide === 1" 
          :class="{'active-slide': activeSlide === 1, 'leaving-slide': leaving && activeSlide === 1}"
          class="absolute inset-0 z-10 transition-opacity duration-1000">
-        {{-- Stripe Transition Background --}}
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner1.jpeg') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner1.avif') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-[11]"></div>
@@ -97,7 +96,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
         {{-- Stripe Transition Background --}}
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner2.jpeg') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner2.avif') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-l from-black/95 via-black/60 to-black/20 z-[11]"></div>
@@ -141,7 +140,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
         {{-- Stripe Transition Background --}}
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner3.jpeg') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/single-vision-banner3.avif') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/40 to-transparent z-[11]"></div>
@@ -240,7 +239,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
         {{-- Stripe Transition Background --}}
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens1.jpeg') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens1.avif') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/40 to-transparent z-[11]"></div>
@@ -265,7 +264,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                             Introducing Eye Mek Progressive—engineered for those who never slow down.
                         </p>
                         <p class="text-lg text-warm-200/80 leading-relaxed max-w-xl animate-slide-up" style="animation-delay: 0.6s">
-                            Featuring our signature <span class="text-logo-yellow font-bold uppercase tracking-wider">Drive X technology</span>, optimized for the road.
+                            Featuring our signature <span class="text-logo-yellow font-bold uppercase tracking-wider">Road Master technology</span>, optimized for the road.
                         </p>
                     </div>
                 </div>
@@ -279,7 +278,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
          class="absolute inset-0 z-10 transition-opacity duration-1000" style="display: none;">
         <div class="stripe-container absolute inset-0">
             @for($i=0; $i<5; $i++)
-            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens2.png') }}');"></div>
+            <div class="stripe-item" style="background-image: url('{{ asset('images/progressive-lens2.avif') }}');"></div>
             @endfor
         </div>
         <div class="absolute inset-0 bg-gradient-to-r from-black/95 via-black/40 to-transparent z-[11]"></div>
@@ -303,7 +302,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-8 pt-2">
                         <div class="flex items-center gap-3">
                             <span class="text-logo-yellow text-xl leading-none">🚗</span>
-                            <span class="text-sm font-bold tracking-wide uppercase">Drive X: <span class="text-warm-300 font-medium">Ultimate road clarity</span></span>
+                            <span class="text-sm font-bold tracking-wide uppercase">Road Master: <span class="text-warm-300 font-medium">Ultimate road clarity</span></span>
                         </div>
                         <div class="flex items-center gap-3">
                             <span class="text-logo-yellow text-xl leading-none">💻</span>
@@ -354,7 +353,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
 <section class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     {{-- Background Image (Round Segment) --}}
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/kryptok-bi-focal.jpg') }}" alt="Kryptok Bifocal KBF" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
+        <img src="{{ asset('images/kryptok-bi-focal1.avif') }}" alt="Kryptok Bifocal KBF" class="w-full h-full object-cover grayscale-[0.2] brightness-75">
         <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10"></div>
     </div>
 
@@ -385,7 +384,7 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
 <section class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     {{-- Background Image (Flat Top) --}}
     <div class="absolute inset-0 z-0">
-        <img src="{{ asset('images/bifocal-lens.jpeg') }}" alt="D-Bifocal DBF" class="w-full h-full object-cover">
+        <img src="{{ asset('images/bifocal-lens.avif') }}" alt="D-Bifocal DBF" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent z-10"></div>
     </div>
 
@@ -451,6 +450,10 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
     }
 </style>
 @endif
+
+
+
+
 
 
 
@@ -913,13 +916,136 @@ class="relative h-[65vh] min-h-[550px] overflow-hidden bg-warm-900 group">
             @endif
         </div>
 
+        {{-- Vision Area Comparison (Specific to Progressive) --}}
+        @if($product->slug === 'premium-progressive-rx')
+        <section class="section-padding bg-warm-50/50 relative overflow-hidden mt-16 rounded-[2.5rem]">
+            <div class="container-custom relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="text-brand-500 font-black uppercase text-xs tracking-[0.3em] mb-4">Precision Optics Comparative</h2>
+                    <h3 class="text-4xl md:text-5xl font-display font-black text-midnight leading-tight">
+                        Standard vs. <span class="text-logo-yellow">HD Digital.</span>
+                    </h3>
+                    <p class="text-warm-500 mt-4 max-w-2xl mx-auto text-lg">
+                        Experience the difference of free-form digital surfacing. Standard progressives limit your view—Eye Mek HD Digital expands it.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                    {{-- Standard Progressive Card --}}
+                    <div class="bg-white rounded-[2.5rem] p-8 border border-warm-200 shadow-xl group hover:border-warm-300 transition-all duration-500">
+                        <div class="flex items-center justify-between mb-8">
+                            <h4 class="text-lg font-bold text-warm-400 uppercase tracking-widest">Standard Progressive</h4>
+                            <span class="px-4 py-1.5 rounded-full bg-warm-100 text-warm-500 text-[10px] font-black uppercase">Legacy Technology</span>
+                        </div>
+                        
+                        <div class="relative aspect-video rounded-3xl overflow-hidden mb-8 border-4 border-warm-100 group-hover:border-warm-200 transition-colors">
+                            <img src="{{ asset('images/progressive-lens-sd.avif') }}" alt="Standard Progressive Vision Area" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-red-500/5 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            
+                            {{-- Legend Overlay --}}
+                            <div class="absolute bottom-4 left-4 right-4 flex justify-center gap-4">
+                                <div class="px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[8px] font-bold text-white uppercase tracking-tighter">Narrow Intermediate</div>
+                                <div class="px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[8px] font-bold text-white uppercase tracking-tighter">High Distortion</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-warm-50 border border-warm-100">
+                                <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center shrink-0">
+                                    <span class="text-red-500 text-xs">⚠️</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-warm-900 text-sm">Restricted Corridors</p>
+                                    <p class="text-xs text-warm-500 mt-1 leading-relaxed">Narrow passage between far and near zones causes constant head movement to find focus.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-warm-50 border border-warm-100">
+                                <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center shrink-0">
+                                    <span class="text-red-500 text-xs">⚠️</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-warm-900 text-sm">Peripheral Blur</p>
+                                    <p class="text-xs text-warm-500 mt-1 leading-relaxed">Unwanted astigmatism at the edges makes side vision extremely distorted and uncomfortable.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- HD Digital Progressive Card --}}
+                    <div class="bg-gradient-to-br from-brand-900 via-midnight to-black rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-logo-yellow/10 blur-[100px] rounded-full pointer-events-none"></div>
+                        
+                        <div class="flex items-center justify-between mb-8 relative z-10">
+                            <h4 class="text-lg font-bold text-white uppercase tracking-widest">HD Digital Progressive</h4>
+                            <span class="px-4 py-1.5 rounded-full bg-logo-yellow text-brand-900 text-[10px] font-black uppercase shadow-[0_0_20px_rgba(248,184,3,0.3)] animate-pulse">Eye Mek Optimized</span>
+                        </div>
+                        
+                        <div class="relative aspect-video rounded-3xl overflow-hidden mb-8 border-4 border-logo-yellow/30 group-hover:border-logo-yellow transition-colors relative z-10">
+                            <img src="{{ asset('images/progressive-lens-hd.avif') }}" alt="HD Digital Progressive Vision Area" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 scifi-scan-line opacity-20"></div>
+                            
+                            {{-- Legend Overlay --}}
+                            <div class="absolute bottom-4 left-4 right-4 flex justify-center gap-4">
+                                <div class="px-3 py-1 bg-logo-yellow/80 backdrop-blur-md rounded-full text-[8px] font-black text-brand-900 uppercase tracking-tighter shadow-lg">Extra Wide View</div>
+                                <div class="px-3 py-1 bg-logo-yellow/80 backdrop-blur-md rounded-full text-[8px] font-black text-brand-900 uppercase tracking-tighter shadow-lg">Zero Edge Distortion</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 relative z-10">
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 group-hover:bg-white/10 transition-colors">
+                                <div class="w-8 h-8 rounded-lg bg-logo-yellow/20 flex items-center justify-center shrink-0">
+                                    <span class="text-logo-yellow text-xs">✅</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-white text-sm uppercase tracking-wide">Panoramic Intermediate</p>
+                                    <p class="text-xs text-white/60 mt-1 leading-relaxed">Back-surface digital surfacing creates a 35% wider clear corridor for effortless screen use.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 group-hover:bg-white/10 transition-colors">
+                                <div class="w-8 h-8 rounded-lg bg-logo-yellow/20 flex items-center justify-center shrink-0">
+                                    <span class="text-logo-yellow text-xs">✅</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-white text-sm uppercase tracking-wide">Minimal 'Swim' Effect</p>
+                                    <p class="text-xs text-white/60 mt-1 leading-relaxed">Optimized power distribution virtually eliminates the swaying sensation found in legacy lenses.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-16 text-center">
+                    <div class="inline-flex flex-col md:flex-row items-center gap-8 p-8 rounded-[2rem] bg-white border border-warm-200 shadow-xl max-w-4xl mx-auto">
+                        <div class="flex-1 text-left">
+                            <p class="text-brand-500 font-black text-[10px] uppercase tracking-widest mb-2">The Eye Mek Promise</p>
+                            <h5 class="text-xl font-display font-bold text-midnight leading-snug">
+                                Precision that respects your eyes' natural movement.
+                            </h5>
+                            <p class="text-sm text-warm-500 mt-2">Our digital surfacing technology maps your unique prescription onto the lens surface point-by-point, giving you the most natural vision possible.</p>
+                        </div>
+                        <div class="flex-shrink-0 grid grid-cols-2 gap-3">
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 h-12 rounded-full bg-brand-50 flex items-center justify-center text-xl">♾️</div>
+                                <span class="text-[9px] font-black uppercase text-brand-400">Infinity Corridors</span>
+                            </div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="w-12 h-12 rounded-full bg-brand-50 flex items-center justify-center text-xl">🔬</div>
+                                <span class="text-[9px] font-black uppercase text-brand-400">Free-Form Tech</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        @endif
+
         {{-- Lifestyle Focused Banner (Specific to Single Vision) --}}
         @if($product->slug === 'single-vision-rx')
         </div> {{-- End container-custom from previous section --}}
         
         <section class="relative h-[55vh] min-h-[450px] overflow-hidden bg-warm-900 group my-20">
             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[12s] group-hover:scale-105" 
-                 style="background-image: url('{{ asset('images/single-vision-banner2.jpeg') }}');">
+                 style="background-image: url('{{ asset('images/single-vision-banner2.avif') }}');">
             </div>
             
             {{-- Dark Overlay for Readability --}}

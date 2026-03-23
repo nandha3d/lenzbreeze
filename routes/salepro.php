@@ -200,6 +200,7 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
         Route::post('products/purchase-return-history-data', 'purchaseReturnHistoryData');
 
         Route::post('importproduct', 'importProduct')->name('product.import');
+        Route::post('importproduct-chunk', 'importProductChunk')->name('product.import.chunk');
         Route::post('exportproduct', 'exportProduct')->name('product.export');
         Route::get('products/all-product-in-stock', 'allProductInStock')->name('product.allProductInStock');
         Route::get('products/show-all-product-online', 'showAllProductOnline')->name('product.showAllProductOnline');

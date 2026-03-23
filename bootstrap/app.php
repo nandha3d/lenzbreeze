@@ -19,8 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->prefix('admin')
                 ->group(base_path('routes/salepro.php'));
 
-            // Bind {product} parameter to WebProduct for admin routes
-            \Illuminate\Support\Facades\Route::model('product', \App\Models\WebProduct::class);
+            // Bind {web_product} parameter to WebProduct for admin routes
+            \Illuminate\Support\Facades\Route::model('web_product', \App\Models\WebProduct::class);
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {

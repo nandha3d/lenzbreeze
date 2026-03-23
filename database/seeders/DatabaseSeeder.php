@@ -170,8 +170,8 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 2, 'brand' => 'EYE MEK', 'name' => 'Eye Mek Premium Progressive RX',
                 'slug' => 'premium-progressive-rx', 'tagline' => 'Seamless Sight. Absolute Protection.',
-                'image' => 'images/progressive-lens3.jpeg',
-                'gallery' => ['images/progressive-lens3.jpeg', 'images/products/premium-progressive-rx-tech.jpg'],
+                'image' => 'images/progressive-lens3.avif',
+                'gallery' => ['images/progressive-lens3.avif', 'images/products/premium-progressive-rx-tech.avif'],
                 'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">High-Performance Optics. 🚀</span> EYE MEK Progressive line, the inclusion of Drive X and HD Digital technology moves this into the "High-Performance" category. Modern progressives often struggle with peripheral "swim" or glare while driving; EYE MEK highlights how these specific pain points are solved for a seamless experience.',
                 'features' => [
                     'Drive X: Specialized filter to reduce night-time glare and sharpen road details.',
@@ -182,15 +182,15 @@ class DatabaseSeeder extends Seeder
                 'specifications' => [
                     'Material' => 'CR-39 / High Index',
                     'variants' => [
-                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.jpg', 'details' => $data_cr39],
-                        ['name' => 'Uncoated', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.jpg', 'details' => array_merge($data_cr39, ['summary' => 'Pure lens material without external treatments.', 'details' => ['specs' => [['label' => 'Coating', 'value' => 'None']]]])],
-                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.jpg', 'details' => $data_hard_coat],
-                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.jpg', 'details' => array_merge($data_photochromic, ['summary' => 'Rapid darkening in Grey or Brown for 2-in-1 indoor/outdoor use.']), 'sub_variants' => ['Photo Grey', 'Photo Brown']],
-                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.jpg', 'details' => $data_blue_cut],
-                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'image' => 'images/variants/hd.jpg', 'details' => array_merge($data_hd_digital, ['summary' => 'Wider corridors and reduced "swim effect" for faster adaptation.'])],
-                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'image' => 'images/variants/polarized.jpg', 'details' => $data_polarized],
-                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.jpg', 'details' => array_merge($data_hmc, ['summary' => 'Choose Green for a natural look or Blue for a modern, tech-focused aesthetic.']), 'sub_variants' => ['Emerald Green ARC', 'Sapphire Blue ARC']],
-                        ['name' => 'Drive x', 'icon_type' => 'drive', 'image' => 'images/variants/hmc.jpg', 'details' => array_merge($data_hmc, ['name' => 'Drive x', 'summary' => 'Specialized filter to reduce night-time glare and sharpen road details.'])],
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.avif', 'details' => $data_cr39],
+                        ['name' => 'Uncoated', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.avif', 'details' => array_merge($data_cr39, ['summary' => 'Pure lens material without external treatments.', 'details' => ['specs' => [['label' => 'Coating', 'value' => 'None']]]])],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.avif', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.avif', 'details' => array_merge($data_photochromic, ['summary' => 'Rapid darkening in Grey or Brown for 2-in-1 indoor/outdoor use.']), 'sub_variants' => ['Photo Grey', 'Photo Brown']],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.avif', 'details' => $data_blue_cut],
+                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'image' => 'images/variants/hd.avif', 'details' => array_merge($data_hd_digital, ['summary' => 'Wider corridors and reduced "swim effect" for faster adaptation.'])],
+                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'image' => 'images/variants/polarized.avif', 'details' => $data_polarized],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.avif', 'details' => array_merge($data_hmc, ['summary' => 'Choose Green for a natural look or Blue for a modern, tech-focused aesthetic.']), 'sub_variants' => ['Emerald Green ARC', 'Sapphire Blue ARC']],
+                        ['name' => 'Drive x', 'icon_type' => 'drive', 'image' => 'images/variants/hmc.avif', 'details' => array_merge($data_hmc, ['name' => 'Drive x', 'summary' => 'Specialized filter to reduce night-time glare and sharpen road details.'])],
                     ]
                 ],
                 'technologies' => ['Progressive', 'Photochromic', 'Blue Cut', 'Polarized', 'Anti-Glare'],
@@ -200,7 +200,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 1, 'brand' => 'EYE MEK', 'name' => 'Eye Mek Single Vision',
                 'slug' => 'single-vision-rx', 'tagline' => 'Your Vision, Upgraded.',
-                'image' => 'images/single-vision.jpeg',
+                'image' => 'images/single-vision.avif',
                 'description' => '<span class="block text-xl font-bold text-brand-600 mb-3">Welcome to the next level of visual clarity.</span> EYE MEK isn\'t just a lens; it’s a premium vision solution tailored to your lifestyle. Whether you\'re navigating a digital workspace, driving under the sun, or looking for everyday durability, we have the perfect fit.<br><br>Here is a breakdown of the EYE MEK Single Vision (SV) collection, crafted for those who refuse to compromise on quality.',
                 'features' => [
                     'Ultra-lightweight & crystal clear.',
@@ -214,13 +214,13 @@ class DatabaseSeeder extends Seeder
                 'specifications' => [
                     'Material' => 'CR-39 / Polycarbonate',
                     'variants' => [
-                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.jpg', 'details' => $data_cr39],
-                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.jpg', 'details' => $data_hard_coat],
-                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.jpg', 'details' => $data_photochromic, 'sub_variants' => ['Photo Grey', 'Photo Brown']],
-                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.jpg', 'details' => $data_blue_cut],
-                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'image' => 'images/variants/hd.jpg', 'details' => $data_hd_digital],
-                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'image' => 'images/variants/polarized.jpg', 'details' => $data_polarized],
-                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.jpg', 'details' => $data_hmc],
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.avif', 'details' => $data_cr39],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.avif', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.avif', 'details' => $data_photochromic, 'sub_variants' => ['Photo Grey', 'Photo Brown']],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.avif', 'details' => $data_blue_cut],
+                        ['name' => 'HD digital', 'icon_type' => 'blue_cut', 'image' => 'images/variants/hd.avif', 'details' => $data_hd_digital],
+                        ['name' => 'Polarized', 'icon_type' => 'polarized', 'image' => 'images/variants/polarized.avif', 'details' => $data_polarized],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.avif', 'details' => $data_hmc],
                     ]
                 ],
                 'technologies' => ['Anti-Glare', 'Blue Cut', 'Polarized', 'Photochromic'],
@@ -230,7 +230,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'Kryptok Bifocal (KBF)',
                 'slug' => 'kryptok-bifocals', 'tagline' => 'The Bifocal You Know.',
-                'image' => 'images/kryptok-bi-focal1.jpg',
+                'image' => 'images/kryptok-bi-focal1.avif',
                 'description' => 'See the world clearly—from the book in your hand to the view on the horizon. EYE MEK KBF lenses offer a seamless transition for your daily needs. Choose our Grey or Brown Photochromic options for effortless indoor-to-outdoor comfort. It’s the bifocal you know, with the premium protection you deserve.',
                 'features' => [
                     'Kryptok Design: Distinct segments for instant near-and-far focus.',
@@ -243,11 +243,11 @@ class DatabaseSeeder extends Seeder
                 'specifications' => [
                     'Material' => 'CR-39 White',
                     'variants' => [
-                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.jpg', 'details' => $data_cr39],
-                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.jpg', 'details' => $data_hard_coat],
-                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.jpg', 'details' => $data_photochromic],
-                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.jpg', 'details' => $data_blue_cut],
-                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.jpg', 'details' => $data_hmc],
+                        ['name' => 'CR 39 white', 'icon_type' => 'clear', 'image' => 'images/variants/cr-39.avif', 'details' => $data_cr39],
+                        ['name' => 'Hard Coat', 'icon_type' => 'clear', 'image' => 'images/variants/hard-coat.avif', 'details' => $data_hard_coat],
+                        ['name' => 'Photochromic', 'icon_type' => 'photochromic', 'image' => 'images/variants/photochromic.avif', 'details' => $data_photochromic],
+                        ['name' => 'Blue cut', 'icon_type' => 'blue_cut', 'image' => 'images/variants/blu-cut.avif', 'details' => $data_blue_cut],
+                        ['name' => 'HMC (Antiglare)', 'icon_type' => 'antiglare', 'image' => 'images/variants/hmc.avif', 'details' => $data_hmc],
                     ]
                 ],
                 'technologies' => ['Bifocal', 'Photochromic', 'Anti-Glare'],
@@ -256,7 +256,7 @@ class DatabaseSeeder extends Seeder
             [
                 'category_id' => 7, 'brand' => 'EYE MEK', 'name' => 'D-Bifocal / Flat Top BF (DBF)',
                 'slug' => 'd-bifocal-lens', 'tagline' => 'Wide View. Sharp Focus.',
-                'image' => 'images/bifocal-lens.jpeg',
+                'image' => 'images/bifocal-lens.avif',
                 'description' => 'Tired of narrow reading zones? Step into the wide-angle view of EYE MEK DBF. Our Flat Top design provides an immediate, easy-to-find segment for near-vision, making it the perfect companion for everything from your morning newspaper to your evening hobbies. Lightweight, durable, and crystal clear—it’s the classic bifocal, perfected by EYE MEK.',
                 'features' => [
                     'The "Easy-Adapt" Segment: The flat top makes it incredibly easy for first-time bifocal wearers to find their "sweet spot" for reading.',

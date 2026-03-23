@@ -83,7 +83,7 @@ class BillerController extends Controller
 
         $mailSetting = MailSetting::latest()->first();
         $message = $this->mailAction($lims_biller_data, $mailSetting);
-        return redirect('biller')->with('message', $message);
+        return redirect('admin/biller')->with('message', $message);
 
     }
 
@@ -139,7 +139,7 @@ class BillerController extends Controller
 
         $lims_biller_data->update($input);
         $this->cacheForget('biller_list');
-        return redirect('biller')->with('message','Data updated successfully');
+        return redirect('admin/biller')->with('message','Data updated successfully');
     }
 
     public function importBiller(Request $request)
@@ -189,7 +189,7 @@ class BillerController extends Controller
             $message = $this->mailAction($data, $mailSetting);
         }
         $this->cacheForget('biller_list');
-        return redirect('biller')->with('message', $message);
+        return redirect('admin/biller')->with('message', $message);
     }
 
     protected function mailAction($data, $mailSetting)
@@ -235,6 +235,6 @@ class BillerController extends Controller
         $lims_biller_data->is_active = false;
         $lims_biller_data->save();
         $this->cacheForget('biller_list');
-        return redirect('biller')->with('not_permitted','Data deleted successfully');
+        return redirect('admin/biller')->with('not_permitted','Data deleted successfully');
     }
 }

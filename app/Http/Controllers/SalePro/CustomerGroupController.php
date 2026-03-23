@@ -40,7 +40,7 @@ class CustomerGroupController extends Controller
         $lims_customer_group_data['is_active'] = true;
         CustomerGroup::create($lims_customer_group_data);
         $this->cacheForget('customer_group_list');
-        return redirect('customer_group')->with('message', 'Data inserted successfully');
+        return redirect('admin/customer_group')->with('message', 'Data inserted successfully');
     }
 
     public function edit($id)
@@ -65,7 +65,7 @@ class CustomerGroupController extends Controller
 
         $lims_customer_group_data->update($input);
         $this->cacheForget('customer_group_list');
-        return redirect('customer_group')->with('message', 'Data updated successfully');
+        return redirect('admin/customer_group')->with('message', 'Data updated successfully');
     }
 
     public function importCustomerGroup(Request $request)
@@ -105,7 +105,7 @@ class CustomerGroupController extends Controller
            $customer_group->save();
         }
         $this->cacheForget('customer_group_list');
-        return redirect('customer_group')->with('message', 'Customer Group imported successfully');
+        return redirect('admin/customer_group')->with('message', 'Customer Group imported successfully');
 
     }
 
@@ -152,7 +152,7 @@ class CustomerGroupController extends Controller
 
         $this->cacheForget('customer_group_list');
 
-        return redirect('customer_group')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/customer_group')->with('not_permitted', 'Data deleted successfully');
     }
 
     public function customerGroupAll()

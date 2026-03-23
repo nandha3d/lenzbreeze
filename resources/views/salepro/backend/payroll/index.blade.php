@@ -280,7 +280,7 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible',
                 },
                 action: function(e, dt, button, config) {
@@ -294,7 +294,7 @@
                 extend: 'excel',
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible',
                 },
                 action: function(e, dt, button, config) {
@@ -308,7 +308,7 @@
                 extend: 'csv',
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible',
                 },
                 action: function(e, dt, button, config) {
@@ -322,7 +322,7 @@
                 extend: 'print',
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
+                    columns: ':visible:not(.not-exported)',
                     rows: ':visible',
                 },
                 action: function(e, dt, button, config) {
@@ -382,7 +382,7 @@
             $( dt_selector.column( 5 ).footer() ).html(dt_selector.cells( rows, 5, { page: 'current' } ).data().sum().toFixed({{$general_setting->decimal}}));
         }
         else {
-            $( dt_selector.column( 5 ).footer() ).html(dt_selector.cells( rows, 5, { page: 'current' } ).data().sum().toFixed({{$general_setting->decimal}}));
+            $( dt_selector.column( 5 ).footer() ).html(dt_selector.column( 5, {page:'current'} ).data().sum().toFixed({{$general_setting->decimal}}));
         }
     }
 </script>

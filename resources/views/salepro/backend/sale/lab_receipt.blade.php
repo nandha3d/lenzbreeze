@@ -148,6 +148,14 @@
                     $product_type = \App\Models\ProductType::find($lims_product_data->product_type_id);
 
                 ?>
+                <div style="position: relative;">
+                @if($key == 0 && $warrantyQr)
+                <div style="position: absolute; right: -15px; top: 0; text-align: center; width: 90px;">
+                    <img src="{{$warrantyQr}}" style="width: 70px; height: 70px;" />
+                    <p style="font-size: 8px; margin: 0; font-weight: bold; line-height: 1;">{{$warranty->serial_number}}</p>
+                    <p style="font-size: 7px; margin: 0; line-height: 1;">Scan to Verify Warranty</p>
+                </div>
+                @endif
                 <table class="table-data" style="margin-top: 15px">
                 <tbody>
                 <tr>
@@ -168,7 +176,7 @@
 
                 <tr>
                     <td colspan="3">
-                        <span>SPH: {{$product_sale_data->sph}} </span>
+                        <span> SPH: {{$product_sale_data->sph}} </span>
                         <span style="margin: 0px 10px">CYL: {{$product_sale_data->cyl}} </span>
                         <span>AXIS: {{$product_sale_data->axis}}</span>
                         <span style="margin-left:5px">{{$product_sale_data->lr}} </span>
@@ -178,27 +186,19 @@
                 <tr>
                     <td colspan="3">
                         <span> TYPE: {{$product_type->name}}</span>
-                        {{-- <span style="margin:0px 10px"> BASE: {{$product_sale_data->base}} </span> --}}
                         <span style="margin-left:5px"> ADD: {{$product_sale_data->addition}}  </span>
                     </td>
                 </tr>
 
                 </tbody>
             </table>
+            </div>
 
                 @if(count($lims_product_sale_data)-1 != $key)
                     <br>
                 @endif
 
                 @endforeach
-
-            <!-- <tfoot> -->
-
-
-
-
-
-
 
     </div>
 </div>

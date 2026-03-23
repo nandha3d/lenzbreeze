@@ -154,7 +154,7 @@
                 <a id="toggle-btn" href="#" class="menu-btn"><i class="dripicons-menu"> </i></a>
                 <span class="brand-big">
                     @if($general_settings->site_logo)
-                        <img src="{{asset('/images/logo/logo.png')}}" width="50">
+                        <img src="{{asset('/images/logo/logo.avif')}}" width="50">
                         &nbsp; &nbsp;
                     @endif
                     <h1 class="d-inline">{{$general_settings->site_title ?? "No title"}}</h1></span>
@@ -369,7 +369,7 @@
                             <a href="#Core_hr" aria-expanded="false" data-toggle="collapse">
                                 <i class="dripicons-briefcase"></i><span>{{__('Core HR')}}</span>
                             </a>
-                        @endcan
+                        @endif
 
                         <ul id="Core_hr" class="collapse list-unstyled">
 
@@ -659,7 +659,7 @@
                             <a href="#Training" aria-expanded="false" data-toggle="collapse"> <i
                                         class="dripicons-trophy"></i><span>{{trans('file.Training')}}</span>
                             </a>
-                        @endcan
+                        @endif
                         <ul id="Training" class="collapse list-unstyled ">
                             @can('view-training')
                                 <li id="training_list"><a
@@ -687,7 +687,7 @@
                             <a href="#Events_Meetings" aria-expanded="false" data-toggle="collapse"> <i
                                         class="dripicons-to-do"></i><span>{{trans('file.Events')}} & {{trans('file.Meetings')}}</span>
                             </a>
-                        @endcan
+                        @endif
                         <ul id="Events_Meetings" class="collapse list-unstyled ">
                             @can('view-event')
                                 <li id="events"><a
@@ -754,7 +754,7 @@
                                 <a href="#Finance" aria-expanded="false" data-toggle="collapse">
                                     <i class="dripicons-graph-pie"></i><span>{{trans('file.Finance')}}</span>
                                 </a>
-                            @endcan
+                            @endif
 
                             <ul id="Finance" class="collapse list-unstyled ">
                                 @can('view-account')
@@ -807,7 +807,7 @@
                                 <a href="#assets" aria-expanded="false" data-toggle="collapse"> <i
                                             class="dripicons-box"></i><span>{{trans(('file.Assets'))}}</span>
                                 </a>
-                            @endcan
+                            @endif
                             <ul id="assets" class="collapse list-unstyled ">
                                 @can('category')
                                     <li id="assets_category"><a
@@ -830,7 +830,7 @@
                                 <a href="#file_manager" aria-expanded="false" data-toggle="collapse"> <i
                                             class="dripicons-archive"></i><span>{{__('File Manager')}}</span>
                                 </a>
-                            @endcan
+                            @endif
 
                             <ul id="file_manager" class="collapse list-unstyled ">
 

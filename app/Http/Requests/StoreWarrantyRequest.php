@@ -45,7 +45,7 @@ class StoreWarrantyRequest extends FormRequest
             'batch_number'       => 'nullable|string|max:50',
 
             // Sale
-            'retailer_id'        => 'required|exists:retailers,id',
+            'store_id'           => 'required|exists:salepro.customers,id',
             'purchase_date'      => 'required|date',
             'warranty_months'    => 'required|in:6,12,24',
 
@@ -60,8 +60,8 @@ class StoreWarrantyRequest extends FormRequest
             'serial_number.unique'      => 'This serial number is already registered.',
             'customer_phone.required'   => 'Customer phone number is required.',
             'customer_address.required' => 'Customer address is required.',
-            'retailer_id.required'      => 'Please select a retailer.',
-            'retailer_id.exists'        => 'Selected retailer does not exist.',
+            'store_id.required'      => 'Please select a retail store.',
+            'store_id.exists'        => 'Selected retail store does not exist.',
             'lens_type.required'        => 'Please select a lens type.',
             'lens_coating.required'     => 'Please select a lens coating.',
             'warranty_months.required'  => 'Please select warranty duration.',

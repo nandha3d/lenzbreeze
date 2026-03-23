@@ -39,9 +39,9 @@
             </div>
         </div>
 
-        {{-- Customer Details --}}
+        {{-- End User Details --}}
         <div class="bg-white rounded-xl shadow-sm border border-warm-200 p-6">
-            <h2 class="text-lg font-bold text-warm-800 mb-4">👤 Customer Details</h2>
+            <h2 class="text-lg font-bold text-warm-800 mb-4">👤 End User Details (Customer)</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-warm-700">Full Name <span class="text-red-500">*</span></label>
@@ -58,7 +58,7 @@
                     <input type="email" name="customer_email" value="{{ old('customer_email', $warranty->customer_email ?? '') }}" class="w-full px-4 py-2.5 rounded-lg border border-warm-300 focus:ring-2 focus:ring-accent-500 outline-none">
                 </div>
                 <div class="space-y-2">
-                    <label class="block text-sm font-semibold text-warm-700">Customer Photo</label>
+                    <label class="block text-sm font-semibold text-warm-700">End User Photo</label>
                     <div class="flex items-center gap-4">
                         <input type="file" name="customer_photo" accept="image/*" @change="photoPreview = URL.createObjectURL($event.target.files[0])" class="w-full text-sm text-warm-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-accent-50 file:text-accent-700 hover:file:bg-accent-100">
                         <template x-if="photoPreview"><img :src="photoPreview" class="w-12 h-12 rounded-full object-cover border-2 border-warm-200"></template>
@@ -149,14 +149,14 @@
             <h2 class="text-lg font-bold text-warm-800 mb-4">📅 Sale & Warranty</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div class="space-y-2">
-                    <label class="block text-sm font-semibold text-warm-700">Retailer <span class="text-red-500">*</span></label>
-                    <select name="retailer_id" required class="w-full px-4 py-2.5 rounded-lg border border-warm-300 focus:ring-2 focus:ring-accent-500 outline-none">
-                        <option value="">Select Retailer...</option>
-                        @foreach($retailers as $r)
-                            <option value="{{ $r->id }}" {{ old('retailer_id', $warranty->retailer_id ?? '') == $r->id ? 'selected' : '' }}>{{ $r->name }} ({{ $r->retailer_code }})</option>
+                    <label class="block text-sm font-semibold text-warm-700">Retail Store <span class="text-red-500">*</span></label>
+                    <select name="store_id" required class="w-full px-4 py-2.5 rounded-lg border border-warm-300 focus:ring-2 focus:ring-accent-500 outline-none">
+                        <option value="">Select Retail Store...</option>
+                        @foreach($stores as $s)
+                            <option value="{{ $s->id }}" {{ old('store_id', $warranty->store_id ?? '') == $s->id ? 'selected' : '' }}>{{ $s->name }} ({{ $s->customer_group_id }})</option>
                         @endforeach
                     </select>
-                    @error('retailer_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('store_id') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-warm-700">Purchase Date <span class="text-red-500">*</span></label>
@@ -255,10 +255,17 @@ function fetchOrder() {
         btn.disabled = false;
         
         if(data.found) {
-            document.querySelector('[name="customer_name"]').value = data.customer_name;
-            document.querySelector('[name="customer_phone"]').value = data.customer_phone;
-            document.querySelector('[name="customer_email"]').value = data.customer_email;
-            document.querySelector('[name="customer_address"]').value = data.customer_address;
+            // Map to Store
+            // Map to Store
+            document.querySelector('[name="store_id"]').value = data.store_id || "";
+            
+            // Auto-fill End User if available (captured from SalePro)
+            document.querySelector('[name="customer_name"]').value = data.end_user_name || "";
+            document.querySelector('[name="customer_phone"]').value = data.end_user_phone || "";
+            document.querySelector('[name="customer_email"]').value = data.end_user_email || "";
+            document.querySelector('[name="customer_address"]').value = data.end_user_address || "";
+            
+            // Product info
             document.querySelector('[name="product_name"]').value = data.product_name;
             
             // Auto-dispatch alpine reactive event for purchaseDate

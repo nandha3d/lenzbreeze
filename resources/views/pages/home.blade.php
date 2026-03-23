@@ -13,19 +13,19 @@
             { 
                 title: 'See the World with <span class=\'text-accent-300\'>Blue Cut Clarity</span>', 
                 tagline: 'Ultimate protection for the digital age. Our high-performance blue cut lenses shield your eyes from harmful digital strain.',
-                image: '{{ asset('images/bluecut.jpeg') }}',
+                image: '{{ asset('images/bluecut.avif') }}',
                 badge: 'Digital Protection'
             },
             { 
-                title: 'Precision <span class=\'text-accent-300\'>D-Bifocal Vision</span>', 
-                tagline: 'Seamlessly transition between near and distant vision with our premium flat-top segment bifocals.',
-                image: '{{ asset('images/d-bifocal.jpeg') }}',
+                title: 'Premium <span class=\'text-accent-300\'>Road Master Progressive</span>', 
+                tagline: 'Experience seamless vision at every distance with our signature Road Master technology. Optimized for clarity on the road and precision in every detail.',
+                image: '{{ asset('images/progressive-lens3.avif') }}',
                 badge: 'Multi-Distance Vision'
             },
             { 
                 title: 'Refined <span class=\'text-accent-300\'>Single Vision</span>', 
                 tagline: 'Experience sharp, distortion-free vision tailored exactly to your prescription using advanced manufacturing.',
-                image: '{{ asset('images/single-vision.jpeg') }}',
+                image: '{{ asset('images/single-vision.avif') }}',
                 badge: 'Custom Precision',
                 alt: 'Lenz Breeze Single Vision Optical Lens'
             }
@@ -129,7 +129,7 @@
     <div class="container-custom py-8">
         <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="Eye Mek Premium Optical Lens Logo" width="150" height="48" class="h-12 w-auto object-contain">
+                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).avif') }}" alt="Eye Mek Premium Optical Lens Logo" width="150" height="48" class="h-12 w-auto object-contain">
                 <div class="pl-3 border-l border-warm-200">
                     <span class="font-display font-bold text-xl text-brand-500 uppercase tracking-tight">Eye Mek</span>
                     <span class="block text-xs text-warm-400">Premium Optical Lenses</span>

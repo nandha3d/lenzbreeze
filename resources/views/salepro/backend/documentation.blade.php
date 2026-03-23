@@ -126,7 +126,7 @@
                     You need to accept and continue for going to the next step.
                 </li>
             </ul>
-            <img alt="" src="read_me/assets/images/step1.png">
+            <img alt="" src="read_me/assets/images/step1.avif">
             <h2><strong>Step 2</strong></h2>
             <ul>
                 <li>
@@ -158,7 +158,7 @@
                     Click on submit.
                 </li>
             </ul>
-            <img alt="" src="read_me/assets/images/step3.png">
+            <img alt="" src="read_me/assets/images/step3.avif">
             <h2><strong>Step 4</strong></h2>
             <ul>
                 <li>Congratulations! You have successfully installed {{$general_setting->site_title}}.<br>
@@ -185,16 +185,16 @@
             <p>Imagine you have an existing WooCommerce website. Now you want to use salepro and also want to synchronize your WooCommerce website with SalePro. If you want to do so then this is the ultimate solution you are looking for. SalePro WooCommerce addon comes with complete synchronization with your WooCommerce website. You can synchronize your orders from WooCommerce to SalePro. Also you can can synchronize products, categories from SalePro to WooCommerce. And you have to map your Salepro taxes with WooCommerce taxes.</p>
             <p>To purchase this addon go to the addon list from left sidebar and click on the Buy Now button.</p>
             <p>
-                <img alt="" src="read_me/assets/images/woocommerce1.png">
+                <img alt="" src="read_me/assets/images/woocommerce1.avif">
             </p>
             <p>After purchasing this addon from codecanyon click on the install button. Type your purchase key which you will get from the envato during the purchase. Then click on the submit button. If your purchase key is correct then the addon will be installed automatically and you will see a new option on the left side bar named WooCommerce.</p>
             <p>
                 <img alt="" src="read_me/assets/images/woocommerce2.png">
-                <img alt="" src="read_me/assets/images/woocommerce3.png">
+                <img alt="" src="read_me/assets/images/woocommerce3.avif">
             </p>
             <p>If you go to the WooCommerce section you will get all the necessary options to sync your Wocommerce categories, products, taxes and orders. You can also sync products from SalePro to WooCommerce from the product create or edit page.</p>
             <p>
-                <img alt="" src="read_me/assets/images/woocommerce4.png">
+                <img alt="" src="read_me/assets/images/woocommerce4.avif">
             </p>
             <p>When we released the update you can update it automatically from the addon list page.</p>
             <p>
@@ -220,7 +220,7 @@
             <h2><strong>AUTOMATIC UPDATE</strong></h2>
             <p>We released automatic update feature in version 3.8.0. So if you want this feature your software version must be at least 3.8.0. Any admin/owner user will be notified on the dashboard when the update will be released.</p>
             <p>
-                <img alt="" src="read_me/assets/images/update8.png">
+                <img alt="" src="read_me/assets/images/update8.avif">
             </p>
             <p>If your software version is less than 3.8.0 then follow the following procedure to update the software. Once you do it after that you will receive update notification on the dashboard as we described earlier.</p>
             <h2><strong>UPDATE with Existing Data</strong></h2>s
@@ -234,7 +234,7 @@
             <p><strong>Please follow the following spanshots carefully to merge database:</strong></p>
             <p>Open the software.</p>
             <p>
-                <img alt="" src="read_me/assets/images/update1.png">
+                <img alt="" src="read_me/assets/images/update1.avif">
             </p>
             <p>Select your source and target database and click compare now.</p>
             <p>
@@ -242,11 +242,11 @@
             </p>
             <p>After comparing successfully two database click ok.</p>
             <p>
-                <img alt="" src="read_me/assets/images/update3.png">
+                <img alt="" src="read_me/assets/images/update3.avif">
             </p>
             <p>Then select the checkbox and click Diployment Wizard.</p>
             <p>
-                <img alt="" src="read_me/assets/images/update4.png">
+                <img alt="" src="read_me/assets/images/update4.avif">
             </p>
             <p>Uncheck the Recompare after deployment checkbox and click next.</p>
             <p>
@@ -258,7 +258,7 @@
             </p>
             <p>Click Ok.</p>
             <p>
-                <img alt="" src="read_me/assets/images/update7.png">
+                <img alt="" src="read_me/assets/images/update7.avif">
             </p>
             <p>Thats all! You have just updated the database. Now follow step 4 as we described earlier.</p>
             <h2><strong>UPDATE without Existing Data</strong></h2>
@@ -278,7 +278,7 @@
                 First you have to install your printer driver. Then go to settings and select Devices.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/pos_printer1.png">
+                <img alt="" src="read_me/assets/images/pos_printer1.avif">
             </p>
             <p>
                 Then go to Devices and printers.
@@ -290,13 +290,13 @@
                 Set your POS printer as default printer.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/pos_printer3.png">
+                <img alt="" src="read_me/assets/images/pos_printer3.avif">
             </p>
             <p>
                 Then go to Printing preferences.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/pos_printer4.png">
+                <img alt="" src="read_me/assets/images/pos_printer4.avif">
             </p>
             <p>
                 Then go to Advanced.
@@ -314,13 +314,13 @@
                 After that go to printer properties.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/pos_printer7.png">
+                <img alt="" src="read_me/assets/images/pos_printer7.avif">
             </p>
             <p>
                 Go to device settings and select 3rd option of auto.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/pos_printer8.png">
+                <img alt="" src="read_me/assets/images/pos_printer8.avif">
             </p>
             <p>
                 Please make sure you choose correct paper size(3rd option) when you want to print the invoice.
@@ -338,7 +338,7 @@
                 When you install this software it will come with some dummy data. To delete all these dummy data click on your username on the top navigation bar. Then you will see an option named Empty Database. Click on that and all the dummy data will be deleted automatically.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/empty_database1.png">
+                <img alt="" src="read_me/assets/images/empty_database1.avif">
             </p>
             <p>
                 <img alt="" src="read_me/assets/images/empty_database2.png">
@@ -353,7 +353,7 @@
                 To add mail functionality to your inventory you have to setup mail server first. To do this go to <strong>Mail Setting</strong> under <strong>Setting</strong> module. You have to fill up the following information.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/mail1.png">
+                <img alt="" src="read_me/assets/images/mail1.avif">
             </p>
         </section>
         <section id="dashboard">
@@ -365,11 +365,11 @@
                 We have a gorgeous looking dashboard for our customer from where they get Revenue, Sale Return, Purchase Return and Profit information of today / last 7 days / current month / current year at a glance by one click.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/dashboard1.png">
+                <img alt="" src="read_me/assets/images/dashboard1.avif">
             </p>
             <p>You will get information of your cash flow that means how much money you are earning and how much money you are spending from this line chart.</p>
             <p>
-                <img alt="" src="read_me/assets/images/dashboard4.png">
+                <img alt="" src="read_me/assets/images/dashboard4.avif">
             </p>
             <p>You also aware of your current month's <strong>purchase</strong>, <strong>revenue</strong> <strong>expenditure</strong> froms this doughnut chart.</p>
             <p>
@@ -379,7 +379,7 @@
             <p><img alt="" src="read_me/assets/images/dashboard2.png"></p>
             <p>From <strong>Dashboard</strong> You will also get recent transaction(sale, purchase, quotation, payment) and top 5 best selling product of current month and current year.
             </p>
-            <p><img alt="" src="read_me/assets/images/dashboard3.png"></p>
+            <p><img alt="" src="read_me/assets/images/dashboard3.avif"></p>
         </section>
         <section id="product">
             <div class="page-header">
@@ -389,12 +389,12 @@
             <h2><strong>Category</strong></h2>
             <p>You can add, edit and delete product category. You can also import category from CSV file and export table data to PDF, Excel, CSV. Also you can print data from table.</p>
             <p>
-                <img alt="" src="read_me/assets/images/category1.png">&nbsp;&nbsp;
+                <img alt="" src="read_me/assets/images/category1.avif">&nbsp;&nbsp;
                 <img alt="" src="read_me/assets/images/category2.png">
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/category3.png">&nbsp;&nbsp;
-                <img alt="" src="read_me/assets/images/category4.png">
+                <img alt="" src="read_me/assets/images/category3.avif">&nbsp;&nbsp;
+                <img alt="" src="read_me/assets/images/category4.avif">
             </p>
             <p>
                 If you dont want to export any column you can do this by clicking Column Visibility button. From here you can choose column to remove from table.
@@ -415,13 +415,13 @@
                 If you want to search anything from the table you can simply type the word in the search box.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/category7.png">
+                <img alt="" src="read_me/assets/images/category7.avif">
             </p>
             <p>
                 You can also control the pagination from <strong>Show</strong> dropdown.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/category8.png">
+                <img alt="" src="read_me/assets/images/category8.avif">
             </p>
             <h2><strong>Product</strong></h2>
             <p>In product section you will just add general information of a product. <strong>To add stock you have to purchase that product.</strong> You can create three types of product in {{$general_setting->site_title}}.</p>
@@ -433,11 +433,11 @@
             </ul>
             <p>You can add, edit and delete product. You can import product from CSV. <strong>You must follow the instruction to import data from CSV</strong>. To get better understanding you can download the sample file.</p>
             <p>
-                <img alt="" src="read_me/assets/images/product1.png">&nbsp;&nbsp;
+                <img alt="" src="read_me/assets/images/product1.avif">&nbsp;&nbsp;
                 <img alt="" src="read_me/assets/images/product2.png">
             </p>
             <p>You can sort table data according to column</p>
-            <p><img alt="" src="read_me/assets/images/product3.png"></p>
+            <p><img alt="" src="read_me/assets/images/product3.avif"></p>
             <p>And you can search, export and print data from table that we discussed earlier in greater detail.</p>
         </section>
         <section id="weight-scale-machine">
@@ -446,7 +446,7 @@
                 <hr class="notop">
             </div>
             <p>{{$general_setting->site_title}} is compatible with weight scale machine. But you have to follow the rules strictly. In a weight scale machine the machine will give you a label of 13 digits barcode. Consider the following picture: </p>
-            <p><img alt="" src="read_me/assets/images/weight_machine1.jpeg"></p>
+            <p><img alt="" src="read_me/assets/images/weight_machine1.avif"></p>
             <p>Here first 7 digits are the product code which must be similar with the product code of {{$general_setting->site_title}}. Next 5 digits contains weight and the last digit is a random number. Whenever you put a product on a weight scale machine it will generate this type of label automatically. Then all you have to do is scan this label. Product's info and weight will be calculated automatically with {{$general_setting->site_title}}. But the product code must be same both for {{$general_setting->site_title}} and weight scale machine.</p>
             <p><img alt="" src="read_me/assets/images/weight_machine2.jpeg"></p>
         </section>
@@ -472,16 +472,16 @@
             <h2><strong>Add Purchase</strong></h2>
             <p>You can create purchase in Purchase module. <strong>By creating purchase the stock quantity of product will be increased.</strong> .There are three purchase status: Recieved, Partial, Pending, Orderd. You can add product to order table by typing or scanning barcode of product</p>
             <p>
-                <img alt="" src="read_me/assets/images/purchase1.png">&nbsp;&nbsp;
+                <img alt="" src="read_me/assets/images/purchase1.avif">&nbsp;&nbsp;
                 <img alt="" src="read_me/assets/images/purchase2.png">
             </p>
             <p>You can also edit product info from order table.</p>
-            <p><img alt="" src="read_me/assets/images/purchase3.png"></p>
+            <p><img alt="" src="read_me/assets/images/purchase3.avif"></p>
             <p>After creating purchase you will be redirected to purchase index page. You will get summary of purchase from table. To get details you just have to click in the table row.</p>
-            <p><img alt="" src="read_me/assets/images/purchase4.png"></p>
+            <p><img alt="" src="read_me/assets/images/purchase4.avif"></p>
             <h2><strong>Import Purchase</strong></h2>
             <p>You can import sale from CSV.<strong>You must follow the instruction to import data from CSV</strong>. To get better understanding you can download the sample file. </p>
-            <p><img alt="" src="read_me/assets/images/purchase7.png"></p>
+            <p><img alt="" src="read_me/assets/images/purchase7.avif"></p>
             <h2><strong>Payment</strong></h2>
             <p>You can make payment from Purchase table. You can make payment with Cash, Gift Card, Cheque, Credit card and Deposit.</p>
             <p><img alt="" src="read_me/assets/images/purchase5.png">&nbsp;&nbsp;
@@ -496,7 +496,7 @@
             </div>
             <p>User can make the purchase automated for those products which quantity exceeds the alert quantity by setting up the cron job. Please follow the following steps to make it workable.</p>
             <p>First go to the cpanel and go to the cron job settings</p>
-            <p><img alt="" src="read_me/assets/images/automated_purchase1.png"></p>
+            <p><img alt="" src="read_me/assets/images/automated_purchase1.avif"></p>
             <p>Then set up the cron job as described below. Here cron job is set for every 5 minitues. So the system will check in every five minitues and if any product exceeds the alert quantity an auotomated purchase will be made.</p>
             <p><img alt="" src="read_me/assets/images/automated_purchase2.png"></p>
             <p><strong>Note:</strong> If you face any issues while setting up cron jobs, please contact at <a href="https://lion-coders.com/support">Support</a>.</p>
@@ -509,12 +509,12 @@
             <h2><strong>POS</strong></h2>
             <p>You can create sale from POS. Customer, Warehouse and Biller (representative of your company) will be automatically selected according to POS Settings under <a href="#setting">Settings</a> module. Touch screen keybord is activated in POS module. You can add product to order table by typing or scanning barcode of product. Featured Product will be displayed in the right side. You can also add product by clicking product image. You can edit product info from order table.</p>
             <p>
-                <img alt="" src="read_me/assets/images/sale1.png">
+                <img alt="" src="read_me/assets/images/sale1.avif">
                 <img alt="" src="read_me/assets/images/sale2.png">&nbsp;&nbsp;
-                <img alt="" src="read_me/assets/images/sale3.png">
+                <img alt="" src="read_me/assets/images/sale3.avif">
             </p>
             <p>To add order discount, order tax and shipping cost you just have to click the button that are shown below. To finalize the sale you have to click the <strong>Payment</strong> button.</p>
-            <p><img alt="" src="read_me/assets/images/sale4.png"></p>
+            <p><img alt="" src="read_me/assets/images/sale4.avif"></p>
             <p>After creating sale you will be redirected to sale index page. A confirmation mail will be sent automatically to customer's email with sale details. You will get summary of sale from table. To get details you just have to click in the table row.</p>
             <p>You can also generate <strong>Invoice</strong> automatically which is beutifully designed</p>
             <p><img alt="" src="read_me/assets/images/sale6.png"></p>
@@ -528,12 +528,12 @@
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
             <h2><strong>Delivery</strong></h2>
             <p>You can add delivery for your sold products. A confirmation mail will be sent automatically to customer's email with delivery details.</p>
-            <p><img alt="" src="read_me/assets/images/delivery1.png"></p>
+            <p><img alt="" src="read_me/assets/images/delivery1.avif"></p>
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
             <h2><strong>Gift Card</strong></h2>
             <p>You can sell GiftCard to customer. By using gift card customer can purchase product. Again GiftCard can be recharged. Customer will be notified by mail when assigning or recharging a GiftCard.</p>
             <p>
-                <img alt="" src="read_me/assets/images/gift_card1.png">&nbsp;&nbsp;
+                <img alt="" src="read_me/assets/images/gift_card1.avif">&nbsp;&nbsp;
                 <img alt="" src="read_me/assets/images/gift_card2.png">
             </p>
         </section>
@@ -545,7 +545,7 @@
             <h2><strong>Expense Category</strong></h2>
             <p>You can create, edit and delete expense category in Expense module.</p>
             <p>
-                <img alt="" src="read_me/assets/images/expense1.png">
+                <img alt="" src="read_me/assets/images/expense1.avif">
             </p>
             <h2><strong>Expense</strong></h2>
             <p>You can create, edit and delete expense in Expense module.</p>
@@ -562,7 +562,7 @@
             <h2><strong>Add Quotation</strong></h2>
             <p>You can create quotation in Quotation module. There are two quotation status: Pending and Sent</p>
             <p>
-                <img alt="" src="read_me/assets/images/quotation1.png">
+                <img alt="" src="read_me/assets/images/quotation1.avif">
             </p>
             <p>If quotation status is <strong>Sent</strong> a confirmation mail will be sent automatically to customer's email with quotation details.</p>
             <h2><strong>Create Sale</strong></h2>
@@ -571,7 +571,7 @@
             </p>
             <h2><strong>Create Purchase</strong></h2>
             <p>You can create purchase from Quotation.</p>
-            <p><img alt="" src="read_me/assets/images/quotation3.png">
+            <p><img alt="" src="read_me/assets/images/quotation3.avif">
             </p>
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
         </section>
@@ -583,7 +583,7 @@
             <h2><strong>Add Adjustment</strong></h2>
             <p>You can adjust product quantity in Quantity Adjustment module. There will be two operation: Subtraction and Addition</p>
             <p>
-                <img alt="" src="read_me/assets/images/adjustment1.png">
+                <img alt="" src="read_me/assets/images/adjustment1.avif">
                 <img alt="" src="read_me/assets/images/adjustment2.png">
             </p>
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
@@ -603,7 +603,7 @@
             <h2><strong>Add Transfer</strong></h2>
             <p>You can transfer your product from one warehouse to another in Transfer module. You can also transfer product with CSV file. <strong>You must follow the instruction to import data from CSV.</strong> To get better understanding you can download the sample file. You will get details of transfer by clicking in the table row.</p>
             <p>
-                <img alt="" src="read_me/assets/images/transfer1.png">
+                <img alt="" src="read_me/assets/images/transfer1.avif">
             </p>
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
         </section>
@@ -615,7 +615,7 @@
             <h2><strong>Add Return</strong></h2>
             <p>You can return your product with Return module. You can track return of both purchase and sale with this module. A confirmation mail will be sent automatically to customer's email with return details if customer refund products. Again if you return product to supplier a confirmation mail will be sent automatically to supplier's email with return details. You will get details of return by clicking in the table row.</p>
             <p>
-                <img alt="" src="read_me/assets/images/return1.png">
+                <img alt="" src="read_me/assets/images/return1.avif">
             </p>
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
         </section>
@@ -627,7 +627,7 @@
             <h2><strong>Account</strong></h2>
             <p>You can create,edit and delete account to link all your transactions. You can also set default account for sale. All the payments must be done under an account.</p>
             <p>
-                <img alt="" src="read_me/assets/images/accounting_1.png">
+                <img alt="" src="read_me/assets/images/accounting_1.avif">
             </p>
             <p>You can generate <strong>Balance Sheet</strong> of your accounts. You can also make <strong>Account Statement</strong> of an specific account to see all the transactions which has done with this account.</p>
         </section>
@@ -654,12 +654,12 @@
             <p>You can create, edit and delete user account. By creating user account password will be sent to the user's email that is given. Again you can active or inactive a user.</p>
             <p>There is also be a register option to create user account. But his/her ID will not be activated untill admin will approve it.</p>
             <p>
-                <img alt="" src="read_me/assets/images/user1.png">
+                <img alt="" src="read_me/assets/images/user1.avif">
             </p>
             <h2><strong>Add Customer</strong></h2>
             <p>You can create, edit and delete customer. After creating customer a confirmation email will automatically send to customer. You can add money to customer's database just like a bank account. You can also import customer with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/customer1.png">
+                <img alt="" src="read_me/assets/images/customer1.avif">
             </p>
             <p>
                 <img alt="" src="read_me/assets/images/customer2.png">
@@ -667,12 +667,12 @@
             <h2><strong>Add Biller</strong></h2>
             <p>Biller is the representative of your company. You may have multiple company and you want to manage all your inventory from a single platform. So this is a solution for enterprise. You can create, edit and delete biller. After creating biller a confirmation email will automatically send to biller. You can also import biller with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/biller1.png">
+                <img alt="" src="read_me/assets/images/biller1.avif">
             </p>
             <h2><strong>Add Supplier</strong></h2>
             <p>Supplier is the people from whom you purchase products. You can create, edit and delete supplier. After creating supplier a confirmation email will automatically send to supplier. You can also import supplier with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/supplier1.png">
+                <img alt="" src="read_me/assets/images/supplier1.avif">
             </p>
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
         </section>
@@ -710,9 +710,9 @@
             </div>
             <p>You can set daily sale objective for specific products. Meaning the minumum sold quantity for a product in a day. If the product can not fulfill the objective user will be notified on the dashboard. To make this feature automated you have to set up the cron job correctly.</p>
             <p>First go to the cpanel and go to the cron job settings</p>
-            <p><img alt="" src="read_me/assets/images/automated_purchase1.png"></p>
+            <p><img alt="" src="read_me/assets/images/automated_purchase1.avif"></p>
             <p>Then set up the cron job as described below. Here cron job is set up for once per day. So the system will check at 12:00 am if any product can not fulfill the daily sale objective for previous day. Products those can not fulfill the daily sale objective will be listed to the daily sale objective report.</p>
-            <p><img alt="" src="read_me/assets/images/dso_alert1.png"></p>
+            <p><img alt="" src="read_me/assets/images/dso_alert1.avif"></p>
             <p><strong>Note:</strong> If you face any issues while setting up cron jobs, please contact at <a href="https://lion-coders.com/support">Support</a>.</p>
         </section>
         <section id="setting">
@@ -723,12 +723,12 @@
             <h2><strong>Add Role</strong></h2>
             <p>You can create, edit and delete user roles. You can controll user access by changing the role permission. So, under a certain role users have specific access over this software</p>
             <p>
-                <img alt="" src="read_me/assets/images/role1.png">
+                <img alt="" src="read_me/assets/images/role1.avif">
             </p>
             <h2><strong>Add Warehouse</strong></h2>
             <p>You can create, edit and delete warehouse. You can also import warehouse with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/warehouse1.png">
+                <img alt="" src="read_me/assets/images/warehouse1.avif">
             </p>
             <h2><strong>Add Customer Group</strong></h2>
             <p>
@@ -738,22 +738,22 @@
                 You can also import customer group with CSV file. <strong>You must follow the instruction to import data from CSV.</strong>
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/customer_group1.png">
+                <img alt="" src="read_me/assets/images/customer_group1.avif">
             </p>
             <h2><strong>Add Brand</strong></h2>
             <p>You can create, edit and delete product brand. You can also import brand with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/brand1.png">
+                <img alt="" src="read_me/assets/images/brand1.avif">
             </p>
             <h2><strong>Add Unit</strong></h2>
             <p>You can create, edit and delete product unit. You can also import brand with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/unit1.png">
+                <img alt="" src="read_me/assets/images/unit1.avif">
             </p>
             <h2><strong>Add Tax</strong></h2>
             <p>You can create, edit and delete different product tax. You can also import tax with CSV file. <strong>You must follow the instruction to import data from CSV.</strong></p>
             <p>
-                <img alt="" src="read_me/assets/images/tax1.png">
+                <img alt="" src="read_me/assets/images/tax1.avif">
             </p>
             <p>And you can search, export and print data from table that we discussed in <a href="#product">Product</a> section.</p>
             <h2><strong>General Settings</strong></h2>
@@ -764,7 +764,7 @@
             <p>You can set your own POS settings from this module. You can set default customer, biller, warehouse and how many Featured products will be displayed in the POS module. You have to set your <strong>Stripe</strong> public and private key for Credit Card Payment. To implement payment with <strong>Paypal</strong> you have to buy live api from Paypal. You will also need to fillup the following information.
             </p>
             <p>
-                <img alt="" src="read_me/assets/images/pos1.png">
+                <img alt="" src="read_me/assets/images/pos1.avif">
             </p>
             <h2><strong>HRM Setting</strong></h2>
             <p>You can set default CheckIn and CheckOut time in HRM Setting.</p>

@@ -1806,7 +1806,7 @@ $(document).on('submit', '.payment-form', function(e) {
                     // Redirect to the URL returned for Pesapal payment method
                     location.href = response.redirect_url;
                 } else if ($('select[name="sale_status"]').val() == 1 && response !== 'pesapal') {
-                    let link = "{{url('sales/gen_invoice/')}}" + '/' + response;
+                    let link = "{{url('admin/sales/gen_invoice/')}}" + '/' + response;
                     $('#print-layout').load(link, function() {
                         setTimeout(function() {
                             window.print();
@@ -1825,15 +1825,19 @@ $(document).on('submit', '.payment-form', function(e) {
                 }
                 else if($('select[name="sale_status"]').val() != 1){
                     localStorage.clear();
+                    alert('Order created successfully!');
                     location.href = "{{route('sales.index')}}";
                 }
                 else {
                     localStorage.clear();
+                    alert('Order created successfully!');
                     location.href = response;
                 }
             },
             error: function(xhr) {
-                console.log('Form submission failed.');
+                console.log('Form submission failed.', xhr);
+                alert('Error creating order. Please try again.');
+                $("#submit-button").prop('disabled', false);
             }
         });
 

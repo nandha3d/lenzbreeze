@@ -73,8 +73,8 @@
 @endsection
 
 @push('scripts')
-@include('salepro.backend.report._export_helper')
 <script type="text/javascript">
+@include('salepro.backend.report._export_helper')
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -166,8 +166,7 @@
                 extend: 'pdf',
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
-                    columns: ':visible:Not(.not-exported)',
-                    rows: ':visible'
+                    columns: ':visible:not(.not-exported)',
                 },
                 action: newexportaction,
                 footer:true
@@ -177,7 +176,6 @@
                 text: '<i title="export to excel" class="dripicons-document-new"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
                 action: newexportaction,
                 footer:true
@@ -187,7 +185,6 @@
                 text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
                 action: newexportaction,
                 footer:true
@@ -197,7 +194,6 @@
                 text: '<i title="print" class="fa fa-print"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported)',
-                    rows: ':visible'
                 },
                 action: newexportaction,
                 footer:true

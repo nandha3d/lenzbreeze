@@ -370,7 +370,7 @@ class CustomerController extends Controller
         if($customer_data['pos'])
             return $customerInfo;
         else
-            return redirect('customer')->with('create_message', $message);
+            return redirect('admin/customer')->with('create_message', $message);
     }
 
     public function edit($id)
@@ -448,7 +448,7 @@ class CustomerController extends Controller
             DB::table('customers')->where('id', $lims_customer_data->id)->update($custom_field_data);
         $this->cacheForget('customer_list');
 
-        return redirect('customer')->with('edit_message', $message);
+        return redirect('admin/customer')->with('edit_message', $message);
     }
 
     public function importCustomer(Request $request)
@@ -514,7 +514,7 @@ class CustomerController extends Controller
 
             }
             $this->cacheForget('customer_list');
-            return redirect('customer')->with('import_message', $message);
+            return redirect('admin/customer')->with('import_message', $message);
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -571,7 +571,7 @@ class CustomerController extends Controller
             //     $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             // }
         }
-        return redirect('customer')->with('create_message', $message);
+        return redirect('admin/customer')->with('create_message', $message);
     }
 
     public function updateDeposit(Request $request)
@@ -583,7 +583,7 @@ class CustomerController extends Controller
         $lims_customer_data->deposit += $amount_dif;
         $lims_customer_data->save();
         $lims_deposit_data->update($data);
-        return redirect('customer')->with('create_message', 'Data updated successfully');
+        return redirect('admin/customer')->with('create_message', 'Data updated successfully');
     }
 
     public function deleteDeposit(Request $request)
@@ -594,7 +594,7 @@ class CustomerController extends Controller
         $lims_customer_data->deposit -= $lims_deposit_data->amount;
         $lims_customer_data->save();
         $lims_deposit_data->delete();
-        return redirect('customer')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/customer')->with('not_permitted', 'Data deleted successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -615,7 +615,7 @@ class CustomerController extends Controller
         $lims_customer_data->is_active = false;
         $lims_customer_data->save();
         $this->cacheForget('customer_list');
-        return redirect('customer')->with('not_permitted','Data deleted Successfully');
+        return redirect('admin/customer')->with('not_permitted','Data deleted Successfully');
     }
 
     protected function mailAction($data, $mailSetting, $request, $customMessage=null)

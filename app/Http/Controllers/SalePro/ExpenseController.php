@@ -219,7 +219,7 @@ class ExpenseController extends Controller
         if($cash_register_data)
             $data['cash_register_id'] = $cash_register_data->id;
         Expense::create($data);
-        return redirect('expenses')->with('message', 'Data inserted successfully');
+        return redirect('admin/expenses')->with('message', 'Data inserted successfully');
     }
 
     public function show($id)
@@ -245,7 +245,7 @@ class ExpenseController extends Controller
         $lims_expense_data = Expense::find($data['expense_id']);
         $data['created_at'] = date("Y-m-d H:i:s", strtotime($data['created_at']));
         $lims_expense_data->update($data);
-        return redirect('expenses')->with('message', 'Data updated successfully');
+        return redirect('admin/expenses')->with('message', 'Data updated successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -262,6 +262,6 @@ class ExpenseController extends Controller
     {
         $lims_expense_data = Expense::find($id);
         $lims_expense_data->delete();
-        return redirect('expenses')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/expenses')->with('not_permitted', 'Data deleted successfully');
     }
 }

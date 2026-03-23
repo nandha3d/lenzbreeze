@@ -89,7 +89,7 @@
               ?>
               @if($add_permission_active)
               <li id="purchase-create-menu"><a href="{{route('purchases.create')}}">{{trans('file.Add Purchase')}}</a></li>
-              <li id="purchase-import-menu"><a href="{{url('purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
+              <li id="purchase-import-menu"><a href="{{url('admin/purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
               @endif
             </ul>
           </li>
@@ -128,7 +128,7 @@
               @if($add_permission_active)
               <li><a href="{{route('sale.pos')}}">POS</a></li>
               <li id="sale-create-menu"><a href="{{route('sales.create')}}">{{trans('file.Add Sale')}}</a></li>
-              <li id="sale-import-menu"><a href="{{url('sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li>
+              <li id="sale-import-menu"><a href="{{url('admin/sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li>
               @endif
               @endif
               @if($gift_card_permission_active)
@@ -209,7 +209,7 @@
               ?>
               @if($add_permission_active)
               <li id="transfer-create-menu"><a href="{{route('transfers.create')}}">{{trans('file.Add Transfer')}}</a></li>
-              <li id="transfer-import-menu"><a href="{{url('transfers/transfer_by_csv')}}">{{trans('file.Import Transfer By CSV')}}</a></li>
+              <li id="transfer-import-menu"><a href="{{url('admin/transfers/transfer_by_csv')}}">{{trans('file.Import Transfer By CSV')}}</a></li>
               @endif
             </ul>
           </li>
@@ -514,7 +514,7 @@
               @endif
               @if($best_seller_active)
               <li id="best-seller-report-menu">
-                <a href="{{url('report/best_seller')}}">{{trans('file.Best Seller')}}</a>
+                <a href="{{url('admin/report/best_seller')}}">{{trans('file.Best Seller')}}</a>
               </li>
               @endif
               @if($product_report_active)
@@ -529,22 +529,22 @@
               @endif
               @if($daily_sale_active)
               <li id="daily-sale-report-menu">
-                <a href="{{url('report/daily_sale/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Sale')}}</a>
+                <a href="{{url('admin/report/daily_sale/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Sale')}}</a>
               </li>
               @endif
               @if($monthly_sale_active)
               <li id="monthly-sale-report-menu">
-                <a href="{{url('report/monthly_sale/'.date('Y'))}}">{{trans('file.Monthly Sale')}}</a>
+                <a href="{{url('admin/report/monthly_sale/'.date('Y'))}}">{{trans('file.Monthly Sale')}}</a>
               </li>
               @endif
               @if($daily_purchase_active)
               <li id="daily-purchase-report-menu">
-                <a href="{{url('report/daily_purchase/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Purchase')}}</a>
+                <a href="{{url('admin/report/daily_purchase/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Purchase')}}</a>
               </li>
               @endif
               @if($monthly_purchase_active)
               <li id="monthly-purchase-report-menu">
-                <a href="{{url('report/monthly_purchase/'.date('Y'))}}">{{trans('file.Monthly Purchase')}}</a>
+                <a href="{{url('admin/report/monthly_purchase/'.date('Y'))}}">{{trans('file.Monthly Purchase')}}</a>
               </li>
               @endif
               @if($sale_report_active)
@@ -1384,7 +1384,7 @@
                                 @if($category->image)
                                     <img  src="{{url('images/category', $category->image)}}" />
                                 @else
-                                    <img  src="{{url('images/product/zummXD2dvAtI.png')}}" />
+                                    <img  src="{{url('images/product/zummXD2dvAtI.avif')}}" />
                                 @endif
                                 <p class="text-center">{{$category->name}}</p>
                             </div>
@@ -1409,7 +1409,7 @@
                                 </div>
                             @else
                                 <div class="col-md-3 brand-img" data-brand="{{$brand->id}}">
-                                    <img  src="{{url('images/product/zummXD2dvAtI.png')}}" />
+                                    <img  src="{{url('images/product/zummXD2dvAtI.avif')}}" />
                                     <p class="text-center">{{$brand->title}}</p>
                                 </div>
                             @endif
@@ -1597,7 +1597,7 @@
         $("ul#sale").addClass("show");
         $("ul#sale li").eq(1).addClass("active");
 
-        var public_key = <?php echo json_encode($lims_pos_setting_data->stripe_public_key) ?>;
+        var productImgBase = '{{asset("images/product")}}'; = <?php echo json_encode($lims_pos_setting_data->stripe_public_key) ?>;
         var valid;
 
         // array data depend on warehouse
@@ -1875,9 +1875,9 @@
                     $.each(data['name'], function(index) {
                         var product_info = data['code'][index]+'|' + data['name'][index] + '|null|0';
                         if(index % 5 == 0 && index != 0)
-                            tableData += '</tr><tr><td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></td>';
+                            tableData += '</tr><tr><td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="'+productImgBase+'/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></td>';
                         else
-                            tableData += '<td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></td>';
+                            tableData += '<td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="'+productImgBase+'/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></td>';
                     });
 
                     if(data['name'].length % 5){
@@ -1930,10 +1930,10 @@
                     $.each(data['name'], function(index) {
                         var product_info = data['code'][index]+' (' + data['name'][index] + ')';
                         if(index % 5 == 0 && index != 0){
-                            tableData += '</tr><tr><td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="../../images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p></td>';
+                            tableData += '</tr><tr><td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="'+productImgBase+'/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p></td>';
                         }
                         else
-                            tableData += '<td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="../../images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p></td>';
+                            tableData += '<td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="'+productImgBase+'/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p></td>';
                     });
 
                     if(data['name'].length % 5){
@@ -1976,10 +1976,10 @@
                     $.each(data['name'], function(index) {
                         var product_info = data['code'][index]+' (' + data['name'][index] + ')';
                         if(index % 5 == 0 && index != 0){
-                            tableData += '</tr><tr><td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="../../images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p></td>';
+                            tableData += '</tr><tr><td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="'+productImgBase+'/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p></td>';
                         }
                         else
-                            tableData += '<td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="../../images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p></td>';
+                            tableData += '<td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="'+productImgBase+'/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p></td>';
                     });
 
                     if(data['name'].length % 5){
@@ -2466,7 +2466,7 @@
             $.ajax({
                 type: 'GET',
                 async: false,
-                url: '../lims_product_search',
+                url: '{{url("/admin/sales/lims_product_search")}}',
                 data: {
                     data: data
                 },

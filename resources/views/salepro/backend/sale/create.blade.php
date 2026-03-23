@@ -68,7 +68,7 @@
 
                                                       $points[$customer->id] = $customer->points;
                                                     @endphp
-                                                    <option value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
+                                                    <option value="{{$customer->id}}" data-place="{{$customer->place}}" data-city="{{$customer->city}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
                                                 @endforeach
                                                 </select>
                                                 <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#addCustomer"><i class="dripicons-plus"></i></button>
@@ -80,7 +80,7 @@
 
                                                       $points[$customer->id] = $customer->points;
                                                     @endphp
-                                                    <option value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
+                                                    <option value="{{$customer->id}}" data-place="{{$customer->place}}" data-city="{{$customer->city}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
                                                 @endforeach
                                                 </select>
                                                 @endif
@@ -115,6 +115,41 @@
                                         </div>
                                     </div>
                                     @endif
+
+                                    {{-- End User Details Section (Added for Warranty flow) --}}
+                                    <div class="col-md-12 my-4">
+                                        <div class="card shadow-sm" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+                                            <div class="card-body p-4">
+                                                <h5 class="text-primary mb-3"><i class="dripicons-user"></i> End User Details (Captured for Warranty)</h5>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Name</label>
+                                                            <input type="text" name="end_user_name" class="form-control" placeholder="Full name of buyer"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Phone</label>
+                                                            <input type="text" name="end_user_phone" class="form-control" placeholder="Phone number"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Email</label>
+                                                            <input type="email" name="end_user_email" class="form-control" placeholder="Email (optional)"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Address</label>
+                                                            <input type="text" name="end_user_address" class="form-control" placeholder="City or Address"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -822,11 +857,76 @@ $('select[name="product_type_id"]').on('change', function() {
     getProduct(warehouse_id);
 });
 
+$('select[name="customer_id"]').on('change', function() {
+    var customer_id = $(this).val();
+    var selected = $(this).find('option:selected');
+    var place = selected.data('place');
+    var city = selected.data('city');
+    
+    filterWarehouseByCustomer(place, city);
+    setCustomerGroupRate(customer_id);
+});
+
+function filterWarehouseByCustomer(place, city) {
+    $.ajax({
+        url: "{{ url('/admin/sales/warehouses-by-location') }}",
+        data: { place: place, city: city },
+        success: function(data) {
+            var $wh = $('select[name="warehouse_id"]');
+            $wh.empty().append('<option value="">Select warehouse...</option>');
+            $wh.append('<option value="all">All</option>');
+            $.each(data, function(i, wh) {
+                $wh.append('<option value="'+wh.id+'">'+wh.name+'</option>');
+            });
+            $wh.selectpicker('refresh');
+            
+            // Auto-trigger getProduct if location matched a warehouse
+            if(data.length > 0) {
+                $wh.val(data[0].id).trigger('change');
+            }
+        }
+    });
+}
+
 function getProduct(warehouse_id){
-    // Refactored to avoid loading entire product list
-    // We can still call it to update stock for EXISTING items if needed,
-    // but for now let's just empty the array to prevent memory issues.
-    lims_product_array = [];
+    var brand_id = $('#brand_id').val();
+    var category_id = $('#category_id').val();
+    var product_type_id = $('#product_type_id').val();
+
+    if(!brand_id){
+        return;
+    }else if(!category_id){
+        return;
+    }else if(!product_type_id){
+        return;
+    }
+
+    $.get('{{ url("/admin/sales/getproduct") }}/' + warehouse_id + '?brand='+brand_id+'&category='+category_id +'&product_type='+product_type_id, function(data) {
+        lims_product_array = [];
+        product_code = data[4];
+        product_name = data[0];
+        product_qty = data[3];
+        product_type = data[2];
+        product_id = data[4];
+        product_list = data[5];
+        qty_list = data[6];
+        product_warehouse_price = data[7];
+        product_price = data[8];
+        category = data[1];
+        product_brand = data[9];
+
+        $.each(product_code, function(index) {
+            lims_product_array.push(product_code[index]+'|'+product_name[index]+'|'+category[index]+'|'+product_type[index] +'|'+product_price[index] + '|' + product_brand[index]);
+        });
+
+        //updating in stock
+        var rownumber = $('table.order-list tbody tr:last').index();
+        for(rowindex  = 0; rowindex <= rownumber; rowindex++) {
+            var row_product_code = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.product-code').val();
+            pos = product_code.indexOf(row_product_code);
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text(product_qty[pos]);
+        }
+    });
 }
 
 $('#lims_productcodeSearch').on('input', function(){
@@ -842,27 +942,21 @@ $('#lims_productcodeSearch').on('input', function(){
     else if(!warehouse_id){
         $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
         alert('Please select Warehouse!');
+    }else if(!brand_id){
+        alert('Please select brand!');
+    }else if(!category_id){
+        alert('Please select category!');
     }
-    // Brand and category are optional for search now
 });
 
 var lims_productcodeSearch = $('#lims_productcodeSearch');
 
 lims_productcodeSearch.autocomplete({
     source: function(request, response) {
-        $.ajax({
-            url: "{{ route('products.search_autocomplete') }}",
-            type: "GET",
-            data: {
-                term: request.term,
-                warehouse_id: $("#warehouse_id").val(),
-                brand_id: $("#brand_id").val(),
-                category_id: $("#category_id").val()
-            },
-            success: function(data) {
-                response(data);
-            }
-        });
+        var matcher = new RegExp(".?" + $.ui.autocomplete.escapeRegex(request.term), "i");
+        response($.grep(lims_product_array, function(item) {
+            return matcher.test(item);
+        }));
     },
     response: function(event, ui) {
         if (ui.content.length == 1) {
@@ -870,6 +964,10 @@ lims_productcodeSearch.autocomplete({
             $(this).autocomplete( "close" );
             $(".ui-helper-hidden-accessible").css('display', 'none');
             productSearch(data);
+        }
+        else if(ui.content.length == 0 && $('#lims_productcodeSearch').val().length == 13) {
+            $(".ui-helper-hidden-accessible").css('display', 'none');
+          productSearch($('#lims_productcodeSearch').val()+'|'+1);
         }
     },
     select: function(event, ui) {
@@ -1053,7 +1151,7 @@ function productSearch(data) {
         data += '?'+$('#customer_id').val()+'?'+(parseFloat(pre_qty) + 1);
         $.ajax({
             type: 'GET',
-            url: 'lims_product_search',
+            url: '{{ url("/admin/sales/lims_product_search") }}',
             data: {
                 data: data
             },
@@ -1279,7 +1377,7 @@ function checkDiscount(qty, flag) {
         $.ajax({
             type: 'GET',
             async: false,
-            url: '../sales/check-discount?qty='+qty+'&customer_id='+customer_id+'&product_id='+product_id+'&warehouse_id='+warehouse_id,
+            url: '{{url("/admin/sales/check-discount")}}?qty='+qty+'&customer_id='+customer_id+'&product_id='+product_id+'&warehouse_id='+warehouse_id,
             success: function(data) {
                 pos = product_code.indexOf($('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .product-code').val());
                 product_price[rowindex] = parseFloat(data[0] * currency['exchange_rate']) + parseFloat(data[0] * currency['exchange_rate'] * customer_group_rate);
@@ -1705,7 +1803,7 @@ $(document).on('submit', '.payment-form', function(e) {
                     // Redirect to the URL returned for Pesapal payment method
                     location.href = response.redirect_url;
                 } else if ($('select[name="sale_status"]').val() == 1 && response !== 'pesapal') {
-                    let link = "{{url('sales/gen_invoice/')}}" + '/' + response;
+                    let link = "{{url('admin/sales/gen_invoice/')}}" + '/' + response;
                     $('#print-layout').load(link, function() {
                         setTimeout(function() {
                             window.print();
@@ -1724,15 +1822,20 @@ $(document).on('submit', '.payment-form', function(e) {
                 }
                 else if($('select[name="sale_status"]').val() != 1){
                     localStorage.clear();
+                    alert('Order created successfully!');
                     location.href = "{{route('sales.index')}}";
                 }
                 else {
                     localStorage.clear();
+                    alert('Order created successfully!');
                     location.href = response;
                 }
             },
-            error: function(xhr) {
-                console.log('Form submission failed.');
+            error: function(xhr, status, error) {
+                console.log('Form submission failed.', xhr);
+                var errDetail = "HTTP " + xhr.status + ": " + error;
+                alert('Error creating order. ' + errDetail + '\nCheck network tab or laravel log for more info.');
+                $("#submit-button").prop('disabled', false);
             }
         });
 

@@ -1,13 +1,13 @@
-<header class="sticky top-0 z-[100] glass-premium transition-all duration-500" x-data="{ mobileOpen: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
+<header class="sticky top-0 z-[100] glass-premium transition-all duration-500" x-data="{ mobileOpen: false, scrolled: false }" x-on:scroll.window="scrolled = (window.pageYOffset > 20)">
     <div class="container-custom">
         <div class="flex items-center justify-between transition-all duration-500" :class="scrolled ? 'h-16' : 'h-20'">
             {{-- Logo --}}
             <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                 <div class="relative">
-                    <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze Logo" class="h-10 lg:h-12 w-auto object-contain transition-transform duration-500 group-hover:rotate-[10deg] group-hover:scale-110">
+                    <img src="{{ asset('images/logo-icon.avif') }}" alt="Lenz Breeze Logo" width="48" height="48" class="h-10 lg:h-12 w-auto object-contain transition-transform duration-500 group-hover:rotate-[10deg] group-hover:scale-110">
                     <div class="absolute -inset-1 bg-tech-cyan/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full"></div>
                 </div>
-                <img src="{{ asset('images/logo-text.png') }}" alt="Lenz Breeze" class="h-4 lg:h-5 w-auto object-contain hidden sm:block">
+                <img src="{{ asset('images/logo-text.avif') }}" alt="Lenz Breeze" width="160" height="20" class="h-4 lg:h-5 w-auto object-contain hidden sm:block">
             </a>
 
             {{-- Desktop Nav --}}
@@ -40,7 +40,7 @@
             </nav>
 
             {{-- Mobile Toggle --}}
-            <button @click="mobileOpen = !mobileOpen" class="lg:hidden p-2 rounded-xl text-midnight hover:bg-white/50 transition-colors">
+            <button x-on:click="mobileOpen = !mobileOpen" aria-label="Toggle mobile menu" class="lg:hidden p-2 rounded-xl text-midnight hover:bg-white/50 transition-colors">
                 <svg x-show="!mobileOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 <svg x-show="mobileOpen" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>

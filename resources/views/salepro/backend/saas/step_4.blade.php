@@ -12,7 +12,7 @@
     <div class="col-md-6 offset-md-3">
         <div class='wrapper'>
             <header>
-                <img src="{{ asset('saas-install-assets/images/logo.png')}}" alt="Logo"/>
+                <img src="{{ asset('saas-install-assets/images/logo.avif')}}" alt="Logo"/>
                 <h1 class="text-center">SalepPro SaaS Auto Installer</h1>
             </header>
             <hr>

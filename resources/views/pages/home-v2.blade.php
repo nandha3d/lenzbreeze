@@ -47,7 +47,7 @@
     <div class="container-custom py-8">
         <div class="flex flex-col sm:flex-row items-center justify-center gap-8 md:gap-16">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).png') }}" alt="Eye Mek icon" class="w-14 h-14 object-contain">
+                <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).avif') }}" alt="Eye Mek icon" class="w-14 h-14 object-contain">
                 <div>
                     <span class="font-display font-bold text-lg text-brand-500 uppercase tracking-tight">Eye Mek Premium</span>
                     <span class="block text-xs text-warm-400">High-Performance Range</span>

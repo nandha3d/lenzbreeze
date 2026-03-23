@@ -1691,7 +1691,11 @@ class ProductController extends Controller
 
     public function importProduct(Request $request)
     {
-        ini_set('max_execution_time', '0');
+        // Reset memory limit; shared hosting proxies (Nginx/Apache) enforce
+        // their own hard timeout - we fight that with per-chunk commits below.
+        @ini_set('memory_limit', '512M');
+        ignore_user_abort(true);
+
         // Get file
         $upload = $request->file('file');
         $ext = pathinfo($upload->getClientOriginalName(), PATHINFO_EXTENSION);
@@ -1700,9 +1704,6 @@ class ProductController extends Controller
         }
 
         $filePath = $upload->getRealPath();
-        // echo $upload->getClientOriginalName();die;
-        // echo $filePath;die;
-        // Open and read file
         $file = fopen($filePath, 'r');
         $header = fgetcsv($file);
         if (!$header) {
@@ -1717,155 +1718,434 @@ class ProductController extends Controller
             $escapedHeader[] = $escapedItem;
         }
 
-        // Looping through other columns
+        // Pre-fetch ALL invariant data ONCE (never inside the loop)
+        $lims_unit_data = Unit::where('unit_code', 1)->first();
+        if (!$lims_unit_data) {
+            fclose($file);
+            return redirect()->back()->with('not_permitted', 'Default Unit (code 1) does not exist in the database.');
+        }
+
+        $warehouse_ids = Warehouse::where('is_active', true)->pluck('id')->toArray();
+        $addons = explode(',', config('addons'));
+        $hasEcommerce = in_array('ecommerce', $addons);
+        $withoutStock = config('without_stock') === 'yes';
+
+        // In-memory cache for repeated lookups (avoid querying same brand/category/type again)
+        $brandCache = [];
+        $categoryCache = [];
+        $productTypeCache = [];
+
+        // ----------------------------------------------------------------
+        // KEY FIX: each chunk of rows is its OWN independent transaction.
+        // A single wrapping transaction held until the entire file was
+        // processed caused the proxy (Nginx/Apache) to time out (503)
+        // before a response was ever sent.
+        // ----------------------------------------------------------------
+        $chunkSize     = 25;  // rows per independent transaction
+        $rowCount      = 0;   // rows processed (including skipped)
+        $totalImported = 0;   // rows actually saved
+        $errors        = [];  // skipped-row messages
+
+        // Start the first chunk transaction
+        DB::beginTransaction();
+
         try {
             while ($columns = fgetcsv($file)) {
+                // Reset PHP execution timer every chunk so large files
+                // do not hit PHP's own max_execution_time limit.
+                if ($rowCount % $chunkSize === 0) {
+                    @set_time_limit(120);
+                }
+
                 if (count($escapedHeader) !== count($columns)) {
-                    fclose($file);
-                    return redirect()->back()->with('message', 'CSV file format is incorrect.');
+                    // Bad row — skip it, do not abort the whole import
+                    $errors[] = 'Row ' . ($rowCount + 2) . ' skipped: column count mismatch.';
+                    $rowCount++;
+                    continue;
                 }
 
                 $data = array_combine($escapedHeader, $columns);
 
                 // Validate and sanitize input
-                $data['name'] = htmlspecialchars(trim($data['name']));
-                $data['cost'] = (isset($data['cost'])  && is_numeric($data['cost'])) ? str_replace(",", "", $data['cost']) : 0;
-                $data['price'] = (isset($data['price']) && is_numeric($data['price'])) ? str_replace(",", "", $data['price']) : 0;
+                $data['name'] = htmlspecialchars(trim($data['name'] ?? ''));
+                if (empty($data['name'])) {
+                    $rowCount++;
+                    continue; // Skip rows with empty names
+                }
+                $data['cost']  = (isset($data['cost'])  && is_numeric($data['cost']))  ? str_replace(',', '', $data['cost'])  : 0;
+                $data['price'] = (isset($data['price']) && is_numeric($data['price'])) ? str_replace(',', '', $data['price']) : 0;
 
-                // Handle brand
-                $brand_id = null;
-                if (isset($data['brand']) && $data['brand'] !== 'N/A' && $data['brand'] !== '') {
-                    $lims_brand_data = Brand::firstOrCreate(['title' => $data['brand'], 'is_active' => true]);
-                    $brand_id = $lims_brand_data->id;
+                // Handle brand (with in-memory cache)
+                $brand_id  = null;
+                $brandName = $data['brand'] ?? '';
+                if ($brandName !== '' && $brandName !== 'N/A') {
+                    if (!isset($brandCache[$brandName])) {
+                        $brandCache[$brandName] = Brand::firstOrCreate(['title' => $brandName, 'is_active' => true])->id;
+                    }
+                    $brand_id = $brandCache[$brandName];
                 }
 
-                // Handle category
-                $lims_category_data = Category::firstOrCreate(['name' => $data['category'], 'is_active' => true]);
-
-                $lims_product_type_data = ProductType::firstOrCreate(['name' => $data['type'], 'is_active' => true]);
-
-
-                // Handle unit
-                $lims_unit_data = Unit::where('unit_code', 1)->first();
-                if (!$lims_unit_data) {
-                    fclose($file);
-                    return redirect()->back()->with('not_permitted', 'Unit code does not exist in the database.');
+                // Handle category (with in-memory cache)
+                $categoryName = $data['category'] ?? 'General';
+                if (!isset($categoryCache[$categoryName])) {
+                    $categoryCache[$categoryName] = Category::firstOrCreate(['name' => $categoryName, 'is_active' => true])->id;
                 }
+                $category_id = $categoryCache[$categoryName];
+
+                // Handle product type (with in-memory cache)
+                $typeName = $data['type'] ?? 'standard';
+                if (!isset($productTypeCache[$typeName])) {
+                    $productTypeCache[$typeName] = ProductType::firstOrCreate(['name' => $typeName, 'is_active' => true])->id;
+                }
+                $product_type_id = $productTypeCache[$typeName];
 
                 // Create or update product
                 $product = Product::firstOrNew([
-                    'name' => $data['name'],
-                    'is_active' => true
+                    'name'      => $data['name'],
+                    'is_active' => true,
                 ]);
 
                 $product->fill([
-                    'code' => $data['code'],
-                    'type' => 'standard',
-                    'product_type_id' => $lims_product_type_data->id,
+                    'code'              => $data['code'] ?? '',
+                    'type'              => 'standard',
+                    'product_type_id'   => $product_type_id,
                     'barcode_symbology' => 'C128',
-                    'brand_id' => $brand_id,
-                    'category_id' => $lims_category_data->id,
-                    'unit_id' => $lims_unit_data->id,
-                    'purchase_unit_id' => $lims_unit_data->id,
-                    'sale_unit_id' => $lims_unit_data->id,
-                    'cost' => $data['cost'],
-                    'price' => $data['price'],
-                    'tax_method' => 1,
-                    'qty' => 0,
-                    'product_details' => $data['productdetails'] ?? '',
-                    'is_active' => true,
-                    'image' => $data['image'] ?? 'zummXD2dvAtI.avif',
-                    'base' => $data['base'],
-                    'addition' => $data['addition'],
-                    'lr' => $data['lr']
-
+                    'brand_id'          => $brand_id,
+                    'category_id'       => $category_id,
+                    'unit_id'           => $lims_unit_data->id,
+                    'purchase_unit_id'  => $lims_unit_data->id,
+                    'sale_unit_id'      => $lims_unit_data->id,
+                    'cost'              => $data['cost'],
+                    'price'             => $data['price'],
+                    'tax_method'        => 1,
+                    'qty'               => 0,
+                    'product_details'   => $data['productdetails'] ?? '',
+                    'is_active'         => true,
+                    'image'             => $data['image'] ?? 'zummXD2dvAtI.avif',
+                    'base'              => $data['base']     ?? '',
+                    'addition'          => $data['addition'] ?? '',
+                    'lr'                => $data['lr']       ?? '',
                 ]);
 
-                if (in_array('ecommerce', explode(',', config('addons')))) {
-                    $data['slug'] = Str::slug($data['name'], '-');
-                    $product->slug = preg_replace('/[^A-Za-z0-9\-]/', '', $data['slug']);
+                if ($hasEcommerce) {
+                    $product->slug     = preg_replace('/[^A-Za-z0-9\-]/', '', Str::slug($data['name'], '-'));
                     $product->in_stock = true;
                 }
 
                 $product->save();
 
                 // Handle variants
-                $warehouse_ids = Warehouse::where('is_active', true)->pluck('id');
                 if (!empty($data['variantvalue']) && !empty($data['variantname'])) {
                     $variant_option = [];
-                    $variant_value = [];
-                    $variantInfo = explode(",", $data['variantvalue']);
+                    $variant_value  = [];
+                    $variantInfo    = explode(',', $data['variantvalue']);
+                    $validVariant   = true;
 
                     foreach ($variantInfo as $key => $info) {
-                        if (!strpos($info, "[")) {
-                            fclose($file);
-                            return redirect()->back()->with('message', 'Invalid variant value format.');
+                        if (!strpos($info, '[')) {
+                            $validVariant = false;
+                            break;
                         }
-                        $variant_option[] = strtok($info, "[");
-                        $variant_value[] = str_replace("/", ",", substr($info, strpos($info, "[") + 1, (strpos($info, "]") - strpos($info, "[") - 1)));
+                        $variant_option[] = strtok($info, '[');
+                        $variant_value[]  = str_replace('/', ',', substr($info, strpos($info, '[') + 1, (strpos($info, ']') - strpos($info, '[') - 1)));
                     }
 
-                    $product->variant_option = json_encode($variant_option);
-                    $product->variant_value = json_encode($variant_value);
-                    $product->is_variant = true;
-                    $product->save();
+                    if ($validVariant) {
+                        $product->variant_option = json_encode($variant_option);
+                        $product->variant_value  = json_encode($variant_value);
+                        $product->is_variant     = true;
+                        $product->save();
 
-                    $variant_names = explode(",", $data['variantname']);
-                    $item_codes = explode(",", $data['itemcode']);
-                    $additional_costs = explode(",", $data['additionalcost']);
-                    $additional_prices = explode(",", $data['additionalprice']);
+                        $variant_names     = explode(',', $data['variantname']);
+                        $item_codes        = isset($data['itemcode'])        ? explode(',', $data['itemcode'])        : [];
+                        $additional_costs  = isset($data['additionalcost'])  ? explode(',', $data['additionalcost'])  : [];
+                        $additional_prices = isset($data['additionalprice']) ? explode(',', $data['additionalprice']) : [];
 
-                    $productVariants = [];
-                    $productWarehouses = [];
+                        $productVariants   = [];
+                        $productWarehouses = [];
 
-                    foreach ($variant_names as $key => $variant_name) {
-                        $variant = Variant::firstOrCreate(['name' => $variant_name]);
+                        foreach ($variant_names as $key => $variant_name) {
+                            $variant = Variant::firstOrCreate(['name' => $variant_name]);
 
-                        $productVariants[] = [
-                            'product_id' => $product->id,
-                            'variant_id' => $variant->id,
-                            'position' => $key + 1,
-                            'item_code' => $item_codes[$key] ?? $variant_name . '-' . $data['code'],
-                            'additional_cost' => $additional_costs[$key] ?? 0,
-                            'additional_price' => $additional_prices[$key] ?? 0,
-                            'qty' => 0,
-                        ];
-
-                        foreach ($warehouse_ids as $warehouse_id) {
-                            $productWarehouses[] = [
-                                'product_id' => $product->id,
-                                'variant_id' => $variant->id,
-                                'warehouse_id' => $warehouse_id,
-                                'qty' => 0,
+                            $productVariants[] = [
+                                'product_id'       => $product->id,
+                                'variant_id'       => $variant->id,
+                                'position'         => $key + 1,
+                                'item_code'        => $item_codes[$key] ?? $variant_name . '-' . ($data['code'] ?? ''),
+                                'additional_cost'  => $additional_costs[$key]  ?? 0,
+                                'additional_price' => $additional_prices[$key] ?? 0,
+                                'qty'              => 0,
                             ];
+
+                            foreach ($warehouse_ids as $warehouse_id) {
+                                $productWarehouses[] = [
+                                    'product_id'   => $product->id,
+                                    'variant_id'   => $variant->id,
+                                    'warehouse_id' => $warehouse_id,
+                                    'qty'          => 0,
+                                ];
+                            }
+                        }
+
+                        if (!empty($productVariants)) {
+                            ProductVariant::insert($productVariants);
+                        }
+                        if ($withoutStock && !empty($productWarehouses)) {
+                            Product_Warehouse::insert($productWarehouses);
                         }
                     }
-
-                    ProductVariant::insert($productVariants);
-                    if (config('without_stock') === 'yes') {
-                        Product_Warehouse::insert($productWarehouses);
-                    }
-                } elseif (config('without_stock') === 'yes') {
+                } elseif ($withoutStock) {
                     $productWarehouses = [];
                     foreach ($warehouse_ids as $warehouse_id) {
                         $productWarehouses[] = [
-                            'product_id' => $product->id,
+                            'product_id'   => $product->id,
                             'warehouse_id' => $warehouse_id,
-                            'qty' => 0,
+                            'qty'          => 0,
                         ];
                     }
-                    Product_Warehouse::insert($productWarehouses);
+                    if (!empty($productWarehouses)) {
+                        Product_Warehouse::insert($productWarehouses);
+                    }
+                }
+
+                $rowCount++;
+                $totalImported++;
+
+                // --------------------------------------------------------
+                // Commit this chunk and immediately open a NEW transaction.
+                // This releases DB locks and gives the server a heartbeat
+                // so the proxy does not treat the connection as idle/dead.
+                // --------------------------------------------------------
+                if ($totalImported % $chunkSize === 0) {
+                    DB::commit();
+                    DB::beginTransaction();
                 }
             }
 
-            fclose($file);
-            $this->cacheForget('product_list');
-            $this->cacheForget('product_list_with_variant');
-            return redirect('products')->with('import_message', 'Products imported successfully!');
+            // Commit any rows remaining in the last (partial) chunk
+            DB::commit();
+
         } catch (\Exception $e) {
+            // Only the CURRENT chunk is rolled back; all previously committed
+            // chunks are already safely saved in the database.
+            DB::rollBack();
             fclose($file);
-            return redirect()->back()->with('message', 'Error: ' . $e->getMessage());
+            \Log::error('Product Import Error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ' | Line: ' . $e->getLine());
+            return redirect()->back()->with('message',
+                'Import stopped at row ' . ($rowCount + 2) . ': ' . $e->getMessage() .
+                ' (' . $totalImported . ' records were saved before the error.)');
         }
+
+        fclose($file);
+        $this->cacheForget('product_list');
+        $this->cacheForget('product_list_with_variant');
+
+        $msg = $totalImported . ' products imported successfully!';
+        if (!empty($errors)) {
+            $msg .= ' (' . count($errors) . ' rows skipped due to errors.)';
+        }
+        return redirect('admin/products')->with('import_message', $msg);
+    }
+
+    /**
+     * AJAX endpoint: import a small chunk of product rows (JSON).
+     * Called repeatedly by the browser with batches of ~25 rows.
+     * Each request completes in a few seconds — no proxy timeout.
+     */
+    public function importProductChunk(Request $request)
+    {
+        @ini_set('memory_limit', '512M');
+        @set_time_limit(120);
+
+        $rows = $request->input('rows', []);
+        if (empty($rows)) {
+            return response()->json(['success' => false, 'message' => 'No rows received.']);
+        }
+
+        // Pre-fetch invariant data once per chunk
+        $lims_unit_data = Unit::where('unit_code', 1)->first();
+        if (!$lims_unit_data) {
+            return response()->json(['success' => false, 'message' => 'Default Unit (code 1) does not exist.']);
+        }
+
+        $warehouse_ids = Warehouse::where('is_active', true)->pluck('id')->toArray();
+        $addons        = explode(',', config('addons'));
+        $hasEcommerce  = in_array('ecommerce', $addons);
+        $withoutStock  = config('without_stock') === 'yes';
+
+        $brandCache       = [];
+        $categoryCache    = [];
+        $productTypeCache = [];
+        $totalImported    = 0;
+        $errors           = [];
+
+        DB::beginTransaction();
+        try {
+            foreach ($rows as $index => $data) {
+                $data['name'] = htmlspecialchars(trim($data['name'] ?? ''));
+                if (empty($data['name'])) {
+                    $errors[] = 'Row skipped: empty name.';
+                    continue;
+                }
+                $data['cost']  = (isset($data['cost'])  && is_numeric($data['cost']))  ? str_replace(',', '', $data['cost'])  : 0;
+                $data['price'] = (isset($data['price']) && is_numeric($data['price'])) ? str_replace(',', '', $data['price']) : 0;
+
+                // Brand
+                $brand_id  = null;
+                $brandName = $data['brand'] ?? '';
+                if ($brandName !== '' && $brandName !== 'N/A') {
+                    if (!isset($brandCache[$brandName])) {
+                        $brandCache[$brandName] = Brand::firstOrCreate(['title' => $brandName, 'is_active' => true])->id;
+                    }
+                    $brand_id = $brandCache[$brandName];
+                }
+
+                // Category
+                $categoryName = $data['category'] ?? 'General';
+                if (!isset($categoryCache[$categoryName])) {
+                    $categoryCache[$categoryName] = Category::firstOrCreate(['name' => $categoryName, 'is_active' => true])->id;
+                }
+                $category_id = $categoryCache[$categoryName];
+
+                // Product type
+                $typeName = $data['type'] ?? 'standard';
+                if (!isset($productTypeCache[$typeName])) {
+                    $productTypeCache[$typeName] = ProductType::firstOrCreate(['name' => $typeName, 'is_active' => true])->id;
+                }
+                $product_type_id = $productTypeCache[$typeName];
+
+                // Create or update product
+                $product = Product::firstOrNew([
+                    'name'      => $data['name'],
+                    'is_active' => true,
+                ]);
+
+                $product->fill([
+                    'code'              => $data['code'] ?? '',
+                    'type'              => 'standard',
+                    'product_type_id'   => $product_type_id,
+                    'barcode_symbology' => 'C128',
+                    'brand_id'          => $brand_id,
+                    'category_id'       => $category_id,
+                    'unit_id'           => $lims_unit_data->id,
+                    'purchase_unit_id'  => $lims_unit_data->id,
+                    'sale_unit_id'      => $lims_unit_data->id,
+                    'cost'              => $data['cost'],
+                    'price'             => $data['price'],
+                    'tax_method'        => 1,
+                    'qty'               => 0,
+                    'product_details'   => $data['productdetails'] ?? '',
+                    'is_active'         => true,
+                    'image'             => $data['image'] ?? 'zummXD2dvAtI.avif',
+                    'base'              => $data['base']     ?? '',
+                    'addition'          => $data['addition'] ?? '',
+                    'lr'                => $data['lr']       ?? '',
+                ]);
+
+                if ($hasEcommerce) {
+                    $product->slug     = preg_replace('/[^A-Za-z0-9\-]/', '', Str::slug($data['name'], '-'));
+                    $product->in_stock = true;
+                }
+
+                $product->save();
+
+                // Handle variants
+                if (!empty($data['variantvalue']) && !empty($data['variantname'])) {
+                    $variant_option = [];
+                    $variant_value  = [];
+                    $variantInfo    = explode(',', $data['variantvalue']);
+                    $validVariant   = true;
+
+                    foreach ($variantInfo as $key => $info) {
+                        if (strpos($info, '[') === false) {
+                            $validVariant = false;
+                            break;
+                        }
+                        $variant_option[] = strtok($info, '[');
+                        $variant_value[]  = str_replace('/', ',', substr($info, strpos($info, '[') + 1, (strpos($info, ']') - strpos($info, '[') - 1)));
+                    }
+
+                    if ($validVariant) {
+                        $product->variant_option = json_encode($variant_option);
+                        $product->variant_value  = json_encode($variant_value);
+                        $product->is_variant     = true;
+                        $product->save();
+
+                        $variant_names     = explode(',', $data['variantname']);
+                        $item_codes        = isset($data['itemcode'])        ? explode(',', $data['itemcode'])        : [];
+                        $additional_costs  = isset($data['additionalcost'])  ? explode(',', $data['additionalcost'])  : [];
+                        $additional_prices = isset($data['additionalprice']) ? explode(',', $data['additionalprice']) : [];
+
+                        $productVariants   = [];
+                        $productWarehouses = [];
+
+                        foreach ($variant_names as $key => $variant_name) {
+                            $variant = Variant::firstOrCreate(['name' => $variant_name]);
+
+                            $productVariants[] = [
+                                'product_id'       => $product->id,
+                                'variant_id'       => $variant->id,
+                                'position'         => $key + 1,
+                                'item_code'        => $item_codes[$key] ?? $variant_name . '-' . ($data['code'] ?? ''),
+                                'additional_cost'  => $additional_costs[$key]  ?? 0,
+                                'additional_price' => $additional_prices[$key] ?? 0,
+                                'qty'              => 0,
+                            ];
+
+                            foreach ($warehouse_ids as $warehouse_id) {
+                                $productWarehouses[] = [
+                                    'product_id'   => $product->id,
+                                    'variant_id'   => $variant->id,
+                                    'warehouse_id' => $warehouse_id,
+                                    'qty'          => 0,
+                                ];
+                            }
+                        }
+
+                        if (!empty($productVariants)) {
+                            ProductVariant::insert($productVariants);
+                        }
+                        if ($withoutStock && !empty($productWarehouses)) {
+                            Product_Warehouse::insert($productWarehouses);
+                        }
+                    }
+                } elseif ($withoutStock) {
+                    $productWarehouses = [];
+                    foreach ($warehouse_ids as $warehouse_id) {
+                        $productWarehouses[] = [
+                            'product_id'   => $product->id,
+                            'warehouse_id' => $warehouse_id,
+                            'qty'          => 0,
+                        ];
+                    }
+                    if (!empty($productWarehouses)) {
+                        Product_Warehouse::insert($productWarehouses);
+                    }
+                }
+
+                $totalImported++;
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Product Chunk Import Error: ' . $e->getMessage() . ' | File: ' . $e->getFile() . ' | Line: ' . $e->getLine());
+            return response()->json([
+                'success'  => false,
+                'imported' => $totalImported,
+                'message'  => $e->getMessage(),
+                'errors'   => $errors,
+            ]);
+        }
+
+        $this->cacheForget('product_list');
+        $this->cacheForget('product_list_with_variant');
+
+        return response()->json([
+            'success'  => true,
+            'imported' => $totalImported,
+            'errors'   => $errors,
+        ]);
     }
 
 
@@ -1922,7 +2202,7 @@ class ProductController extends Controller
             $lims_product_data->save();
             $this->cacheForget('product_list');
             $this->cacheForget('product_list_with_variant');
-            return redirect('products')->with('message', 'Product deleted successfully');
+            return redirect('admin/products')->with('message', 'Product deleted successfully');
         }
     }
 }

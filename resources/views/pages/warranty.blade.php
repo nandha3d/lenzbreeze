@@ -3,7 +3,7 @@
 @section('meta_description', 'Registered your Eye Mek lenses for warranty coverage. Find lens care instructions and warranty information for your Lenz Breeze purchase.')
 @section('content')
 <div class="min-h-screen py-20 bg-[#F9F7F2]">
-    <div class="container-custom max-w-4xl px-4">
+    <div class="container-custom max-w-5xl mx-auto px-4">
         {{-- Search Box --}}
         <div class="text-center mb-12">
             <h1 class="text-4xl md:text-5xl font-display font-bold text-[#1A1A1A] mb-4">Warranty Verification</h1>
@@ -33,72 +33,59 @@
 
             {{-- Golden Premium Warranty Card --}}
             @if(isset($warranty))
-            <div id="warranty-card" class="bg-white p-4 md:p-14">
-                <div class="relative group cursor-default">
+            <div id="warranty-card" class="bg-white p-4 md:p-14 border-b border-[#F0EEE8]">
+                <div class="relative group cursor-default max-w-4xl mx-auto">
                     {{-- The Physical Card - Modern Premium Black --}}
-                    <div class="quilted-card-base relative aspect-[1.586/1] w-full rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.6)] overflow-hidden transition-all duration-700 hover:scale-[1.01] border border-white/5">
+                    <div class="quilted-card-base relative aspect-[1.586/1] w-full rounded-[1.5rem] md:rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden transition-all duration-700 hover:scale-[1.01] border border-[#333]">
                         {{-- Quilted Pattern Overlay --}}
                         <div class="absolute inset-0 quilted-pattern opacity-80"></div>
                         
                         {{-- Real DOM element for dots to ensure html2canvas captures them (SVG for reliability) --}}
                         <div class="quilted-dots absolute inset-0"></div>
                         
-                        {{-- Pattern Fade Overlay (Real element for better export capture) --}}
-                        <div class="absolute inset-0 pointer-events-none bg-gradient-to-l from-transparent via-[#020202]/50 to-[#020202]"></div>
-                        
-                        {{-- Gold Shine Shimmer --}}
-                        <div class="absolute inset-0 gold-shine opacity-10"></div>
+                        {{-- Pattern Fade Overlay --}}
+                        <div class="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-transparent to-black/80 opacity-50"></div>
 
-                        {{-- Main Content Area --}}
-                        <div class="relative z-10 p-8 md:p-14 h-full flex flex-col justify-between">
-                            {{-- Top Section: Large Logo & Optional Photo --}}
+                        {{-- Main Content Area (Black section) --}}
+                        <div class="relative z-10 p-8 md:p-14 h-[calc(100%-25%)] flex flex-col justify-between">
+                            {{-- Top Section: Large Logo --}}
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <div class="w-40 md:w-64 transition-transform duration-700 group-hover:scale-105">
-                                        <img src="{{ asset('images/logo-icon.png') }}" alt="Lenz Breeze" class="w-24 h-auto object-contain">
+                                    <div class="w-40 md:w-64">
+                                        <img src="{{ asset('images/EYE-MEK-LOGO_YELLOW (1).avif') }}" alt="Eye Mek" class="w-36 md:w-56 h-auto object-contain">
                                     </div>
-                                    <p class="mt-2 text-[#D4AF37] text-[8px] md:text-xs font-black uppercase tracking-[0.6em] ml-1 drop-shadow-md italic">Create A New World</p>
+                                    <p class="mt-2 text-[#D4AF37] text-[9px] md:text-sm font-black uppercase tracking-[0.6em] md:tracking-[0.8em] font-sans">Create A New World</p>
                                 </div>
-                                
-                                {{-- Customer Photo (Right Corner) --}}
-                                @if($warranty->customer_photo)
-                                <div id="customer-photo-container" class="w-16 h-16 md:w-32 md:h-32 rounded-2xl border-2 border-[#D4AF37]/30 overflow-hidden shadow-2xl transform rotate-3 group-hover:rotate-0 transition-transform duration-700 bg-black/20 backdrop-blur-sm">
-                                    <img src="{{ asset('storage/' . $warranty->customer_photo) }}" alt="{{ $warranty->customer_name }}" class="w-full h-full object-cover">
-                                </div>
-                                @endif
                             </div>
 
                             {{-- Middle Section: Holder Name & Serial --}}
-                            <div class="-mt-4 md:-mt-12">
+                            <div class="pb-2 md:pb-4">
                                 <div class="mb-2 md:mb-4">
-                                    <h4 class="embossed-gold text-lg md:text-4xl uppercase tracking-wider drop-shadow-xl">{{ $warranty->customer_name }}</h4>
+                                    <h4 class="text-[#D4AF37] text-2xl md:text-5xl uppercase tracking-wider font-bold drop-shadow-md">{{ $warranty->customer_name }}</h4>
                                 </div>
-                                <p id="serial-number-text" data-serial="{{ $warranty->serial_number }}" class="font-mono text-base md:text-3xl text-white/80 tracking-[0.4em] font-black embossed-text-heavy select-none drop-shadow-2xl">
-                                    {{ strtoupper($warranty->serial_number) }}
+                                <p id="serial-number-text" data-serial="{{ $warranty->serial_number }}" class="font-mono text-xl md:text-3xl text-[#D4AF37]/90 tracking-[0.5em] font-black uppercase">
+                                    {{ $warranty->serial_number }}
                                 </p>
                             </div>
-
-                            {{-- Placeholder for spacing --}}
-                            <div class="h-8 md:h-16"></div>
                         </div>
 
-                        {{-- Golden Footer Slant --}}
-                        <div class="absolute bottom-0 left-0 right-0 h-16 md:h-28 gold-footer-slant overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent animate-pulse"></div>
-                            <div class="h-full flex items-center justify-between px-8 md:px-14 relative z-10">
-                                <div class="flex gap-8 md:gap-20">
+                        {{-- Flat Golden Footer --}}
+                        <div class="absolute bottom-0 left-0 right-0 h-[25%] bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#D4AF37] shadow-inner">
+                            <div class="h-full flex items-center justify-between px-8 md:px-14">
+                                <div class="flex gap-12 md:gap-32">
                                     <div class="flex flex-col">
-                                        <span class="text-black/40 text-[8px] md:text-[10px] font-black uppercase tracking-widest">Valid Thru</span>
-                                        <span class="text-black font-black font-mono text-xs md:text-xl">{{ $warranty->expiry_date->format('m/y') }}</span>
+                                        <span class="text-[#4D4532] text-[8px] md:text-xs font-black uppercase tracking-widest mb-1">Valid Thru</span>
+                                        <span class="text-black font-black font-mono text-sm md:text-2xl">{{ $warranty->expiry_date->format('m/y') }}</span>
                                     </div>
                                     <div class="flex flex-col">
-                                        <span class="text-black/40 text-[8px] md:text-[10px] font-black uppercase tracking-widest">Since</span>
-                                        <span class="text-black font-black font-mono text-xs md:text-xl">{{ $warranty->purchase_date->format('Y') }}</span>
+                                        <span class="text-[#4D4532] text-[8px] md:text-xs font-black uppercase tracking-widest mb-1">Since</span>
+                                        <span class="text-black font-black font-mono text-sm md:text-2xl">{{ $warranty->purchase_date->format('Y') }}</span>
                                     </div>
                                 </div>
-                                {{-- Logo Icon --}}
-                                <div class="h-8 md:h-14 opacity-20">
-                                    <img src="{{ asset('images/logo-icon.png') }}" class="h-full w-auto object-contain brightness-0">
+                                {{-- Powered By Logo (Centered stack) --}}
+                                <div class="flex flex-col items-center justify-center -mr-2 opacity-100">
+                                    <span class="text-[#4D4532] text-[6px] md:text-[9px] font-black uppercase tracking-[0.3em] mb-1">Product By</span>
+                                    <img src="{{ asset('images/logo.avif') }}" alt="Lenz Breeze" class="h-6 md:h-12 w-auto object-contain brightness-0 mix-blend-multiply opacity-90">
                                 </div>
                             </div>
                         </div>

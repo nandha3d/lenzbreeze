@@ -42,7 +42,7 @@ class IncomeCategoryController extends Controller
 
         $data = $request->all();
         IncomeCategory::create($data);
-        return redirect('income_categories')->with('message', 'Data inserted successfully');
+        return redirect('admin/income_categories')->with('message', 'Data inserted successfully');
     }
 
     public function show(string $id)
@@ -70,7 +70,7 @@ class IncomeCategoryController extends Controller
         $data = $request->all();
         $lims_income_category_data = IncomeCategory::find($data['income_category_id']);
         $lims_income_category_data->update($data);
-        return redirect('income_categories')->with('message', 'Data updated successfully');
+        return redirect('admin/income_categories')->with('message', 'Data updated successfully');
     }
 
     public function destroy(string $id)
@@ -78,6 +78,6 @@ class IncomeCategoryController extends Controller
         $lims_income_category_data = IncomeCategory::find($id);
         $lims_income_category_data->is_active = false;
         $lims_income_category_data->save();
-        return redirect('income_categories')->with('not_permitted', 'Data deleted successfully');
+        return redirect('admin/income_categories')->with('not_permitted', 'Data deleted successfully');
     }
 }

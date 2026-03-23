@@ -58,13 +58,13 @@ class AdminController extends Controller
         return redirect()->route('admin.web_products')->with('success', 'Product created successfully.');
     }
 
-    public function editProduct(WebProduct $product)
+    public function editProduct(WebProduct $web_product)
     {
         $categories = ProductCategory::active()->orderBy('display_order')->get();
-        return view('admin.products.form', compact('product', 'categories'));
+        return view('admin.products.form', compact('web_product', 'categories'));
     }
 
-    public function updateProduct(Request $request, WebProduct $product)
+    public function updateProduct(Request $request, WebProduct $web_product)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -84,13 +84,13 @@ class AdminController extends Controller
             $validated['image'] = $request->file('image')->store('products', 'public');
         }
 
-        $product->update($validated);
+        $web_product->update($validated);
         return redirect()->route('admin.web_products')->with('success', 'Product updated successfully.');
     }
 
-    public function deleteProduct(WebProduct $product)
+    public function deleteProduct(WebProduct $web_product)
     {
-        $product->delete();
+        $web_product->delete();
         return redirect()->route('admin.web_products')->with('success', 'Product deleted successfully.');
     }
 

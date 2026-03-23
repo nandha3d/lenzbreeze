@@ -857,7 +857,7 @@ class TransferController extends Controller
                 $message .= '. Please Setup Your Mail Credentials to send Email.';
             }
         }
-        return redirect('transfers')->with('message', $message);
+        return redirect('admin/transfers')->with('message', $message);
     }
 
     public function productTransferData($id)
@@ -1062,7 +1062,7 @@ class TransferController extends Controller
         $lims_transfer_data->item = $key + 1;
         $lims_transfer_data->grand_total = $lims_transfer_data->total_cost + $lims_transfer_data->shipping_cost;
         $lims_transfer_data->save();
-        return redirect('transfers')->with('message', 'Transfer imported successfully');
+        return redirect('admin/transfers')->with('message', 'Transfer imported successfully');
     }
 
     public function edit($id)
@@ -1339,7 +1339,7 @@ class TransferController extends Controller
         }
 
         $lims_transfer_data->update($data);
-        return redirect('transfers')->with('message', 'Transfer updated successfully');
+        return redirect('admin/transfers')->with('message', 'Transfer updated successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -1480,6 +1480,6 @@ class TransferController extends Controller
         $lims_transfer_data->delete();
         $this->fileDelete(public_path('documents/transfer/'), $lims_transfer_data->document);
 
-        return redirect('transfers')->with('not_permitted', 'Transfer deleted successfully');
+        return redirect('admin/transfers')->with('not_permitted', 'Transfer deleted successfully');
     }
 }

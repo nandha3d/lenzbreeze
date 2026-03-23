@@ -157,8 +157,8 @@
 @endsection
 
 @push('scripts')
-
     <script type="text/javascript">
+@include('salepro.backend.report._export_helper')
 
         $("ul#report").siblings('a').attr('aria-expanded','true');
         $("ul#report").addClass("show");
@@ -186,42 +186,27 @@
                     extend: 'pdf',
                     text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                     exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                    action: function(e, dt, button, config) {
-                        datatable_sum(dt, true);
-                        $.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-                        datatable_sum(dt, false);
-                    },
+                        columns: ':visible:not(.not-exported)',
+                        },
+                    action: newexportaction,
                     footer:true
                 },
                 {
                     extend: 'excel',
                     text: '<i title="export to excel" class="dripicons-document-new"></i>',
                     exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                    action: function(e, dt, button, config) {
-                        datatable_sum(dt, true);
-                        $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
-                        datatable_sum(dt, false);
-                    },
+                        columns: ':visible:not(.not-exported)',
+                        },
+                    action: newexportaction,
                     footer:true
                 },
                 {
                     extend: 'csv',
                     text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
                     exportOptions: {
-                        columns: ':visible:Not(.not-exported)',
-                        rows: ':visible'
-                    },
-                    action: function(e, dt, button, config) {
-                        datatable_sum(dt, true);
-                        $.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
-                        datatable_sum(dt, false);
-                    },
+                        columns: ':visible:not(.not-exported)',
+                        },
+                    action: newexportaction,
                     footer:true
                 },
                 {
@@ -229,13 +214,8 @@
                     text: '<i title="print" class="fa fa-print"></i>',
                     exportOptions: {
                         columns: ':visible:not(.not-exported)',
-                        rows: ':visible',
-                    },
-                    action: function(e, dt, button, config) {
-                        datatable_sum(dt, true);
-                        $.fn.dataTable.ext.buttons.print.action.call(this, e, dt, button, config);
-                        datatable_sum(dt, false);
-                    },
+                       },
+                    action: newexportaction,
                     footer:true
                 },
                 {
@@ -262,14 +242,14 @@
                 $( dt_selector.column( 13 ).footer() ).html(dt_selector.cells( rows, 13, { page: 'current' } ).data().sum().toFixed(2));
             }
             else {
-                $( dt_selector.column( 6 ).footer() ).html(dt_selector.cells( rows, 6, { page: 'current' } ).data().sum().toFixed(2));
-                $( dt_selector.column( 7 ).footer() ).html(dt_selector.cells( rows, 7, { page: 'current' } ).data().sum().toFixed(2));
-                $( dt_selector.column( 8 ).footer() ).html(dt_selector.cells( rows, 8, { page: 'current' } ).data().sum().toFixed(2));
-                $( dt_selector.column( 9 ).footer() ).html(dt_selector.cells( rows, 9, { page: 'current' } ).data().sum().toFixed(2));
-                $( dt_selector.column( 10 ).footer() ).html(dt_selector.cells( rows, 10, { page: 'current' } ).data().sum().toFixed(2));
-                $( dt_selector.column( 11 ).footer() ).html(dt_selector.cells( rows, 11, { page: 'current' } ).data().sum().toFixed(2));
-                $( dt_selector.column( 12 ).footer() ).html(dt_selector.cells( rows, 12, { page: 'current' } ).data().sum().toFixed(2));
-                $( dt_selector.column( 13 ).footer() ).html(dt_selector.cells( rows, 13, { page: 'current' } ).data().sum().toFixed(2));
+                $( dt_selector.column( 6 ).footer() ).html(dt_selector.column( 6, {page:'current'} ).data().sum().toFixed(2));
+                $( dt_selector.column( 7 ).footer() ).html(dt_selector.column( 7, {page:'current'} ).data().sum().toFixed(2));
+                $( dt_selector.column( 8 ).footer() ).html(dt_selector.column( 8, {page:'current'} ).data().sum().toFixed(2));
+                $( dt_selector.column( 9 ).footer() ).html(dt_selector.column( 9, {page:'current'} ).data().sum().toFixed(2));
+                $( dt_selector.column( 10 ).footer() ).html(dt_selector.column( 10, {page:'current'} ).data().sum().toFixed(2));
+                $( dt_selector.column( 11 ).footer() ).html(dt_selector.column( 11, {page:'current'} ).data().sum().toFixed(2));
+                $( dt_selector.column( 12 ).footer() ).html(dt_selector.column( 12, {page:'current'} ).data().sum().toFixed(2));
+                $( dt_selector.column( 13 ).footer() ).html(dt_selector.column( 13, {page:'current'} ).data().sum().toFixed(2));
             }
         }
 
