@@ -34,6 +34,8 @@
                 line-height: 1.4;
             }
             @media print {
+                @page { margin: 0; }
+                body { margin: 1.6cm; }
                 .hidden-print {
                     display: none !important;
                 }
@@ -148,18 +150,21 @@
         </table>
         <table dir="" style="width: 100%;border-collapse: collapse;">
             <tr class="table-header" style="">
-                <td style="border:1px solid #222;padding:1px 3px;width:10%;text-align:center">Order No</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:25%;text-align:center">{{trans('file.Description')}}</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:8%;text-align:center">HSN</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:5%;text-align:center">{{trans('file.Qty')}}</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:6%;text-align:center">Rate</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:6%;text-align:center">Discount</td>
-                {{-- <td style="border:1px solid #222;padding:1px 3px;width:8%;text-align:center">Amount</td> --}}
-                <td style="border:1px solid #222;padding:1px 2px;width:11%;text-align:center;">{{trans('file.Subtotal')}}</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:13%;text-align:center">Order No</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:13%;text-align:center">Customer Order No.</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:30%;text-align:center">{{trans('file.Description')}}</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:10%;text-align:center">HSN</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:6%;text-align:center">{{trans('file.Qty')}}</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:8%;text-align:center">Rate</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:8%;text-align:center">Discount</td>
+                <td style="border:1px solid #222;padding:1px 2px;width:12%;text-align:center;">{{trans('file.Subtotal')}}</td>
             </tr>
             <?php
             $total_product_tax = 0;
             $totalPrice = 0;
+            $total_fees = 0;
+            $total_fitting = 0;
+            $total_tinting = 0;
 
             $bill_order_data = \App\Models\Sale::where(["customer_id" => $bill->customer_id, "order_tax_rate" => $bill->order_tax_rate])
                         ->whereDate("created_at",  $bill->date)->get();
@@ -169,6 +174,26 @@
                 <?php
                     $lims_sale_data = $order;
                     $lims_product_sale_data = \App\Models\Product_Sale::where(["sale_id" => $order->id])->get();
+                    $order_extras = \DB::connection('salepro')->table('order_extras')
+                        ->join('order_extra_types', 'order_extras.order_extra_type_id', '=', 'order_extra_types.id')
+                        ->where('sale_id', $order->id)
+                        ->select('order_extra_types.name', 'order_extra_types.type', 'order_extras.value')
+                        ->get();
+                    $customer_order_no = '';
+                    foreach($order_extras as $extra) {
+                        if($extra->type == 'info') {
+                            $customer_order_no = $extra->value;
+                        }
+                        if($extra->name == 'Fitting charge') {
+                            $total_fitting += (float)$extra->value;
+                        }
+                        if($extra->name == 'Tinting cost') {
+                            $total_tinting += (float)$extra->value;
+                        }
+                        if($extra->type == 'fee' && is_numeric($extra->value)) {
+                            $total_fees += (float)$extra->value;
+                        }
+                    }
                 ?>
 
             @foreach($lims_product_sale_data as $key => $product_sale_data)
@@ -191,24 +216,22 @@
             ?>
             <tr>
                 <td style="border-right:1px solid #222;border-left:1px solid #222;padding:1px 3px;text-align: center;">{{$lims_sale_data->order_no}}</td>
+                <td style="border-right:1px solid #222;padding:1px 3px;text-align: center;">{{$customer_order_no}}</td>
                 <td style="border-right:1px solid #222;padding:1px 3px;font-size: 15px;line-height: 1.2;">
                     {!!$lims_product_data->name!!}
                     <br>
-                    {{-- <span>Base: {{$lims_product_data->base}} </span> --}}
                     <span >Add: {{$product_sale_data->addition}} </span>
                     <br>
                     <span>SPH: {{$product_sale_data->sph}} </span>
                     <span style="margin-left:5px">CYL: {{$product_sale_data->cyl}} </span>
                     <span style="margin-left:5px">AXIS: {{$product_sale_data->axis}} </span>
                     <span style="margin-left:5px">{{$product_sale_data->lr}} </span>
-
                 </td>
                 <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">9001</td>
                 <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">{{$product_sale_data->qty}}</td>
                 <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">{{number_format($product_sale_data->net_unit_price, $general_setting->decimal, '.', ',')}}</td>
                 <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">{{number_format($product_sale_data->discount, $general_setting->decimal, '.', ',')}}</td>
-                {{-- <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">{{number_format(($product_sale_data->net_unit_price - $product_sale_data->discount), $general_setting->decimal, '.', ',')}}</td> --}}
-                <td style="border-right:1px solid #222;border-right:1px solid #222;padding:1px 3px;text-align:center;font-size: 15px;">{{number_format($product_sale_data->total, $general_setting->decimal, '.', ',')}}</td>
+                <td style="border-right:1px solid #222;padding:1px 3px;text-align:center;font-size: 15px;">{{number_format($product_sale_data->total, $general_setting->decimal, '.', ',')}}</td>
             </tr>
             @endforeach
             @endforeach
@@ -222,87 +245,54 @@
                  <td style="border-right:1px solid #222"></td>
                  <td style="border-right:1px solid #222"></td>
                  <td style="border-right:1px solid #222"></td>
+                 <td style="border-right:1px solid #222"></td>
             </tr>
             @endif
 
             <tr>
-                <td style="border: 1px solid #222"></td>
-                <td style="border: 1px solid #222">Total</td>
-                <td style="border: 1px solid #222"></td>
-                <td style="border: 1px solid #222;text-align:center">{{$bill->total_qty}}</td>
-                <td style="border: 1px solid #222;text-align:center">{{($bill->total_price  + $bill->total_discount)}}</td>
-                <td style="border: 1px solid #222;text-align:center">{{$bill->total_discount}}</td>
-                <td style="border: 1px solid #222;text-align:center">{{$bill->total_price}}</td>
-           </tr>
+                <td style="border: 1px solid #222; width: 13%;"></td>
+                <td style="border: 1px solid #222; width: 13%;"></td>
+                <td style="border: 1px solid #222; width: 30%; text-align: center;">Total</td>
+                <td style="border: 1px solid #222; width: 10%;"></td>
+                <td style="border: 1px solid #222; width: 6%; text-align: center;">{{$bill->total_qty}}</td>
+                <td style="border: 1px solid #222; width: 8%; text-align: center;">{{number_format(($bill->total_price  + $bill->total_discount), $general_setting->decimal, '.', ',')}}</td>
+                <td style="border: 1px solid #222; width: 8%; text-align: center;">{{number_format($bill->total_discount, $general_setting->decimal, '.', ',')}}</td>
+                <td style="border: 1px solid #222; width: 12%; text-align: center;">{{number_format($bill->total_price, $general_setting->decimal, '.', ',')}}</td>
+            </tr>
 
+            <?php 
+                $footer_rowspan = 4; // Tax + Fitting + Tinting + Special Discount
+            ?>
             <tr>
-                <td colspan="3" rowspan="2" style="border:1px solid #222;padding:1px 3px;text-align: center; vertical-align: top;">
+                <td colspan="4" rowspan="{{$footer_rowspan}}" style="border:1px solid #222;padding:1px 3px;text-align: center; vertical-align: top; width: 66%;">
                     {{trans('file.Note')}}<br>{{$bill->sale_note}}
                 </td>
 
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
+                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px; width: 22%;">
                     {{trans('file.Tax')}} (5%)
                 </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
+                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px; width: 12%;">
                     {{number_format((float)($bill->total_tax+$bill->order_tax) ,$general_setting->decimal, '.', ',')}}
                 </td>
-
-                {{-- <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                    {{trans('file.Discount')}}
-                </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                    {{number_format((float)($bill->total_discount) ,$general_setting->decimal, '.', ',')}}
-                </td> --}}
             </tr>
 
-
-
-            {{-- <tr>
+            <tr>
                 <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                    {{trans('file.Total Before Tax')}}
+                    Fitting charge
                 </td>
                 <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                        {{number_format($bill->total_price ,$general_setting->decimal, '.', ',')}}
+                    {{number_format((float)$total_fitting ,$general_setting->decimal, '.', ',')}}
                 </td>
-            <tr> --}}
-
             </tr>
-            {{-- @if($general_setting->invoice_format == 'gst' && $general_setting->state == 1)
-                <tr>
-                    <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                        IGST
-                    </td>
-                    <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                        {{number_format((float)($lims_sale_data->total_tax+$lims_sale_data->order_tax) ,$general_setting->decimal, '.', ',')}}
-                    </td>
-                </tr>
-            @elseif($general_setting->invoice_format == 'gst' && $general_setting->state == 2)
-                <tr>
-                    <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                        SGST
-                    </td>
-                    <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                        {{number_format( ($lims_sale_data->total_tax+$lims_sale_data->order_tax) / 2 , $general_setting->decimal, '.', ',')}}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                        CGST
-                    </td>
-                    <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                        {{number_format( ($lims_sale_data->total_tax+$lims_sale_data->order_tax) / 2 , $general_setting->decimal, '.', ',')}}
-                    </td>
-                </tr>
-            @else --}}
-                {{-- <tr>
-                    <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                        {{trans('file.Tax')}} (5%)
-                    </td>
-                    <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                        {{number_format((float)($bill->total_tax+$bill->order_tax) ,$general_setting->decimal, '.', ',')}}
-                    </td>
-                </tr> --}}
-            {{-- @endif --}}
+
+            <tr>
+                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
+                    Tinting cost
+                </td>
+                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
+                    {{number_format((float)$total_tinting ,$general_setting->decimal, '.', ',')}}
+                </td>
+            </tr>
 
             <tr>
                 <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
@@ -313,21 +303,22 @@
                 </td>
             </tr>
 
+
             <tr>
                 @if($general_setting->currency_position == 'prefix')
-                <td class="td-text" colspan="3" rowspan="2" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top;">
+                <td class="td-text" colspan="4" rowspan="2" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top; width: 66%;">
                     {{trans('file.In Words')}}<br>INR <span style="text-transform:capitalize;font-size: 15px;">{{str_replace("-"," ", App\Http\Controllers\SalePro\BillController::NumberToWords($bill->grand_total))}}</span> only
                 </td>
                 @else
-                    <td class="td-text" colspan="3" rowspan="2" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top;">
+                    <td class="td-text" colspan="4" rowspan="2" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top; width: 66%;">
                         {{trans('file.In Words')}}:<br><span style="text-transform:capitalize;font-size: 15px;">{{str_replace("-"," ", App\Http\Controllers\SalePro\BillController::NumberToWords($bill->grand_total))}}</span> INR only
                     </td>
                 @endif
 
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
+                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px; width: 22%;">
                    Shipping Charge
                 </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
+                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px; width: 12%;">
                     {{number_format((float)($bill->shipping_cost) ,$general_setting->decimal, '.', ',')}}
                 </td>
             </tr>
@@ -338,33 +329,7 @@
                 <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">{{trans('file.grand total')}}</td>
                 <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">{{number_format((float)$bill->grand_total ,$general_setting->decimal, '.', ',')}}</td>
             </tr>
-            {{-- <tr>
-
-            </tr> --}}
-            {{-- <tr>
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                    {{trans('file.Paid')}}
-                </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                    {{number_format((float)$bill->paid_amount ,$general_setting->decimal, '.', ',')}}
-                </td>
-            </tr>
-            <tr>
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                    {{trans('file.Due')}}
-                </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                    {{number_format((float)($bill->grand_total - $bill->paid_amount) ,$general_setting->decimal, '.', ',')}}
-                </td>
-            </tr>
-            <tr>
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                    {{trans('file.Total Due')}}
-                </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                    {{number_format($bill->total_due ,$general_setting->decimal, '.', ',')}}
-                </td>
-            </tr> --}}
+            {{-- Removed historical balance rows to avoid confusion --}}
             <tr>
                 <td colspan="2" style="border:1px solid #222">
                     <table>

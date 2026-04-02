@@ -116,40 +116,9 @@
                                     </div>
                                     @endif
 
-                                    {{-- End User Details Section (Added for Warranty flow) --}}
-                                    <div class="col-md-12 my-4">
-                                        <div class="card shadow-sm" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
-                                            <div class="card-body p-4">
-                                                <h5 class="text-primary mb-3"><i class="dripicons-user"></i> End User Details (Captured for Warranty)</h5>
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label>End User Name</label>
-                                                            <input type="text" name="end_user_name" class="form-control" placeholder="Full name of buyer"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label>End User Phone</label>
-                                                            <input type="text" name="end_user_phone" class="form-control" placeholder="Phone number"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label>End User Email</label>
-                                                            <input type="email" name="end_user_email" class="form-control" placeholder="Email (optional)"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label>End User Address</label>
-                                                            <input type="text" name="end_user_address" class="form-control" placeholder="City or Address"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+
+
 
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -255,6 +224,44 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                {{-- End User Details Section (Added for Warranty flow) --}}
+                                <div class="row">
+                                    <div class="col-md-12 mt-4 mb-2">
+                                        <div class="card shadow-sm" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+                                            <div class="card-body p-4">
+                                                <h5 class="text-primary mb-3"><i class="dripicons-user"></i> End User Details (Captured for Warranty)</h5>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Name</label>
+                                                            <input type="text" name="end_user_name" class="form-control" placeholder="Full name of buyer"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Phone</label>
+                                                            <input type="text" name="end_user_phone" class="form-control" placeholder="Phone number"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Email</label>
+                                                            <input type="email" name="end_user_email" class="form-control" placeholder="Email (optional)"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>End User Address</label>
+                                                            <input type="text" name="end_user_address" class="form-control" placeholder="City or Address"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group">
@@ -292,6 +299,23 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
+                                    {{-- Additional Order Details --}}
+                                    @foreach($order_extra_types ?? [] as $type)
+                                        @if(in_array($type->name, ['Fitting charge', 'Tinting cost', 'Customer Order No.']))
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>{{$type->name}}</label>
+                                                <input type="hidden" name="extra_type_id[]" value="{{$type->id}}">
+                                                <input type="{{$type->type == 'fee' ? 'number' : 'text'}}" 
+                                                       name="extra_value[]" 
+                                                       class="form-control {{$type->type == 'fee' ? 'extra-fee-input' : ''}}" 
+                                                       step="any" 
+                                                       placeholder="Enter {{$type->name}}">
+                                            </div>
+                                        </div>
+                                        @endif
+                                    @endforeach
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.Order Tax')}}</label>
@@ -325,17 +349,6 @@
                                                 {{trans('file.Shipping Cost')}}
                                             </label>
                                             <input type="number" name="shipping_cost" class="form-control" step="any"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>{{trans('file.Attach Document')}}</label> <i class="dripicons-question" data-toggle="tooltip" title="Only jpg, jpeg, png, gif, pdf, csv, docx, xlsx and txt file is supported"></i>
-                                            <input type="file" name="document" class="form-control" />
-                                            @if($errors->has('extension'))
-                                                <span>
-                                                   <strong>{{ $errors->first('extension') }}</strong>
-                                                </span>
-                                            @endif
                                         </div>
                                     </div>
                                     @foreach($custom_fields as $field)
@@ -388,6 +401,22 @@
                                             </div>
                                         @endif
                                     @endforeach
+                                    <!-- Other Extras Section -->
+                                    <div class="col-md-12 mt-3 mb-3">
+                                        <label><strong>Other Extras (Optional)</strong></label>
+                                        <table class="table table-bordered table-hover" id="order-extras-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 60%">Extra Type</th>
+                                                    <th style="width: 30%">Value</th>
+                                                    <th style="width: 10%"><button type="button" class="btn btn-sm btn-primary add-extra-btn"><i class="fa fa-plus"></i></button></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    @if($general_setting->is_sale_status_active)
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.Sale Status')}} *</label>
@@ -397,6 +426,8 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @endif
+                                    @if($general_setting->is_payment_status_active)
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.Payment Status')}} *</label>
@@ -408,6 +439,7 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @endif
                                 </div>
                                 <div id="payment">
                                     <div class="row">
@@ -1555,9 +1587,22 @@ function calculateGrandTotal() {
     if (!shipping_cost)
         shipping_cost = {{number_format(0, $general_setting->decimal, '.', '')}};
 
+    var total_extra_fees = 0;
+    // New fixed fields
+    $('.extra-fee-input').each(function() {
+        total_extra_fees += parseFloat($(this).val()) || 0;
+    });
+    // Dynamic table fields
+    $('.extra-value-input').each(function() {
+        var typeDropdown = $(this).closest('tr').find('.extra-type-select option:selected');
+        if (typeDropdown.data('type') === 'fee') {
+            total_extra_fees += parseFloat($(this).val()) || 0;
+        }
+    });
+
     item = ++item + '(' + total_qty + ')';
     order_tax = (subtotal - order_discount) * (order_tax / 100);
-    var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+    var grand_total = (subtotal + order_tax + shipping_cost + total_extra_fees) - order_discount;
 
     $('input[name="order_discount"]').val(order_discount);
     $('input[name="shipping_cost"]').val(shipping_cost);
@@ -1735,20 +1780,19 @@ $('input[name="paying_amount[]"]').on("input", function() {
     $("#change").text( parseFloat( $(this).val() - $("#paid-amount").val()).toFixed({{$general_setting->decimal}}));
 });
 
-$(window).keydown(function(e){
+$(document).keydown(function(e) {
     if (e.which == 13) {
         var $targ = $(e.target);
         if (!$targ.is("textarea") && !$targ.is(":button,:submit")) {
-            var focusNext = false;
-            $(this).find(":input:visible:not([disabled],[readonly]), a").each(function(){
-                if (this === e.target) {
-                    focusNext = true;
-                }
-                else if (focusNext){
-                    $(this).focus();
-                    return false;
-                }
+            e.preventDefault();
+            var focusable = $(":input:visible:not([disabled],[readonly]), a").filter(function() {
+                // Ignore elements with tabindex="-1"
+                return $(this).attr("tabindex") !== "-1";
             });
+            var currentIndex = focusable.index($targ);
+            if (currentIndex > -1 && currentIndex < focusable.length - 1) {
+                focusable.eq(currentIndex + 1).focus();
+            }
             return false;
         }
     }
@@ -1841,6 +1885,76 @@ $(document).on('submit', '.payment-form', function(e) {
 
     }
 });
+    // Return Warehouse Match Check
+    // Fires when user finishes entering lens values (sph, cyl, axis)
+    // Checks if a matching returned product exists in the return warehouse
+    $(document).on('change', '.sph, .cyl, .axis', function() {
+        var row = $(this).closest('tr');
+        var product_id = row.find('.product-id').val();
+        var sph  = row.find('.sph').val();
+        var cyl  = row.find('.cyl').val();
+        var axis = row.find('.axis').val();
+
+        if (!product_id || !sph) return;
+
+        $.ajax({
+            url: '{{ route("return-sale.check-match") }}',
+            method: 'GET',
+            data: { product_id: product_id, sph: sph, cyl: cyl, axis: axis },
+            success: function(response) {
+                row.next('.return-match-alert').remove();
+                if (response.match) {
+                    var alertHtml = '<tr class="return-match-alert">' +
+                        '<td colspan="20" style="background:#fff3cd;border:1px solid #ffc107;padding:8px 12px;font-size:13px;">' +
+                        '<strong>&#9888; Return Warehouse Match Found:</strong> ' +
+                        'Product with these lens values (SPH: ' + sph + ', CYL: ' + cyl + ', AXIS: ' + axis + ') ' +
+                        'is available at <strong>' + response.warehouse_name + '</strong>. ' +
+                        'Qty available: <strong>' + response.qty + '</strong>. ' +
+                        'Return Ref: <strong>' + response.reference_no + '</strong>. ' +
+                        '<em>You may use return stock instead of placing a new order.</em>' +
+                        '</td></tr>';
+                    row.after(alertHtml);
+                }
+            }
+        });
+        });
+    });
+
+    var orderExtraTypes = @json($order_extra_types ?? []);
+
+    $(document).on('click', '.add-extra-btn', function() {
+        var optionsHtml = '<option value="">Select Type...</option>';
+        $.each(orderExtraTypes, function(i, type) {
+            optionsHtml += '<option value="' + type.id + '" data-type="' + type.type + '">' + type.name + '</option>';
+        });
+
+        var rowHtml = '<tr>' +
+            '<td><select name="extra_type_id[]" class="form-control extra-type-select" required>' + optionsHtml + '</select></td>' +
+            '<td><input type="text" name="extra_value[]" class="form-control extra-value-input" required placeholder="Amount or Text"></td>' +
+            '<td><button type="button" class="btn btn-sm btn-danger remove-extra-btn"><i class="fa fa-trash"></i></button></td>' +
+        '</tr>';
+        $('#order-extras-table tbody').append(rowHtml);
+        if($('.selectpicker').length) {
+            // $('.selectpicker').selectpicker('refresh'); // if using bootstrap-select
+        }
+    });
+
+    $(document).on('click', '.remove-extra-btn', function() {
+        $(this).closest('tr').remove();
+        calculateGrandTotal();
+    });
+
+    $(document).on('keyup', '.extra-value-input', function() {
+        calculateGrandTotal();
+    });
+
+    $(document).on('change', '.extra-type-select', function() {
+        calculateGrandTotal();
+    });
+
+    $(document).on('keyup change', '.extra-fee-input', function() {
+        calculateGrandTotal();
+    });
 </script>
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 @endpush

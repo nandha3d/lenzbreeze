@@ -112,6 +112,37 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                {{-- Additional Order Information Section --}}
+                                @php
+                                    $extra_values = $order_extras->pluck('value', 'order_extra_type_id');
+                                @endphp
+                                <div class="col-md-12 my-4">
+                                    <div class="card shadow border-0" style="background-color: #f1f5f9; border: 1px solid #cbd5e1;">
+                                        <div class="card-body p-4 rounded-xl">
+                                            <h5 class="text-primary mb-3" style="font-weight: 600;"><i class="dripicons-document-edit text-primary"></i> Additional Order Details</h5>
+                                            <div class="row">
+                                                @foreach($order_extra_types ?? [] as $type)
+                                                    @if(in_array($type->name, ['Fitting charge', 'Tinting cost', 'Customer Order No.']))
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label><strong>{{$type->name}}</strong></label>
+                                                            <input type="hidden" name="extra_type_id[]" value="{{$type->id}}">
+                                                            <input type="{{$type->type == 'fee' ? 'number' : 'text'}}" 
+                                                                   name="extra_value[]" 
+                                                                   value="{{$extra_values[$type->id] ?? ''}}"
+                                                                   class="form-control {{$type->type == 'fee' ? 'extra-fee-input' : ''}}" 
+                                                                   step="any" 
+                                                                   placeholder="Enter {{$type->name}}">
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="row mt-3">
                                     <div class="col-md-12">
                                         <label>{{trans('file.Select Product')}}</label>
@@ -242,7 +273,7 @@
 
                                                         <td ><input type="text" class="form-control qty update_product" name="qty[]" value="{{$product_sale->qty}}" step="any" required/></td>
                                                         {{-- <td class="net_unit_price">{{ number_format((float)$product_sale->net_unit_price, $general_setting->decimal, '.', '')}} </td> --}}
-                                                        <td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="{{ number_format((float)$product_sale->net_unit_price, $general_setting->decimal, '.', '')}}" required/></td>
+                                                        <td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="{{ number_format((float)$product_sale->net_unit_price, $general_setting->decimal, '.', '')}}" readonly style="background-color:#e9ecef;" required/></td>
                                                         <td>
 
                                                             <div class="input-group-prepend">
@@ -392,17 +423,6 @@
                                             <input type="number" name="shipping_cost" class="form-control" value="{{$lims_sale_data->shipping_cost}}" step="any" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>{{trans('file.Attach Document')}}</label> <i class="dripicons-question" data-toggle="tooltip" title="Only jpg, jpeg, png, gif, pdf, csv, docx, xlsx and txt file is supported"></i>
-                                            <input type="file" name="document" class="form-control" />
-                                            @if($errors->has('extension'))
-                                                <span>
-                                                   <strong>{{ $errors->first('extension') }}</strong>
-                                                </span>
-                                            @endif
-                                        </div>
-                                    </div>
                                     @foreach($custom_fields as $field)
                                         <?php $field_name = str_replace(' ', '_', strtolower($field->name)); ?>
                                         @if(!$field->is_admin || \Auth::user()->role_id == 1)
@@ -462,6 +482,41 @@
                                             </div>
                                         @endif
                                     @endforeach
+                                    <!-- Other Extras Section -->
+                                    <div class="col-md-12 mt-3 mb-3">
+                                        <label><strong>Other Extras (Optional)</strong></label>
+                                        <table class="table table-bordered table-hover" id="order-extras-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 60%">Extra Type</th>
+                                                    <th style="width: 30%">Value</th>
+                                                    <th style="width: 10%"><button type="button" class="btn btn-sm btn-primary add-extra-btn"><i class="fa fa-plus"></i></button></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php
+                                                    $fixed_extra_ids = $order_extra_types->whereIn('name', ['Fitting charge', 'Tinting cost', 'Customer Order No.'])->pluck('id')->toArray();
+                                                @endphp
+                                                @foreach($order_extras as $extra)
+                                                    @if(!in_array($extra->order_extra_type_id, $fixed_extra_ids))
+                                                        <tr>
+                                                            <td>
+                                                                <select name="extra_type_id[]" class="form-control extra-type-select" required>
+                                                                    <option value="">Select Type...</option>
+                                                                    @foreach($order_extra_types as $type)
+                                                                        <option value="{{$type->id}}" data-type="{{$type->type}}" {{$type->id == $extra->order_extra_type_id ? 'selected' : ''}}>{{$type->name}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </td>
+                                                            <td><input type="text" name="extra_value[]" class="form-control extra-value-input" required placeholder="Amount or Text" value="{{$extra->value}}"></td>
+                                                            <td><button type="button" class="btn btn-sm btn-danger remove-extra-btn"><i class="fa fa-trash"></i></button></td>
+                                                        </tr>
+                                                    @endif
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    @if($general_setting->is_sale_status_active)
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.Sale Status')}} *</label>
@@ -472,6 +527,7 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @endif
                                     @if($lims_sale_data->coupon_id)
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -1057,7 +1113,7 @@
 
                         cols += '<td><input type="text" class="form-control qty " name="qty[]" value="'+data['qty']+'"  required/></td>';
 
-                        cols += '<td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="'+data['price']+'" required/></td>';
+                        cols += '<td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="'+data['price']+'" readonly style="background-color:#e9ecef;" required/></td>';
                         cols += `<td>
                                     <div class="input-group-prepend">
                                     <select  name="discount_type[]" class="form-control discount_type" style="width:60px;padding: 6px;">
@@ -1377,9 +1433,22 @@ function calculateRowProductData(quantity) {
         if (!shipping_cost)
             shipping_cost = {{number_format(0, $general_setting->decimal, '.', '')}};
 
+        var total_extra_fees = 0;
+        // New fixed fields
+        $('.extra-fee-input').each(function() {
+            total_extra_fees += parseFloat($(this).val()) || 0;
+        });
+        // Dynamic table fields
+        $('.extra-value-input').each(function() {
+            var typeDropdown = $(this).closest('tr').find('.extra-type-select option:selected');
+            if (typeDropdown.data('type') === 'fee') {
+                total_extra_fees += parseFloat($(this).val()) || 0;
+            }
+        });
+
         item = ++item + '(' + total_qty + ')';
         order_tax = (subtotal - order_discount) * (order_tax / 100);
-        var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+        var grand_total = (subtotal + order_tax + shipping_cost + total_extra_fees) - order_discount;
         $('input[name="grand_total"]').val(grand_total.toFixed({{$general_setting->decimal}}));
         if($('input[name="coupon_active"]').val()) {
             couponDiscount();
@@ -1440,20 +1509,18 @@ function calculateRowProductData(quantity) {
         calculateGrandTotal();
     });
 
-    $(window).keydown(function(e){
+    $(document).keydown(function(e) {
         if (e.which == 13) {
             var $targ = $(e.target);
             if (!$targ.is("textarea") && !$targ.is(":button,:submit")) {
-                var focusNext = false;
-                $(this).find(":input:visible:not([disabled],[readonly]), a").each(function(){
-                    if (this === e.target) {
-                        focusNext = true;
-                    }
-                    else if (focusNext){
-                        $(this).focus();
-                        return false;
-                    }
+                e.preventDefault();
+                var focusable = $(":input:visible:not([disabled],[readonly]), a").filter(function() {
+                    return $(this).attr("tabindex") !== "-1";
                 });
+                var currentIndex = focusable.index($targ);
+                if (currentIndex > -1 && currentIndex < focusable.length - 1) {
+                    focusable.eq(currentIndex + 1).focus();
+                }
                 return false;
             }
         }
@@ -1479,6 +1546,42 @@ function calculateRowProductData(quantity) {
             $("#submit-button").prop('disabled', true);
             $(".batch-no").prop('disabled', false);
         }
+    });
+
+    var orderExtraTypes = @json($order_extra_types ?? []);
+
+    $(document).on('click', '.add-extra-btn', function() {
+        var optionsHtml = '<option value="">Select Type...</option>';
+        $.each(orderExtraTypes, function(i, type) {
+            optionsHtml += '<option value="' + type.id + '" data-type="' + type.type + '">' + type.name + '</option>';
+        });
+
+        var rowHtml = '<tr>' +
+            '<td><select name="extra_type_id[]" class="form-control extra-type-select" required>' + optionsHtml + '</select></td>' +
+            '<td><input type="text" name="extra_value[]" class="form-control extra-value-input" required placeholder="Amount or Text"></td>' +
+            '<td><button type="button" class="btn btn-sm btn-danger remove-extra-btn"><i class="fa fa-trash"></i></button></td>' +
+        '</tr>';
+        $('#order-extras-table tbody').append(rowHtml);
+        if($('.selectpicker').length) {
+            // $('.selectpicker').selectpicker('refresh');
+        }
+    });
+
+    $(document).on('click', '.remove-extra-btn', function() {
+        $(this).closest('tr').remove();
+        calculateGrandTotal();
+    });
+
+    $(document).on('keyup', '.extra-value-input', function() {
+        calculateGrandTotal();
+    });
+
+    $(document).on('change', '.extra-type-select', function() {
+        calculateGrandTotal();
+    });
+
+    $(document).on('keyup change', '.extra-fee-input', function() {
+        calculateGrandTotal();
     });
     </script>
 // <script type="text/javascript" src="https://js.stripe.com/v3/"></script>

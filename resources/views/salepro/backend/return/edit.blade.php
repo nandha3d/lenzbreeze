@@ -82,6 +82,8 @@
                                                         <th>{{trans('file.Discount')}}</th>
                                                         <th>{{trans('file.Tax')}}</th>
                                                         <th>{{trans('file.Subtotal')}}</th>
+                                                        <th>Original Lens Values</th>
+                                                        <th>Actual Lens Values (SPH / CYL / AXIS / ADD / L-R)</th>
                                                         <th><i class="dripicons-trash"></i></th>
                                                     </tr>
                                                 </thead>
@@ -145,6 +147,13 @@
                                                         $temp_unit_operator = $unit_operator = implode(",",$unit_operator) .',';
                                                         $temp_unit_operation_value = $unit_operation_value =  implode(",",$unit_operation_value) . ',';
                                                         $product_batch_data = \App\Models\ProductBatch::select('batch_no')->find($product_return->product_batch_id);
+
+                                                        // Fetch original sale data to show original lens values
+                                                        $product_sale_data = DB::connection('salepro')->table('product_sales')->where([
+                                                            ['sale_id', $lims_return_data->sale_id],
+                                                            ['product_id', $product_return->product_id],
+                                                            ['variant_id', $product_return->variant_id]
+                                                        ])->first();
                                                     ?>
                                                         <td>{{$product_data->name}} <button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button> </td>
                                                         <td>{{$product_data->code}}</td>
@@ -164,6 +173,24 @@
                                                         <td class="discount">{{ number_format((float)$product_return->discount, $general_setting->decimal, '.', '')}}</td>
                                                         <td class="tax">{{ number_format((float)$product_return->tax, $general_setting->decimal, '.', '')}}</td>
                                                         <td class="sub-total">{{ number_format((float)$product_return->total, $general_setting->decimal, '.', '')}}</td>
+                                                        {{-- Original lens values (read-only) --}}
+                                                        <td style="white-space:nowrap; font-size:12px; color:#888;">
+                                                            {{ $product_sale_data->sph ?? '-' }} /
+                                                            {{ $product_sale_data->cyl ?? '-' }} /
+                                                            {{ $product_sale_data->axis ?? '-' }} /
+                                                            {{ $product_sale_data->addition ?? '-' }} /
+                                                            {{ $product_sale_data->lr ?? '-' }}
+                                                        </td>
+                                                        {{-- Actual lens values (editable) --}}
+                                                        <td style="white-space:nowrap;">
+                                                            <div style="display:flex; gap:4px;">
+                                                                <input type="text" name="actual_sph[]"      class="form-control actual-lens" placeholder="SPH"  style="width:52px; font-size:12px;" value="{{ $product_return->actual_sph ?? '' }}">
+                                                                <input type="text" name="actual_cyl[]"      class="form-control actual-lens" placeholder="CYL"  style="width:52px; font-size:12px;" value="{{ $product_return->actual_cyl ?? '' }}">
+                                                                <input type="text" name="actual_axis[]"     class="form-control actual-lens" placeholder="AXIS" style="width:52px; font-size:12px;" value="{{ $product_return->actual_axis ?? '' }}">
+                                                                <input type="text" name="actual_addition[]" class="form-control actual-lens" placeholder="ADD"  style="width:52px; font-size:12px;" value="{{ $product_return->actual_addition ?? '' }}">
+                                                                <input type="text" name="actual_lr[]"       class="form-control actual-lens" placeholder="L/R"  style="width:42px; font-size:12px;" value="{{ $product_return->actual_lr ?? '' }}">
+                                                            </div>
+                                                        </td>
                                                         <td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>
                                                         <input type="hidden" class="product-code" name="product_code[]" value="{{$product_data->code}}"/>
                                                         <input type="hidden" name="product_id[]" class="product-id" value="{{$product_data->id}}"/>
@@ -195,6 +222,8 @@
                                                     <th id="total-discount">{{ number_format((float)$lims_return_data->total_discount, $general_setting->decimal, '.', '')}}</th>
                                                     <th id="total-tax">{{ number_format((float)$lims_return_data->total_tax, $general_setting->decimal, '.', '')}}</th>
                                                     <th id="total">{{ number_format((float)$lims_return_data->total_price, $general_setting->decimal, '.', '')}}</th>
+                                                    <th></th>
+                                                    <th></th>
                                                     <th><i class="dripicons-trash"></i></th>
                                                 </tfoot>
                                             </table>
@@ -731,6 +760,16 @@ function productSearch(data){
                 cols += '<td class="discount">{{number_format(0, $general_setting->decimal, '.', '')}}</td>';
                 cols += '<td class="tax"></td>';
                 cols += '<td class="sub-total"></td>';
+                cols += '<td>-</td>'; // Placeholder for Original Lens Values
+                cols += '<td style="white-space:nowrap;">' +
+                            '<div style="display:flex; gap:4px;">' +
+                                '<input type="text" name="actual_sph[]" class="form-control actual-lens" placeholder="SPH" style="width:52px; font-size:12px;">' +
+                                '<input type="text" name="actual_cyl[]" class="form-control actual-lens" placeholder="CYL" style="width:52px; font-size:12px;">' +
+                                '<input type="text" name="actual_axis[]" class="form-control actual-lens" placeholder="AXIS" style="width:52px; font-size:12px;">' +
+                                '<input type="text" name="actual_addition[]" class="form-control actual-lens" placeholder="ADD" style="width:52px; font-size:12px;">' +
+                                '<input type="text" name="actual_lr[]" class="form-control actual-lens" placeholder="L/R" style="width:42px; font-size:12px;">' +
+                            '</div>' +
+                        '</td>';
                 cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
                 cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
                 cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';

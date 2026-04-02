@@ -910,12 +910,13 @@ class SaleController extends Controller
             $brand_list = Brand::where('is_active', true)->get();
             $category_list = Category::where('is_active', true)->get();
             $product_type_list = ProductType::where('is_active', true)->get();
+            $order_extra_types = \DB::table('order_extra_types')->where('is_active', true)->get();
 
             $uri = $request->path();
             if( str_replace('admin/', '', $uri) != 'sales/order'){
-                return view('backend.sale.order',compact('currency_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_tax_list', 'lims_reward_point_setting_data','options', 'numberOfInvoice', 'custom_fields', 'lims_customer_group_all', 'brand_list', 'category_list', 'product_type_list', 'date'));
+                return view('backend.sale.order',compact('currency_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_tax_list', 'lims_reward_point_setting_data','options', 'numberOfInvoice', 'custom_fields', 'lims_customer_group_all', 'brand_list', 'category_list', 'product_type_list', 'date', 'order_extra_types'));
             }else{
-                return view('backend.sale.create',compact('currency_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_tax_list', 'lims_reward_point_setting_data','options', 'numberOfInvoice', 'custom_fields', 'lims_customer_group_all', 'brand_list', 'category_list', 'product_type_list'));
+                return view('backend.sale.create',compact('currency_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_tax_list', 'lims_reward_point_setting_data','options', 'numberOfInvoice', 'custom_fields', 'lims_customer_group_all', 'brand_list', 'category_list', 'product_type_list', 'order_extra_types'));
             }
 
         }
@@ -942,6 +943,10 @@ class SaleController extends Controller
         }
 
         $data = $request->all();
+        // Provide defaults for optional form fields that may be hidden by admin toggles
+        if(!isset($data['sale_status'])) $data['sale_status'] = 1; // Default: Completed
+        if(!isset($data['payment_status'])) $data['payment_status'] = 1; // Default: Pending
+        if(!isset($data['pos'])) $data['pos'] = 0;
         /*DB::beginTransaction();
         try {*/
             if(isset($request->reference_no)) {
@@ -1070,6 +1075,22 @@ class SaleController extends Controller
                 else
                     $data['queue'] = 1;
             }
+            // Set default statuses if toggles are off and fields are missing
+            if(!isset($data['sale_status'])) {
+                $data['sale_status'] = 1; // Completed
+            }
+            if(!isset($data['payment_status'])) {
+                // For POS, payment_status is already set above./
+                // For regular sale, if hidden, we default to Paid (4) if grand_total == paid_amount, else Pending (1)
+                if(!isset($data['pos'])) {
+                    $balance = $data['grand_total'] - $data['paid_amount'];
+                    if($balance > 0 || $balance < 0)
+                        $data['payment_status'] = 1; // Pending
+                    else
+                        $data['payment_status'] = 4; // Paid
+                }
+            }
+
             //inserting data to sales table
             // return $data;
             $lims_sale_data = Sale::create($data);
@@ -1115,8 +1136,8 @@ class SaleController extends Controller
             $mail_data['paid_amount'] = $lims_sale_data->paid_amount;
 
             $product_id = $data['product_id'];
-            $product_batch_id = isset($data['product_batch_id']) ? $data['product_batch_id'] : "";
-            $imei_number = isset($data['imei_number']) ? $data['imei_number'] : "";
+            $product_batch_id = isset($data['product_batch_id']) ? $data['product_batch_id'] : [];
+            $imei_number = isset($data['imei_number']) ? $data['imei_number'] : [];
             $product_code = $data['product_code'];
             $qty = $data['qty'];
             // $sale_unit = "Piece";
@@ -1189,7 +1210,7 @@ class SaleController extends Controller
                         $lims_product_variant_data = ProductVariant::select('id', 'variant_id', 'qty')->FindExactProductWithCode($id, $product_code[$i])->first();
                         $product_sale['variant_id'] = $lims_product_variant_data->variant_id;
                     }
-                    if($lims_product_data->is_batch && $product_batch_id[$i]) {
+                    if($lims_product_data->is_batch && isset($product_batch_id[$i]) && $product_batch_id[$i]) {
                         $product_sale['product_batch_id'] = $product_batch_id[$i];
                     }
 
@@ -1207,7 +1228,7 @@ class SaleController extends Controller
                             $lims_product_variant_data->save();
                             $lims_product_warehouse_data = Product_Warehouse::FindProductWithVariant($id, $lims_product_variant_data->variant_id, $data['warehouse_id'])->first();
                         }
-                        elseif($product_batch_id[$i]) {
+                        elseif(isset($product_batch_id[$i]) && $product_batch_id[$i]) {
                             $lims_product_warehouse_data = Product_Warehouse::where([
                                 ['product_batch_id', $product_batch_id[$i] ],
                                 ['warehouse_id', $data['warehouse_id'] ]
@@ -1314,6 +1335,30 @@ class SaleController extends Controller
                 }
             }
             // ── End warranty auto-creation ──────────────────────────────
+
+            // ── Save Order Extras ───────────────────────────────────────
+            if(isset($data['extra_type_id'])) {
+                foreach($data['extra_type_id'] as $key => $type_id) {
+                    if($type_id) {
+                        \DB::table('order_extras')->insert([
+                            'sale_id' => $lims_sale_data->id,
+                            'order_extra_type_id' => $type_id,
+                            'value' => $data['extra_value'][$key] ?? null,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+            }
+
+            // ── Recompute total_tax from actual product_sale records ────────
+            // The order form doesn't track product-level tax in a separate field,
+            // so total_tax arrives as 0. Recompute from the stored product_sale.tax values.
+            $computed_total_tax = Product_Sale::where('sale_id', $lims_sale_data->id)->sum('tax');
+            if($computed_total_tax > 0 && $lims_sale_data->total_tax == 0) {
+                $lims_sale_data->total_tax = $computed_total_tax;
+                $lims_sale_data->save();
+            }
 
             if($data['sale_status'] == 3)
                 $message = 'Sale successfully added to draft';
@@ -1437,7 +1482,7 @@ class SaleController extends Controller
 
         $smsTemplate = SmsTemplate::where('is_default',1)->latest()->first();
         $smsProvider = ExternalService::where('active',true)->where('type','sms')->first();
-        if($smsProvider && $smsTemplate && $lims_pos_setting_data['send_sms'] == 1) {
+        if($smsProvider && $smsTemplate && isset($lims_pos_setting_data) && $lims_pos_setting_data['send_sms'] == 1) {
             $smsData['type'] = 'onsite';
             $smsData['template_id'] = $smsTemplate['id'];
             $smsData['sale_status'] = $data['sale_status'];
@@ -1449,8 +1494,12 @@ class SaleController extends Controller
         //sms send end
 
         //create new order
-        $billService = new BillService();
-        $billService->customerBillUpdate($lims_sale_data->created_at, $lims_sale_data->customer_id);
+        try {
+            $billService = new BillService();
+            $billService->customerBillUpdate($lims_sale_data->created_at, $lims_sale_data->customer_id);
+        } catch (\Exception $e) {
+            \Log::error('Bill generation error for sale ' . $lims_sale_data->order_no . ': ' . $e->getMessage());
+        }
 
         //api calling code
         if($lims_sale_data->sale_status == '1' && isset($data['draft']) && $data['draft'])
@@ -2055,13 +2104,16 @@ class SaleController extends Controller
             $numberOfInvoice = Sale::count();
             $custom_fields = CustomField::where('belongs_to', 'sale')->get();
 
+            $order_extra_types = \DB::table('order_extra_types')->where('is_active', true)->get();
+
             if(isset($id)){
                 $lims_sale_data = Sale::find($id);
                 $lims_product_sale_data = Product_Sale::where('sale_id', $id)->get();
-                return view('backend.sale.pos', compact('lims_sale_data','lims_product_sale_data','currency_list','role','all_permission', 'lims_customer_list', 'lims_customer_group_all', 'lims_warehouse_list', 'lims_reward_point_setting_data', 'lims_tax_list', 'lims_biller_list', 'lims_pos_setting_data', 'options', 'lims_brand_list', 'lims_category_list', 'lims_table_list', 'lims_coupon_list', 'flag', 'numberOfInvoice', 'custom_fields'));
+                $order_extras = \DB::table('order_extras')->where('sale_id', $id)->get();
+                return view('backend.sale.pos', compact('lims_sale_data','lims_product_sale_data','currency_list','role','all_permission', 'lims_customer_list', 'lims_customer_group_all', 'lims_warehouse_list', 'lims_reward_point_setting_data', 'lims_tax_list', 'lims_biller_list', 'lims_pos_setting_data', 'options', 'lims_brand_list', 'lims_category_list', 'lims_table_list', 'lims_coupon_list', 'flag', 'numberOfInvoice', 'custom_fields', 'order_extra_types', 'order_extras'));
             }
 
-            return view('backend.sale.pos', compact('currency_list','role','all_permission', 'lims_customer_list', 'lims_customer_group_all', 'lims_warehouse_list', 'lims_reward_point_setting_data', 'lims_tax_list', 'lims_biller_list', 'lims_pos_setting_data', 'options', 'lims_brand_list', 'lims_category_list', 'lims_table_list', 'lims_coupon_list', 'flag', 'numberOfInvoice', 'custom_fields'));
+            return view('backend.sale.pos', compact('currency_list','role','all_permission', 'lims_customer_list', 'lims_customer_group_all', 'lims_warehouse_list', 'lims_reward_point_setting_data', 'lims_tax_list', 'lims_biller_list', 'lims_pos_setting_data', 'options', 'lims_brand_list', 'lims_category_list', 'lims_table_list', 'lims_coupon_list', 'flag', 'numberOfInvoice', 'custom_fields', 'order_extra_types'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -2128,7 +2180,8 @@ class SaleController extends Controller
 
             $currency_list = Currency::where('is_active', true)->get();
 
-            return view('backend.sale.create_sale',compact('currency_list', 'lims_biller_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_tax_list', 'lims_sale_data','lims_product_sale_data', 'lims_pos_setting_data', 'lims_brand_list', 'lims_category_list', 'lims_coupon_list', 'lims_product_list', 'product_number', 'lims_customer_group_all', 'lims_reward_point_setting_data'));
+            $order_extra_types = \DB::table('order_extra_types')->where('is_active', true)->get();
+            return view('backend.sale.create_sale',compact('currency_list', 'lims_biller_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_tax_list', 'lims_sale_data','lims_product_sale_data', 'lims_pos_setting_data', 'lims_brand_list', 'lims_category_list', 'lims_coupon_list', 'lims_product_list', 'product_number', 'lims_customer_group_all', 'lims_reward_point_setting_data', 'order_extra_types'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -2911,10 +2964,13 @@ class SaleController extends Controller
             $uri = $request->path();
             $lastString = explode("/",$uri);
 
+            $order_extra_types = \DB::table('order_extra_types')->where('is_active', true)->get();
+            $order_extras = \DB::table('order_extras')->where('sale_id', $id)->get();
+
             if( array_pop($lastString) != 'order'){
-                return view('backend.sale.order_edit',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_tax_list', 'lims_sale_data','lims_product_sale_data', 'currency_exchange_rate', 'custom_fields', 'brand_list', 'category_list', 'product_type_list'));
+                return view('backend.sale.order_edit',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_tax_list', 'lims_sale_data','lims_product_sale_data', 'currency_exchange_rate', 'custom_fields', 'brand_list', 'category_list', 'product_type_list', 'order_extra_types', 'order_extras'));
             }else{
-                return view('backend.sale.edit',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_tax_list', 'lims_sale_data','lims_product_sale_data', 'currency_exchange_rate', 'custom_fields', 'brand_list', 'category_list', 'product_type_list'));
+                return view('backend.sale.edit',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_tax_list', 'lims_sale_data','lims_product_sale_data', 'currency_exchange_rate', 'custom_fields', 'brand_list', 'category_list', 'product_type_list', 'order_extra_types', 'order_extras'));
             }
 
         }
@@ -2959,10 +3015,16 @@ class SaleController extends Controller
             $data['document'] = $documentName;
         }
         $balance = $data['grand_total'] - $data['paid_amount'];
-        if($balance < 0 || $balance > 0)
-            $data['payment_status'] = 2;
-        else
-            $data['payment_status'] = 4;
+        if(!isset($data['payment_status'])) {
+            if($balance < 0 || $balance > 0)
+                $data['payment_status'] = 2; // Due
+            else
+                $data['payment_status'] = 4; // Paid
+        }
+
+        if(!isset($data['sale_status'])) {
+            $data['sale_status'] = 1; // Completed
+        }
 
         $lims_product_sale_data = Product_Sale::where('sale_id', $id)->get();
         // $data['created_at'] = date("Y-m-d", strtotime(str_replace("/", "-", $data['created_at']))) . ' '. date("H:i:s");
@@ -3286,6 +3348,23 @@ class SaleController extends Controller
         if(count($custom_field_data))
             DB::table('sales')->where('id', $lims_sale_data->id)->update($custom_field_data);
         $lims_customer_data = Customer::find($data['customer_id']);
+
+        // ── Sync Order Extras ───────────────────────────────────────
+        \DB::table('order_extras')->where('sale_id', $lims_sale_data->id)->delete();
+        if(isset($data['extra_type_id'])) {
+            foreach($data['extra_type_id'] as $key => $type_id) {
+                if($type_id) {
+                    \DB::table('order_extras')->insert([
+                        'sale_id' => $lims_sale_data->id,
+                        'order_extra_type_id' => $type_id,
+                        'value' => $data['extra_value'][$key] ?? null,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+        }
+
         $message = 'Sale updated successfully';
         //collecting mail data
         $mail_setting = MailSetting::latest()->first();
@@ -3399,7 +3478,7 @@ class SaleController extends Controller
             $currency_code = cache()->get('currency')->code;
         } else {
             $numberInWords = $numberTransformer->toWords($lims_sale_data->grand_total);
-            $sale_currency = DB::table('currencies')->select('code')->where('id',$lims_sale_data->currency_id)->first();
+            $sale_currency = DB::connection('salepro')->table('currencies')->select('code')->where('id',$lims_sale_data->currency_id)->first();
             $currency_code = $sale_currency->code;
         }
         $paying_methods = Payment::where('sale_id', $id)->pluck('paying_method')->toArray();
@@ -3422,14 +3501,14 @@ class SaleController extends Controller
                                 ['belongs_to', 'product'],
                                 ['is_invoice', true]
                             ])->pluck('name');
-        $returned_amount = DB::table('sales')
+        $returned_amount = DB::connection('salepro')->table('sales')
                                     ->join('returns', 'sales.id', '=', 'returns.sale_id')
                                     ->where([
                                         ['sales.customer_id', $lims_customer_data->id],
                                         ['sales.payment_status', '!=', 4]
                                     ])
                                     ->sum('returns.grand_total');
-        $saleData = DB::table('sales')->where([
+        $saleData = DB::connection('salepro')->table('sales')->where([
                         ['customer_id', $lims_customer_data->id],
                         ['payment_status', '!=', 4]
                     ])
@@ -3437,31 +3516,24 @@ class SaleController extends Controller
                     ->first();
 
         $totalDue = $saleData->grand_total - $returned_amount - $saleData->paid_amount;
+        $order_extras = DB::connection('salepro')->table('order_extras')
+            ->join('order_extra_types', 'order_extras.order_extra_type_id', '=', 'order_extra_types.id')
+            ->where('order_extras.sale_id', $id)
+            ->select('order_extras.*', 'order_extra_types.name', 'order_extra_types.type')
+            ->get();
         // return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
 
-        if(!$lims_sale_data->order_tax_rate){
-
-            // $item  = (15 - count($lims_product_sale_data));
-            // for($i = 0; $i <= 10; $i++){
-            //     // array_push($lims_product_sale_data, "test" => "test");
-            //     // $lims_product_sale_data[] =  (object) ['name' => 'My name'];
-            //     $lims_product_sale_data[] = array("product_id" => "");
-
-            // }
-
-            return view('backend.sale.invoice_no_tax', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
-        }else
         if($lims_pos_setting_data->invoice_option == 'A4') {
-            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue', 'order_extras'));
         }
         elseif($lims_sale_data->sale_type == 'online'){
-            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.a4_invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'paid_by_info', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue', 'order_extras'));
         }
         elseif($lims_pos_setting_data->invoice_option == 'thermal' && $lims_pos_setting_data->thermal_invoice_size == '58'){
-            return view('backend.sale.invoice58', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.invoice58', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue', 'order_extras'));
         }
         else{
-            return view('backend.sale.invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue'));
+            return view('backend.sale.invoice', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue', 'order_extras'));
         }
     }
 
@@ -3535,7 +3607,7 @@ class SaleController extends Controller
             $currency_code = cache()->get('currency')->code;
         } else {
             $numberInWords = $numberTransformer->toWords($lims_sale_data->grand_total);
-            $sale_currency = DB::table('currencies')->select('code')->where('id',$lims_sale_data->currency_id)->first();
+            $sale_currency = DB::connection('salepro')->table('currencies')->select('code')->where('id',$lims_sale_data->currency_id)->first();
             $currency_code = $sale_currency->code;
         }
         $paying_methods = Payment::where('sale_id', $id)->pluck('paying_method')->toArray();
@@ -3558,14 +3630,14 @@ class SaleController extends Controller
                                 ['belongs_to', 'product'],
                                 ['is_invoice', true]
                             ])->pluck('name');
-        $returned_amount = DB::table('sales')
+        $returned_amount = DB::connection('salepro')->table('sales')
                                     ->join('returns', 'sales.id', '=', 'returns.sale_id')
                                     ->where([
                                         ['sales.customer_id', $lims_customer_data->id],
                                         ['sales.payment_status', '!=', 4]
                                     ])
                                     ->sum('returns.grand_total');
-        $saleData = DB::table('sales')->where([
+        $saleData = DB::connection('salepro')->table('sales')->where([
                         ['customer_id', $lims_customer_data->id],
                         ['payment_status', '!=', 4]
                     ])

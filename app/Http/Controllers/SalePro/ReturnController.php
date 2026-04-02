@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Mail\ReturnDetails;
+use App\Mail\CreditNote;
 use Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Models\MailSetting;
@@ -684,8 +685,15 @@ class ReturnController extends Controller
 
             $mail_data['qty'][$key] = $qty[$key];
             $mail_data['total'][$key] = $total[$key];
+            $actual_sph_val      = isset($data['actual_sph'][$key])      ? $data['actual_sph'][$key]      : null;
+            $actual_cyl_val      = isset($data['actual_cyl'][$key])      ? $data['actual_cyl'][$key]      : null;
+            $actual_axis_val     = isset($data['actual_axis'][$key])     ? $data['actual_axis'][$key]     : null;
+            $actual_addition_val = isset($data['actual_addition'][$key]) ? $data['actual_addition'][$key] : null;
+            $actual_base_val     = isset($data['actual_base'][$key])     ? $data['actual_base'][$key]     : null;
+            $actual_lr_val       = isset($data['actual_lr'][$key])       ? $data['actual_lr'][$key]       : null;
+
             ProductReturn::insert(
-                ['return_id' => $lims_return_data->id, 'product_id' => $pro_id, 'product_batch_id' => $product_batch_id[$key], 'variant_id' => $variant_id, 'imei_number' => $imei_number[$key], 'qty' => $qty[$key], 'sale_unit_id' => $sale_unit_id, 'net_unit_price' => $net_unit_price[$key], 'discount' => $discount[$key], 'tax_rate' => $tax_rate[$key], 'tax' => $tax[$key], 'total' => $total[$key], 'created_at' => \Carbon\Carbon::now(),  'updated_at' => \Carbon\Carbon::now()]
+                ['return_id' => $lims_return_data->id, 'product_id' => $pro_id, 'product_batch_id' => $product_batch_id[$key], 'variant_id' => $variant_id, 'imei_number' => $imei_number[$key], 'qty' => $qty[$key], 'sale_unit_id' => $sale_unit_id, 'net_unit_price' => $net_unit_price[$key], 'discount' => $discount[$key], 'tax_rate' => $tax_rate[$key], 'tax' => $tax[$key], 'total' => $total[$key], 'actual_sph' => $actual_sph_val, 'actual_cyl' => $actual_cyl_val, 'actual_axis' => $actual_axis_val, 'actual_addition' => $actual_addition_val, 'actual_base' => $actual_base_val, 'actual_lr' => $actual_lr_val, 'created_at' => \Carbon\Carbon::now(),  'updated_at' => \Carbon\Carbon::now()]
             );
             $product_sale_data = Product_Sale::where([
                                     ['product_id', $pro_id],
@@ -796,6 +804,12 @@ class ReturnController extends Controller
             $product_return[4][$key] = $product_return_data->tax_rate;
             $product_return[5][$key] = $product_return_data->discount;
             $product_return[6][$key] = $product_return_data->total;
+            $product_return[8][$key]  = $product_return_data->actual_sph;
+            $product_return[9][$key]  = $product_return_data->actual_cyl;
+            $product_return[10][$key] = $product_return_data->actual_axis;
+            $product_return[11][$key] = $product_return_data->actual_addition;
+            $product_return[12][$key] = $product_return_data->actual_base;
+            $product_return[13][$key] = $product_return_data->actual_lr;
         }
         return $product_return;
     }
@@ -899,10 +913,11 @@ class ReturnController extends Controller
                     }
 
                     $child_data->qty -= $product_return_data->qty * $qty_list[$index];
-                    $child_warehouse_data->qty -= $product_return_data->qty * $qty_list[$index];
-
+                    if($child_warehouse_data) {
+                        $child_warehouse_data->qty -= $product_return_data->qty * $qty_list[$index];
+                        $child_warehouse_data->save();
+                    }
                     $child_data->save();
-                    $child_warehouse_data->save();
                 }
             }
             elseif($product_return_data->sale_unit_id != 0) {
@@ -916,9 +931,11 @@ class ReturnController extends Controller
                     $lims_product_variant_data = ProductVariant::select('id', 'qty')->FindExactProduct($product_return_data->product_id, $product_return_data->variant_id)->first();
                     $lims_product_warehouse_data = Product_Warehouse::FindProductWithVariant($product_return_data->product_id, $product_return_data->variant_id, $lims_return_data->warehouse_id)
                     ->first();
-                    $old_product_variant_id[$key] = $lims_product_variant_data->id;
-                    $lims_product_variant_data->qty -= $quantity;
-                    $lims_product_variant_data->save();
+                    if($lims_product_variant_data) {
+                        $old_product_variant_id[$key] = $lims_product_variant_data->id;
+                        $lims_product_variant_data->qty -= $quantity;
+                        $lims_product_variant_data->save();
+                    }
                 }
                 elseif($product_return_data->product_batch_id) {
                     $lims_product_warehouse_data = Product_Warehouse::where([
@@ -927,18 +944,22 @@ class ReturnController extends Controller
                         ['warehouse_id', $lims_return_data->warehouse_id]
                     ])->first();
 
-                    $product_batch_data = ProductBatch::find($product_return_data->product_batch_id);
-                    $product_batch_data->qty -= $quantity;
-                    $product_batch_data->save();
+                    if($product_batch_data) {
+                        $product_batch_data->qty -= $quantity;
+                        $product_batch_data->save();
+                    }
                 }
                 else
                     $lims_product_warehouse_data = Product_Warehouse::FindProductWithoutVariant($product_return_data->product_id, $lims_return_data->warehouse_id)
                     ->first();
 
+
                 $lims_product_data->qty -= $quantity;
-                $lims_product_warehouse_data->qty -= $quantity;
+                if($lims_product_warehouse_data) {
+                    $lims_product_warehouse_data->qty -= $quantity;
+                    $lims_product_warehouse_data->save();
+                }
                 $lims_product_data->save();
-                $lims_product_warehouse_data->save();
             }
             //deduct imei number if available
             if($product_return_data->imei_number) {
@@ -973,6 +994,13 @@ class ReturnController extends Controller
                     $lims_product_variant_data = ProductVariant::select('id', 'variant_id', 'qty')->FindExactProductWithCode($pro_id, $product_code[$key])->first();
                     $lims_product_warehouse_data = Product_Warehouse::FindProductWithVariant($pro_id, $lims_product_variant_data->variant_id, $data['warehouse_id'])
                     ->first();
+                    if(!$lims_product_warehouse_data) {
+                        $lims_product_warehouse_data = new Product_Warehouse();
+                        $lims_product_warehouse_data->product_id = $pro_id;
+                        $lims_product_warehouse_data->variant_id = $lims_product_variant_data->variant_id;
+                        $lims_product_warehouse_data->warehouse_id = $data['warehouse_id'];
+                        $lims_product_warehouse_data->qty = 0;
+                    }
                     $variant_data = Variant::find($lims_product_variant_data->variant_id);
 
                     $product_return['variant_id'] = $lims_product_variant_data->variant_id;
@@ -985,6 +1013,13 @@ class ReturnController extends Controller
                         ['product_batch_id', $product_batch_id[$key] ],
                         ['warehouse_id', $data['warehouse_id'] ]
                     ])->first();
+                    if(!$lims_product_warehouse_data) {
+                        $lims_product_warehouse_data = new Product_Warehouse();
+                        $lims_product_warehouse_data->product_id = $pro_id;
+                        $lims_product_warehouse_data->product_batch_id = $product_batch_id[$key];
+                        $lims_product_warehouse_data->warehouse_id = $data['warehouse_id'];
+                        $lims_product_warehouse_data->qty = 0;
+                    }
 
                     $product_batch_data = ProductBatch::find($product_batch_id[$key]);
                     $product_batch_data->qty += $quantity;
@@ -993,6 +1028,12 @@ class ReturnController extends Controller
                 else {
                     $lims_product_warehouse_data = Product_Warehouse::FindProductWithoutVariant($pro_id, $data['warehouse_id'])
                     ->first();
+                    if(!$lims_product_warehouse_data) {
+                        $lims_product_warehouse_data = new Product_Warehouse();
+                        $lims_product_warehouse_data->product_id = $pro_id;
+                        $lims_product_warehouse_data->warehouse_id = $data['warehouse_id'];
+                        $lims_product_warehouse_data->qty = 0;
+                    }
                 }
 
                 $lims_product_data->qty +=  $quantity;
@@ -1020,15 +1061,29 @@ class ReturnController extends Controller
                                 ['variant_id', $variant_list[$index]],
                                 ['warehouse_id', $data['warehouse_id'] ],
                             ])->first();
-
-                            $child_product_variant_data->qty += $qty[$key] * $qty_list[$index];
-                            $child_product_variant_data->save();
+                            if(!$child_warehouse_data) {
+                                $child_warehouse_data = new Product_Warehouse();
+                                $child_warehouse_data->product_id = $child_id;
+                                $child_warehouse_data->variant_id = $variant_list[$index];
+                                $child_warehouse_data->warehouse_id = $data['warehouse_id'];
+                                $child_warehouse_data->qty = 0;
+                            }
+                            if($child_product_variant_data) {
+                                $child_product_variant_data->qty += $qty[$key] * $qty_list[$index];
+                                $child_product_variant_data->save();
+                            }
                         }
                         else {
                             $child_warehouse_data = Product_Warehouse::where([
                                 ['product_id', $child_id],
                                 ['warehouse_id', $data['warehouse_id'] ],
                             ])->first();
+                            if(!$child_warehouse_data) {
+                                $child_warehouse_data = new Product_Warehouse();
+                                $child_warehouse_data->product_id = $child_id;
+                                $child_warehouse_data->warehouse_id = $data['warehouse_id'];
+                                $child_warehouse_data->qty = 0;
+                            }
                         }
 
                         $child_data->qty += $qty[$key] * $qty_list[$index];
@@ -1074,6 +1129,12 @@ class ReturnController extends Controller
             $product_return['tax_rate'] = $tax_rate[$key];
             $product_return['tax'] = $tax[$key];
             $product_return['total'] = $total[$key];
+            $product_return['actual_sph']      = isset($data['actual_sph'][$key])      ? $data['actual_sph'][$key]      : null;
+            $product_return['actual_cyl']      = isset($data['actual_cyl'][$key])      ? $data['actual_cyl'][$key]      : null;
+            $product_return['actual_axis']     = isset($data['actual_axis'][$key])     ? $data['actual_axis'][$key]     : null;
+            $product_return['actual_addition'] = isset($data['actual_addition'][$key]) ? $data['actual_addition'][$key] : null;
+            $product_return['actual_base']     = isset($data['actual_base'][$key])     ? $data['actual_base'][$key]     : null;
+            $product_return['actual_lr']       = isset($data['actual_lr'][$key])       ? $data['actual_lr'][$key]       : null;
 
             if($product_return['variant_id'] && in_array($product_variant_id[$key], $old_product_variant_id)) {
                 ProductReturn::where([
@@ -1316,5 +1377,164 @@ class ReturnController extends Controller
         $this->fileDelete(public_path('documents/sale_return/'), $lims_return_data->document);
 
         return redirect('admin/return-sale')->with('not_permitted', 'Data deleted successfully');;
+    }
+
+    /**
+     * Show credit note print view.
+     */
+    public function creditNote($id)
+    {
+        $role = Role::find(Auth::user()->role_id);
+        if ($role->hasPermissionTo('returns-index')) {
+            $lims_return_data        = Returns::find($id);
+            $lims_product_return_data = ProductReturn::where('return_id', $id)->get();
+            $lims_customer_data      = Customer::find($lims_return_data->customer_id);
+            $lims_biller_data        = \App\Models\Biller::find($lims_return_data->biller_id);
+            $lims_warehouse_data     = \App\Models\Warehouse::find($lims_return_data->warehouse_id);
+            $lims_sale_data          = $lims_return_data->sale_id ? Sale::find($lims_return_data->sale_id) : null;
+
+            $products = [];
+            foreach ($lims_product_return_data as $pr) {
+                $product = Product::find($pr->product_id);
+                $unit    = '';
+                if ($pr->sale_unit_id) {
+                    $unit_data = Unit::find($pr->sale_unit_id);
+                    $unit      = $unit_data ? $unit_data->unit_code : '';
+                }
+                $products[] = [
+                    'name'           => $product ? $product->name : 'N/A',
+                    'qty'            => $pr->qty,
+                    'unit'           => $unit,
+                    'net_unit_price' => $pr->net_unit_price,
+                    'tax'            => $pr->tax,
+                    'tax_rate'       => $pr->tax_rate,
+                    'discount'       => $pr->discount,
+                    'total'          => $pr->total,
+                    'actual_sph'     => $pr->actual_sph,
+                    'actual_cyl'     => $pr->actual_cyl,
+                    'actual_axis'    => $pr->actual_axis,
+                    'actual_addition'=> $pr->actual_addition,
+                    'actual_base'    => $pr->actual_base,
+                    'actual_lr'      => $pr->actual_lr,
+                ];
+            }
+
+            return view('backend.return.credit_note', compact(
+                'lims_return_data',
+                'lims_customer_data',
+                'lims_biller_data',
+                'lims_warehouse_data',
+                'lims_sale_data',
+                'products'
+            ));
+        }
+        return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+    }
+
+    /**
+     * Send credit note by email.
+     */
+    public function sendCreditNote(Request $request)
+    {
+        $return_id = $request->input('return_id');
+        $lims_return_data         = Returns::find($return_id);
+        $lims_product_return_data = ProductReturn::where('return_id', $return_id)->get();
+        $lims_customer_data       = Customer::find($lims_return_data->customer_id);
+        $mail_setting             = \App\Models\MailSetting::latest()->first();
+
+        if (!$mail_setting) {
+            return redirect()->back()->with('message', 'Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.');
+        }
+        if (!$lims_customer_data->email) {
+            return redirect()->back()->with('message', 'Customer does not have an email address.');
+        }
+
+        $mail_data = [
+            'reference_no'   => $lims_return_data->reference_no,
+            'sale_reference' => $lims_return_data->sale_id ? Sale::find($lims_return_data->sale_id)->reference_no : 'N/A',
+            'customer_name'  => $lims_customer_data->name,
+            'grand_total'    => $lims_return_data->grand_total,
+            'order_tax'      => $lims_return_data->order_tax,
+            'order_tax_rate' => $lims_return_data->order_tax_rate,
+            'total_price'    => $lims_return_data->total_price,
+            'return_note'    => $lims_return_data->return_note,
+            'products'       => [],
+        ];
+
+        foreach ($lims_product_return_data as $key => $pr) {
+            $product = Product::find($pr->product_id);
+            $unit    = '';
+            if ($pr->sale_unit_id) {
+                $unit_data = Unit::find($pr->sale_unit_id);
+                $unit      = $unit_data ? $unit_data->unit_code : '';
+            }
+            $mail_data['products'][$key] = [
+                'name'    => $product ? $product->name : 'N/A',
+                'qty'     => $pr->qty,
+                'unit'    => $unit,
+                'total'   => $pr->total,
+            ];
+        }
+
+        $this->setMailInfo($mail_setting);
+        try {
+            Mail::to($lims_customer_data->email)->send(new CreditNote($mail_data));
+            $message = 'Credit note sent successfully to ' . $lims_customer_data->email;
+        } catch (\Exception $e) {
+            $message = 'Failed to send mail. Please check your <a href="setting/mail_setting">mail setting</a>.';
+        }
+        return redirect()->back()->with('message', $message);
+    }
+
+    /**
+     * Check if any return warehouse stock matches given lens values.
+     * Called via Ajax from new sale create page.
+     * Returns JSON.
+     */
+    public function checkReturnMatch(Request $request)
+    {
+        $product_id = $request->input('product_id');
+        $sph        = $request->input('sph');
+        $cyl        = $request->input('cyl');
+        $axis       = $request->input('axis');
+        $addition   = $request->input('addition');
+        $lr         = $request->input('lr');
+
+        if (!$product_id || !$sph) {
+            return response()->json(['match' => false]);
+        }
+
+        $matches = \DB::connection('salepro')
+            ->table('product_returns')
+            ->join('returns', 'product_returns.return_id', '=', 'returns.id')
+            ->join('warehouses', 'returns.warehouse_id', '=', 'warehouses.id')
+            ->where('product_returns.product_id', $product_id)
+            ->where('product_returns.actual_sph', $sph)
+            ->where('product_returns.actual_cyl', $cyl)
+            ->where('product_returns.actual_axis', $axis)
+            ->where('product_returns.actual_lr', $lr)
+            ->select(
+                'product_returns.qty',
+                'product_returns.actual_sph',
+                'product_returns.actual_cyl',
+                'product_returns.actual_axis',
+                'product_returns.actual_addition',
+                'product_returns.actual_base',
+                'product_returns.actual_lr',
+                'returns.reference_no',
+                'warehouses.name as warehouse_name'
+            )
+            ->first();
+
+        if ($matches) {
+            return response()->json([
+                'match'          => true,
+                'qty'            => $matches->qty,
+                'reference_no'   => $matches->reference_no,
+                'warehouse_name' => $matches->warehouse_name,
+            ]);
+        }
+
+        return response()->json(['match' => false]);
     }
 }

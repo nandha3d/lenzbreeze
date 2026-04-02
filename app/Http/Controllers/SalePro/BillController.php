@@ -232,21 +232,13 @@ class BillController extends Controller
 
         $date = date('Y-m-d', strtotime($bill_date));
 
-        if(cache()->has('warehouse_list')){
-            $lims_warehouse_data = cache()->get('warehouse_list')->find($lims_sale_data->warehouse_id);
-        }else{
-            $lims_warehouse_data = Warehouse::find(1);
-        }
+        $lims_warehouse_data = Warehouse::find(1);
 
 
         if($request->input('id')){
             $bills_data = CustomerBill::where(['id' => $request->input('id') ])->get();
 
             if(!empty($bills_data)){
-
-                if($bills_data[0]->order_tax_rate == 0){
-                    return view('backend.bill.invoice_no_tax', compact("bills_data"));
-                }
                 return view('backend.bill.a4_invoice', compact("bills_data", "lims_warehouse_data"));
             }
 
@@ -262,16 +254,13 @@ class BillController extends Controller
         }
 
         if(!$tax_rate){
-
             $where['order_tax_rate'] = 0;
-
             $bills_data = CustomerBill::where($where)->get();
-            return view('backend.bill.invoice_no_tax', compact("bills_data"));
         }else{
             $bills_data = CustomerBill::where($where)->where('order_tax_rate',">" , 0 )->get();
-
-            return view('backend.bill.a4_invoice', compact("bills_data", "lims_warehouse_data"));
         }
+
+        return view('backend.bill.a4_invoice', compact("bills_data", "lims_warehouse_data"));
      }
 
     function billByDate(){

@@ -7,6 +7,13 @@ use App\Http\Controllers\Admin\RetailerController;
 use Illuminate\Support\Facades\Route;
 
 // Public Pages
+Route::get('/debug-db', function() {
+    try {
+        return response()->json(\DB::connection('salepro')->select("SHOW CREATE TABLE customer_bills"));
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
+});
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/home-v1', [PageController::class, 'homeV1'])->name('home.v1');
 Route::get('/home-v2', [PageController::class, 'homeV2'])->name('home.v2');
@@ -144,4 +151,91 @@ Route::get('/deploy-auto-import', function () {
     } catch (\Exception $e) {
         return 'Error during import: ' . $e->getMessage();
     }
+});
+
+// Auto-migration route for Hostinger
+Route::get('/run-migrations-live', function () {
+    try {
+        $salepro = \Illuminate\Support\Facades\DB::connection('salepro');
+
+        // Just directly create the tables if they don't exist and completely bypass Artisan migrations
+        if (!\Illuminate\Support\Facades\Schema::connection('salepro')->hasTable('order_extra_types')) {
+            \Illuminate\Support\Facades\Schema::connection('salepro')->create('order_extra_types', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->enum('type', ['fee', 'info'])->default('info');
+                $table->boolean('is_active')->default(true);
+                $table->timestamps();
+            });
+        }
+        
+        if (!\Illuminate\Support\Facades\Schema::connection('salepro')->hasTable('order_extras')) {
+            \Illuminate\Support\Facades\Schema::connection('salepro')->create('order_extras', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->id();
+                $table->unsignedInteger('sale_id');
+                $table->unsignedBigInteger('order_extra_type_id');
+                $table->string('value')->nullable();
+                
+                $table->foreign('sale_id')->references('id')->on('sales')->onDelete('cascade');
+                $table->foreign('order_extra_type_id')->references('id')->on('order_extra_types')->onDelete('cascade');
+                $table->timestamps();
+            });
+        }
+
+        // Ensure default extra types exist for the Additional Order Details
+        if ($salepro->table('order_extra_types')->count() == 0) {
+            $salepro->table('order_extra_types')->insert([
+                ['name' => 'Fitting charge', 'type' => 'fee', 'is_active' => 1, 'created_at' => now(), 'updated_at' => now()],
+                ['name' => 'Tinting cost', 'type' => 'fee', 'is_active' => 1, 'created_at' => now(), 'updated_at' => now()],
+                ['name' => 'Customer Order No.', 'type' => 'info', 'is_active' => 1, 'created_at' => now(), 'updated_at' => now()],
+            ]);
+        }
+
+        // Add missing columns to general_settings from previous customization
+        if (!\Illuminate\Support\Facades\Schema::connection('salepro')->hasColumn('general_settings', 'is_sale_status_active')) {
+            \Illuminate\Support\Facades\Schema::connection('salepro')->table('general_settings', function (\Illuminate\Database\Schema\Blueprint $table) {
+                $table->boolean('is_sale_status_active')->default(true);
+                $table->boolean('is_payment_status_active')->default(true);
+            });
+        }
+
+        // IMPORTANT: Clear cache so general_settings updates take effect immediately
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+
+        return "<strong>Success!</strong> All recent database changes (including general_settings and order_extras) were applied, and the cache was cleared. Your application is good to go!";
+    } catch (\Exception $e) {
+        return "<strong>Error:</strong> " . $e->getMessage();
+    }
+});
+
+// Diagnostic: Check what logo filename is in the database
+Route::get('/check-logo-live', function () {
+    $gs = \Illuminate\Support\Facades\DB::connection('salepro')->table('general_settings')->first();
+    $logoFile = $gs->site_logo ?? '(empty/null)';
+    $logoPath = public_path('logo/' . $gs->site_logo);
+    $exists = file_exists($logoPath) ? 'YES' : 'NO';
+    $logoUrl = url('logo', $gs->site_logo);
+
+    // List all files in public/logo/
+    $files = glob(public_path('logo/*'));
+    $fileList = array_map(fn($f) => basename($f), $files);
+
+    return "<h3>Logo Diagnostic</h3>"
+        . "<p><strong>DB site_logo value:</strong> {$logoFile}</p>"
+        . "<p><strong>Full path checked:</strong> {$logoPath}</p>"
+        . "<p><strong>File exists on disk:</strong> {$exists}</p>"
+        . "<p><strong>URL that invoice uses:</strong> <a href='{$logoUrl}' target='_blank'>{$logoUrl}</a></p>"
+        . "<p><strong>All files in public/logo/:</strong> " . implode(', ', $fileList) . "</p>";
+});
+
+// Quick fix: Update DB to use the correct logo file
+Route::get('/fix-logo-live', function () {
+    \Illuminate\Support\Facades\DB::connection('salepro')
+        ->table('general_settings')
+        ->update(['site_logo' => 'lenzbreeze_logo.avif']);
+
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+
+    return "<strong>Done!</strong> Logo updated to 'lenzbreeze_logo.avif' and cache cleared. <a href='/check-logo-live'>Verify here</a>";
 });

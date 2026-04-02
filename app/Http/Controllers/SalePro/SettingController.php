@@ -93,7 +93,7 @@ class SettingController extends Controller
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
 
         $this->validate($request, [
-            'site_logo' => 'image|mimes:jpg,jpeg,png,gif|max:100000',
+            'site_logo' => 'image|mimes:jpg,jpeg,png,gif,avif,webp|max:100000',
         ]);
 
         $data = $request->except('site_logo');
@@ -133,6 +133,17 @@ class SettingController extends Controller
         $general_setting->state = $data['state'];
         $general_setting->expiry_type = $data['expiry_type'];
         $general_setting->expiry_value = $data['expiry_value'];
+
+        if(isset($data['is_sale_status_active']))
+            $general_setting->is_sale_status_active = true;
+        else
+            $general_setting->is_sale_status_active = false;
+
+        if(isset($data['is_payment_status_active']))
+            $general_setting->is_payment_status_active = true;
+        else
+            $general_setting->is_payment_status_active = false;
+
         $logo = $request->site_logo;
         if ($logo) {
             $this->fileDelete('logo/', $general_setting->site_logo);
@@ -160,7 +171,7 @@ class SettingController extends Controller
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
 
         $this->validate($request, [
-            'site_logo' => 'image|mimes:jpg,jpeg,png,gif|max:100000',
+            'site_logo' => 'image|mimes:jpg,jpeg,png,gif,avif,webp|max:100000',
             'og_image' => 'image|mimes:jpg,jpeg,png|max:100000',
         ]);
 

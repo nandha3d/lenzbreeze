@@ -31,5 +31,10 @@ class Returns extends Model
     {
     	return $this->belongsTo('App\Models\User');
     }
+
+    public function productReturns()
+    {
+        return $this->hasMany('App\Models\ProductReturn', 'return_id');
+    }
 }
 

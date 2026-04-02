@@ -3898,6 +3898,7 @@ class ReportController extends Controller
         $columns = array(
             1 => 'customers.name',
             2 => 'customers.name',
+            3 => 'customers.name',
         );
 
         $start_date = date('Y-m-01', strtotime($request->input('start_date')));
@@ -4361,6 +4362,70 @@ class ReportController extends Controller
             "data"            => $data
         );
         echo json_encode($json_data);
+    }
+
+    public function customerGroupReportExcel(Request $request)
+    {
+        $start_date = date('Y-m-01', strtotime($request->input('start_date')));
+        $end_date = date('Y-m-t', strtotime($request->input('start_date')));
+        $customer_group_id = $request->input('customer_group_id');
+
+        $customer_group_name = '';
+        if($customer_group_id && $customer_group_id != 'all'){
+            $cg = \App\Models\CustomerGroup::select('name')->where('id', $customer_group_id)->first();
+            if($cg){
+                $customer_group_name = $cg->name;
+            }
+        }
+
+        $year = date('Y', strtotime($start_date));
+        $month = date('m', strtotime($start_date));
+
+        $q = DB::table('customer_bill_monthlies', 'cb')
+        ->where('year', $year)
+        ->where('month',$month)
+            ->leftJoin('customers', 'cb.customer_id', '=', 'customers.id')
+            ->leftJoin('customer_groups', 'customers.customer_group_id', '=', 'customer_groups.id');
+
+        if($customer_group_id && $customer_group_id != 'all'){
+            $q =  $q->where('customers.customer_group_id', '=', $customer_group_id);
+        }
+
+        $q = $q->groupBy('cb.customer_id');
+
+        $q = $q->select(DB::raw('customers.id as customer_id, customers.name as customer_name, customers.place as customer_place,
+                        customer_groups.name as group_name,
+                        total_bill, total_price,
+                        grand_total, open_bal, total_paid, bal_amount'))
+                ->orderBy('customers.name')
+                ->orderBy('customers.place');
+
+        $sales = $q->get();
+
+        $data = array();
+        if(!empty($sales))
+        {
+            foreach ($sales as $key => $sale)
+            {
+                $nestedData['customer_id']  = $sale->customer_id;
+                $nestedData['name'] = $sale->customer_name.' ['.($sale->customer_place).']';
+                $nestedData['group_name'] = $sale->group_name ?? '';
+                $nestedData['pre_balance'] = $sale->open_bal;
+                $nestedData['debit'] = $sale->grand_total;
+                $nestedData['credit'] = $sale->total_paid;
+                $nestedData['cl_balance'] = $sale->bal_amount;
+                $data[] = $nestedData;
+            }
+        }
+
+        $start_date = date('d-m-Y', strtotime($start_date));
+        $end_date = date('d-m-Y', strtotime($end_date));
+
+        $view = view('salepro.backend.report.customer_group_report_excel', compact('data', 'start_date', 'end_date', 'customer_group_name'))->render();
+
+        return response($view)
+            ->header('Content-Type', 'application/vnd.ms-excel')
+            ->header('Content-Disposition', 'attachment; filename="Customer_Group_Report.xls"');
     }
 
     // public function supplierReport(Request $request)

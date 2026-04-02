@@ -665,6 +665,74 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Additional Order Details -->
+                    <div class="col-12 mt-2">
+                        <div class="card shadow-sm border-0" style="background-color: #f1f5f9; margin-bottom: 5px;">
+                            <div class="card-body p-2 rounded">
+                                <div class="row">
+                                    @php
+                                        if (isset($order_extras) && $order_extras instanceof \Illuminate\Support\Collection) {
+                                            $extra_values = $order_extras->pluck('value', 'order_extra_type_id');
+                                        } else {
+                                            $extra_values = collect([]);
+                                        }
+                                    @endphp
+                                    @foreach($order_extra_types ?? [] as $type)
+                                        @if(in_array($type->name, ['Fitting charge', 'Tinting cost', 'Customer Order No.']))
+                                        <div class="col-4" style="padding-left: 5px; padding-right: 5px;">
+                                            <div class="form-group mb-0">
+                                                <label style="font-size: 10px; margin-bottom: 0;"><strong>{{$type->name}}</strong></label>
+                                                <input type="hidden" name="extra_type_id[]" value="{{$type->id}}">
+                                                <input type="{{$type->type == 'fee' ? 'number' : 'text'}}" 
+                                                       name="extra_value[]" 
+                                                       value="{{$extra_values[$type->id] ?? ''}}"
+                                                       class="form-control {{$type->type == 'fee' ? 'extra-fee-input' : ''}}" 
+                                                       step="any" 
+                                                       placeholder="{{$type->name}}"
+                                                       style="height: 24px; font-size: 10px; padding: 2px 4px;">
+                                            </div>
+                                        </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Order Extras -->
+                    <div class="col-12 mt-2 mb-1">
+                        <table class="table table-bordered table-condensed" id="order-extras-table" style="font-size: 11px; margin-bottom: 5px; background-color: #fff;">
+                            <thead>
+                                <tr style="background-color: #f8f9fa;">
+                                    <th style="padding: 2px 5px; width: 60%;">Extra Type</th>
+                                    <th style="padding: 2px 5px; width: 30%;">Value</th>
+                                    <th style="padding: 2px 5px; width: 10%;"><button type="button" class="btn btn-xs btn-primary add-extra-btn"><i class="fa fa-plus"></i></button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $fixed_extra_ids = $order_extra_types->whereIn('name', ['Fitting charge', 'Tinting cost', 'Customer Order No.'])->pluck('id')->toArray();
+                                @endphp
+                                @if(isset($order_extras))
+                                    @foreach($order_extras as $extra)
+                                        @if(!in_array($extra->order_extra_type_id, $fixed_extra_ids))
+                                        <tr>
+                                            <td style="padding: 2px;"><select name="extra_type_id[]" class="form-control extra-type-select" required style="height: 22px; padding: 0 2px; font-size: 11px;">
+                                                <option value="">Select...</option>
+                                                @foreach($order_extra_types as $type)
+                                                <option value="{{$type->id}}" data-type="{{$type->type}}" @if($extra->order_extra_type_id == $type->id) selected @endif>{{$type->name}}</option>
+                                                @endforeach
+                                            </select></td>
+                                            <td style="padding: 2px;"><input type="text" name="extra_value[]" class="form-control extra-value-input" value="{{$extra->value}}" required style="height: 22px; padding: 2px; font-size: 11px;"></td>
+                                            <td style="padding: 2px; text-align: center;"><button type="button" class="btn btn-xs btn-danger remove-extra-btn"><i class="fa fa-trash"></i></button></td>
+                                        </tr>
+                                        @endif
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="col-12 totals" style="background-color:#f5f6f7;border-top: 2px solid #ebe9f1;padding-bottom: 7px;padding-top: 7px;">
                         <div class="row">
                             <div class="col-sm-4 col-6">
@@ -3450,7 +3518,20 @@ function getProduct(warehouse_id){
 
         item = ++item + '(' + total_qty + ')';
         order_tax = (subtotal - order_discount) * (order_tax / 100);
-        var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+        
+        var extra_fees = 0;
+        $('.extra-fee-input').each(function() {
+            extra_fees += parseFloat($(this).val()) || 0;
+        });
+        $('.extra-type-select').each(function(i) {
+            var type = $(this).find(':selected').data('type');
+            var val = parseFloat($('.extra-value-input').eq(i).val()) || 0;
+            if(type == 'fee') {
+                extra_fees += val;
+            }
+        });
+
+        var grand_total = (subtotal + order_tax + shipping_cost + extra_fees) - order_discount;
         $('input[name="grand_total"]').val(grand_total.toFixed({{$general_setting->decimal}}));
 
         if($("#coupon-code").val() != '')
@@ -3601,6 +3682,38 @@ function getProduct(warehouse_id){
         }
     });
 
+    var orderExtraTypes = @json($order_extra_types ?? []);
+
+    $(document).on('click', '.add-extra-btn', function() {
+        var optionsHtml = '<option value="">Select Type...</option>';
+        $.each(orderExtraTypes, function(i, type) {
+            optionsHtml += '<option value="' + type.id + '" data-type="' + type.type + '">' + type.name + '</option>';
+        });
+
+        var rowHtml = '<tr>' +
+            '<td style="padding: 2px;"><select name="extra_type_id[]" class="form-control extra-type-select" required style="height: 25px; padding: 2px; font-size: 12px;">' + optionsHtml + '</select></td>' +
+            '<td style="padding: 2px;"><input type="text" name="extra_value[]" class="form-control extra-value-input" required style="height: 25px; padding: 2px; font-size: 12px;" placeholder="Value"></td>' +
+            '<td style="padding: 2px;"><button type="button" class="btn btn-xs btn-danger remove-extra-btn"><i class="fa fa-trash"></i></button></td>' +
+        '</tr>';
+        $('#order-extras-table tbody').append(rowHtml);
+    });
+
+    $(document).on('click', '.remove-extra-btn', function() {
+        $(this).closest('tr').remove();
+        calculateGrandTotal();
+    });
+
+    $(document).on('keyup', '.extra-value-input', function() {
+        calculateGrandTotal();
+    });
+
+    $(document).on('change', '.extra-type-select', function() {
+        calculateGrandTotal();
+    });
+
+    $(document).on('keyup change', '.extra-fee-input', function() {
+        calculateGrandTotal();
+    });
 </script>
 
 @endpush

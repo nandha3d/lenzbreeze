@@ -114,6 +114,11 @@
             <br>{{trans('file.Table')}}: {{$lims_sale_data->table->name}}
             <br>{{trans('file.Queue')}}: {{$lims_sale_data->queue}}
             @endif
+            @foreach($order_extras as $extra)
+                @if($extra->type == 'info')
+                <br>{{$extra->name}}: {{$extra->value}}
+                @endif
+            @endforeach
             <?php
                 foreach($sale_custom_fields as $key => $fieldName) {
                     $field_name = str_replace(" ", "_", strtolower($fieldName));
@@ -215,6 +220,14 @@
                     <th style="text-align:right">{{number_format((float)($lims_sale_data->shipping_cost), $general_setting->decimal, '.', ',')}}</th>
                 </tr>
                 @endif
+                @foreach($order_extras as $extra)
+                    @if($extra->type == 'fee' && $extra->value > 0)
+                    <tr>
+                        <th colspan="2" style="text-align:left">{{$extra->name}}</th>
+                        <th style="text-align:right">{{number_format((float)($extra->value), $general_setting->decimal, '.', ',')}}</th>
+                    </tr>
+                    @endif
+                @endforeach
                 <tr>
                     <th colspan="2" style="text-align:left">{{trans('file.grand total')}}</th>
                     <th style="text-align:right">{{number_format((float)($lims_sale_data->grand_total), $general_setting->decimal, '.', ',')}}</th>

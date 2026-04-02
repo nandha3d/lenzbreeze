@@ -29,6 +29,8 @@
                 line-height: 1.4;
             }
             @media print {
+                @page { margin: 0; }
+                body { margin: 1.6cm; }
                 .hidden-print {
                     display: none !important;
                 }
@@ -36,12 +38,11 @@
                     -webkit-print-color-adjust: exact;
                 }
                 td.td-text {
-
                     -webkit-print-color-adjust: exact;
                 }
 
-                .upi-rq{
-                    width: 400px;
+                .container{
+                    width: 100%;
                 }
             }
             table,tr,td {font-family: sans-serif;border-collapse: collapse;}
@@ -79,7 +80,7 @@
                     ?>
                 </td>
                 <td style="width:30%; text-align: middle; vertical-align: top;">
-                    <img src="{{url('logo', $general_setting->site_logo)}}" height="80" width="150">
+                    <img src="{{url('logo', $general_setting->site_logo)}}" style="max-height:80px; width:auto;">
                 </td>
                 <td style="padding:5px -19px;width:30%;text-align:right;">
                     <div style="display: flex;justify-content: space-between;">
@@ -144,19 +145,40 @@
                     </div>
                     @endif
 
+                    <!-- Display Info Extras -->
+                    @foreach($order_extras as $extra)
+                        @if($extra->type == 'info')
+                        <div style="margin-bottom: 5px">
+                            <span><b>{{$extra->name}}:</b></span>&nbsp;&nbsp;
+                            <span>{{$extra->value}}</span>
+                        </div>
+                        @endif
+                    @endforeach
+
                 </td>
             </tr>
         </table>
+        @php
+            // Extract customer order no from order_extras for display in the new column
+            $customer_order_no = '';
+            if(isset($order_extras)) {
+                foreach($order_extras as $extra) {
+                    if($extra->type == 'info') {
+                        $customer_order_no = $extra->value;
+                    }
+                }
+            }
+        @endphp
         <table dir="@if( Config::get('app.locale') == 'ar' || $general_setting->is_rtl){{'rtl'}}@endif" style="width: 100%;border-collapse: collapse;">
             <tr class="table-header" style="">
-                <td style="border:1px solid #222;padding:1px 3px;width:10%;text-align:center">Order No</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:25%;text-align:center">{{trans('file.Description')}}</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:8%;text-align:center">HSN</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:5%;text-align:center">{{trans('file.Qty')}}</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:6%;text-align:center">Rate</td>
-                <td style="border:1px solid #222;padding:1px 3px;width:6%;text-align:center">Discount</td>
-                {{-- <td style="border:1px solid #222;padding:1px 3px;width:8%;text-align:center">Amount</td> --}}
-                <td style="border:1px solid #222;padding:1px 2px;width:11%;text-align:center;">{{trans('file.Subtotal')}}</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:13%;text-align:center">Order No</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:13%;text-align:center">Customer Order No.</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:30%;text-align:center">{{trans('file.Description')}}</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:10%;text-align:center">HSN</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:6%;text-align:center">{{trans('file.Qty')}}</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:8%;text-align:center">Rate</td>
+                <td style="border:1px solid #222;padding:1px 3px;width:8%;text-align:center">Discount</td>
+                <td style="border:1px solid #222;padding:1px 2px;width:12%;text-align:center;">{{trans('file.Subtotal')}}</td>
             </tr>
             <?php
                 $total_product_tax = 0;
@@ -182,6 +204,7 @@
             ?>
             <tr>
                 <td style="border-right:1px solid #222;border-left:1px solid #222;padding:1px 3px;text-align: center;">{{$lims_sale_data->order_no}}</td>
+                <td style="border-right:1px solid #222;padding:1px 3px;text-align: center;">{{$customer_order_no}}</td>
                 <td style="border-right:1px solid #222;padding:1px 3px;font-size: 15px;line-height: 1.2;">
                     {!!$lims_product_data->name!!}
                     <br>
@@ -192,14 +215,12 @@
                     <span style="margin-left:5px">CYL: {{$product_sale_data->cyl}} </span>
                     <span style="margin-left:5px">AXIS: {{$product_sale_data->axis}} </span>
                     <span style="margin-left:5px">{{$product_sale_data->lr}} </span>
-
                 </td>
                 <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">9001</td>
                 <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">{{$product_sale_data->qty}}</td>
                 <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">{{number_format($product_sale_data->net_unit_price, $general_setting->decimal, '.', ',')}}</td>
                 <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">{{number_format($product_sale_data->discount, $general_setting->decimal, '.', ',')}}</td>
-                {{-- <td style="border-right:1px solid #222;padding:1px 3px;text-align:center">{{number_format(($product_sale_data->net_unit_price - $product_sale_data->discount), $general_setting->decimal, '.', ',')}}</td> --}}
-                <td style="border-right:1px solid #222;border-right:1px solid #222;padding:1px 3px;text-align:center;font-size: 15px;">{{number_format($product_sale_data->total, $general_setting->decimal, '.', ',')}}</td>
+                <td style="border-right:1px solid #222;padding:1px 3px;text-align:center;font-size: 15px;">{{number_format($product_sale_data->total, $general_setting->decimal, '.', ',')}}</td>
             </tr>
             @endforeach
             {{-- adding extra space --}}
@@ -212,19 +233,23 @@
                  <td style="border-right:1px solid #222"></td>
                  <td style="border-right:1px solid #222"></td>
                  <td style="border-right:1px solid #222"></td>
+                 <td style="border-right:1px solid #222"></td>
             </tr>
             @endif
 
+            @php
+                $feeExtrasCount = isset($order_extras) ? $order_extras->where('type', 'fee')->count() : 0;
+            @endphp
             <tr>
-                <td colspan="3" rowspan="7" style="border:1px solid #222;padding:1px 3px;text-align: center; vertical-align: top;">
+                <td colspan="4" rowspan="{{ 6 + $feeExtrasCount }}" style="border:1px solid #222;padding:1px 3px;text-align: center; vertical-align: top; width: 66%;">
                     {{trans('file.Note')}}<br>{{$lims_sale_data->sale_note}}
                 </td>
 
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
+                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px; width: 22%;">
                     {{trans('file.Discount')}}
                 </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                    {{number_format((float)($lims_sale_data->total_discount) ,$general_setting->decimal, '.', ',')}}
+                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px; width: 12%;">
+                    {{number_format((float)($lims_sale_data->order_discount) ,$general_setting->decimal, '.', ',')}}
                 </td>
             </tr>
 
@@ -295,45 +320,54 @@
                 </td>
             </tr>
 
+            <!-- Display Fee Extras -->
+            @foreach($order_extras as $extra)
+                @if($extra->type == 'fee')
+                <tr>
+                    <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
+                       {{$extra->name}}
+                    </td>
+                    <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
+                        {{number_format((float)($extra->value) ,$general_setting->decimal, '.', ',')}}
+                    </td>
+                </tr>
+                @endif
+            @endforeach
+
             <tr>
                 <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">{{trans('file.grand total')}}</td>
                 <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">{{number_format((float)$lims_sale_data->grand_total ,$general_setting->decimal, '.', ',')}}</td>
             </tr>
             <tr>
                 @if($general_setting->currency_position == 'prefix')
-                    <td class="td-text" colspan="3" rowspan="4" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top;">
+                    <td class="td-text" colspan="4" rowspan="3" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top; width: 66%;">
                         {{trans('file.In Words')}}<br>{{$currency_code}} <span style="text-transform:capitalize;font-size: 15px;">{{str_replace("-"," ",$numberInWords)}}</span> only
                     </td>
                 @else
-                    <td class="td-text" colspan="3" rowspan="4" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top;">
+                    <td class="td-text" colspan="4" rowspan="3" style="border:1px solid #222;padding:1px 3px;text-align: center;vertical-align: bottom;font-size: 15px; vertical-align: top; width: 66%;">
                         {{trans('file.In Words')}}:<br><span style="text-transform:capitalize;font-size: 15px;">{{str_replace("-"," ",$numberInWords)}}</span> {{$currency_code}} only
                     </td>
                 @endif
+                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px; width: 22%;"></td>
+                <td class="td-text" style="border:1px solid #222;padding:1px 3px; width: 12%;"></td>
             </tr>
             <tr>
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
+                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px; width: 22%;">
                     {{trans('file.Paid')}}
                 </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
+                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px; width: 12%;">
                     {{number_format((float)$lims_sale_data->paid_amount ,$general_setting->decimal, '.', ',')}}
                 </td>
             </tr>
             <tr>
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
+                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px; width: 22%;">
                     {{trans('file.Due')}}
                 </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
+                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px; width: 12%;">
                     {{number_format((float)($lims_sale_data->grand_total - $lims_sale_data->paid_amount) ,$general_setting->decimal, '.', ',')}}
                 </td>
             </tr>
-            <tr>
-                <td class="td-text" colspan="3" style="border:1px solid #222;padding:1px 3px;">
-                    {{trans('file.Total Due')}}
-                </td>
-                <td class="td-text" style="border:1px solid #222;padding:1px 3px;text-align: center;font-size: 15px;">
-                    {{number_format($totalDue ,$general_setting->decimal, '.', ',')}}
-                </td>
-            </tr>
+            {{-- Removed historical balance row to avoid confusion --}}
                 <td colspan="2" style="border:1px solid #222">
                     <table>
                         <tr>
@@ -360,7 +394,7 @@
                             <td style="text-align: left;width:30"><h4>Scan for UPI Payment</h4></td>
                             <td style="width: 60%; margin-left:10%; padding:10px" >
                                 <?php
-                                    $upiText = "upi://pay?pa=9633625630@ptsbi&pn=Lens Breeze&cu=INR&am=".$bill->total_due."&invoiceNo=".$bill->reference_no;
+                                    $upiText = "upi://pay?pa=9633625630@ptsbi&pn=Lens Breeze&cu=INR&am=".$totalDue."&invoiceNo=".$lims_sale_data->reference_no;
                                     echo '<img class="upi-rq" style="width:100%" src="data:image/png;base64,' . DNS2D::getBarcodePNG($upiText, 'QRCODE') . '" alt="barcode"   />';?>
                             </td>
                         </tr>
@@ -395,7 +429,10 @@
             <tr>
                 <td style="width: 100%; text-align: center">
                     <br>
-                    <?php echo '<img style="max-width:100%" src="data:image/png;base64,' . DNS1D::getBarcodePNG($lims_sale_data->reference_no, 'C128') . '" alt="barcode"   />';?>
+                    <?php 
+                        $barcodeData = $lims_sale_data->reference_no ? $lims_sale_data->reference_no : $lims_sale_data->order_no;
+                        echo '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG($barcodeData, 'C128', 2, 40) . '" alt="barcode"   />';
+                    ?>
                 </td>
             </tr>
         </table>

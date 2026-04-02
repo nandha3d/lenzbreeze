@@ -30,7 +30,9 @@
                                                         <th>{{trans('file.Net Unit Price')}}</th>
                                                         <th>{{trans('file.Discount')}}</th>
                                                         <th>{{trans('file.Tax')}}</th>
-                                                        <th>{{trans('file.Subtotal')}}</th>
+                                                         <th>{{trans('file.Subtotal')}}</th>
+                                                        <th>Original Lens Values (SPH / CYL / AXIS / ADD / L-R)</th>
+                                                        <th>Actual Lens Values <small class="text-muted">(edit if changed)</small></th>
                                                         <th>Choose</th>
                                                     </tr>
                                                 </thead>
@@ -84,7 +86,6 @@
                                                         <td class="discount">{{ number_format((float)$product_sale->discount, $general_setting->decimal, '.', '')}}</td>
                                                         <td class="tax">{{ number_format((float)$product_sale->tax, $general_setting->decimal, '.', '')}}</td>
                                                         <td class="sub-total">{{ number_format((float)$product_sale->total, $general_setting->decimal, '.', '')}}</td>
-                                                        <td><input type="checkbox" class="is-return" name="is_return[]" value="{{$product_sale->id}}"></td>
                                                         <input type="hidden" class="product-code" name="product_code[]" value="{{$product_data->code}}"/>
                                                         <input type="hidden" name="product_sale_id[]" value="{{$product_sale->id}}"/>
                                                         <input type="hidden" name="product_id[]" class="product-id" value="{{$product_data->id}}"/>
@@ -106,6 +107,25 @@
                                                         <input type="hidden" class="subtotal-value" name="subtotal[]" value="{{$product_sale->total}}" />
                                                         <input type="hidden" class="imei-number" value="{{$product_sale->imei_number}}" />
                                                         <input type="hidden" class="return-imei-number" name="imei_number[]" value="" />
+                                                        {{-- Original lens values (read-only, from the original sale) --}}
+                                                        <td style="white-space:nowrap; font-size:12px; color:#888;">
+                                                            {{ $product_sale->sph ?? '-' }} /
+                                                            {{ $product_sale->cyl ?? '-' }} /
+                                                            {{ $product_sale->axis ?? '-' }} /
+                                                            {{ $product_sale->addition ?? '-' }} /
+                                                            {{ $product_sale->lr ?? '-' }}
+                                                        </td>
+                                                        {{-- Actual lens values (editable by staff) --}}
+                                                        <td style="white-space:nowrap;">
+                                                            <div style="display:flex; gap:4px;">
+                                                                <input type="text" name="actual_sph[]"      class="form-control actual-lens" placeholder="SPH"  style="width:52px; font-size:12px;" value="{{ $product_sale->sph ?? '' }}">
+                                                                <input type="text" name="actual_cyl[]"      class="form-control actual-lens" placeholder="CYL"  style="width:52px; font-size:12px;" value="{{ $product_sale->cyl ?? '' }}">
+                                                                <input type="text" name="actual_axis[]"     class="form-control actual-lens" placeholder="AXIS" style="width:52px; font-size:12px;" value="{{ $product_sale->axis ?? '' }}">
+                                                                <input type="text" name="actual_addition[]" class="form-control actual-lens" placeholder="ADD"  style="width:52px; font-size:12px;" value="{{ $product_sale->addition ?? '' }}">
+                                                                <input type="text" name="actual_lr[]"       class="form-control actual-lens" placeholder="L/R"  style="width:42px; font-size:12px;" value="{{ $product_sale->lr ?? '' }}">
+                                                            </div>
+                                                        </td>
+                                                        <td><input type="checkbox" class="is-return" name="is_return[]" value="{{$product_sale->id}}"></td>
                                                     </tr>
                                                     @endforeach
                                                 </tbody>

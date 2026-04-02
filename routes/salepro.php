@@ -164,6 +164,7 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
         Route::get('/recent-payment', 'recentPayment');
         Route::get('switch-theme/{theme}', 'switchTheme')->name('switchTheme');
         Route::get('/dashboard-filter/{start_date}/{end_date}/{warehouse_id}', 'dashboardFilter');
+        Route::get('/stock-levels', 'stockLevels');
         Route::get('addon-list', 'addonList');
         Route::get('my-transactions/{year}/{month}', 'myTransaction');
     });
@@ -499,6 +500,9 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
             Route::get('lims_product_search', 'limsProductSearch')->name('product_return-sale.search');
             Route::get('product_return/{id}', 'productReturnData');
             Route::post('deletebyselection', 'deleteBySelection');
+            Route::get('credit-note/{id}', 'creditNote')->name('return-sale.credit-note');
+            Route::post('send-credit-note', 'sendCreditNote')->name('return-sale.send-credit-note');
+            Route::get('check-return-match', 'checkReturnMatch')->name('return-sale.check-match');
          });
     });
     Route::resource('return-sale', ReturnController::class);
@@ -577,6 +581,7 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
             Route::post('customer-group-payment-data', 'customerGroupPaymentData');
             Route::post('customer-group-quotation-data', 'customerGroupQuotationData');
             Route::post('customer-group-return-data', 'customerGroupReturnData');
+            Route::get('customer-group-excel', 'customerGroupReportExcel')->name('report.customer_group_excel');
             Route::post('supplier', 'supplierReport')->name('report.supplier');
             Route::post('supplier-purchase-data', 'supplierPurchaseData');
             Route::post('supplier-payment-data', 'supplierPaymentData');

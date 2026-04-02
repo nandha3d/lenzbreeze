@@ -336,6 +336,66 @@
                   </div>
               </div>
             </div>
+
+            {{-- Stock Levels Section --}}
+            @if($revenue_profit_summary)
+            <div class="col-md-12 mt-4">
+              <div class="row" style="gap: 1.5rem 0;">
+                <div class="col-xl-4 col-sm-6">
+                  <div class="wrapper count-title">
+                    <div class="icon"><i class="dripicons-box" style="color: {{$color}};"></i></div>
+                    <div class="data">
+                        <div class="count-number" id="stock-total-products">...</div>
+                        <div class="name"><strong>In-Stock Products</strong></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-sm-6">
+                  <div class="wrapper count-title">
+                    <div class="icon"><i class="dripicons-stack" style="color: {{$color}};"></i></div>
+                    <div class="data">
+                        <div class="count-number" id="stock-total-qty">...</div>
+                        <div class="name"><strong>Total Stock Qty</strong></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-sm-6">
+                  <div class="wrapper count-title">
+                    <div class="icon"><i class="dripicons-warning" style="color: #e74c3c;"></i></div>
+                    <div class="data">
+                        <div class="count-number" id="stock-low-count" style="color:#e74c3c;">...</div>
+                        <div class="name"><strong>Low Stock Alerts</strong></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mt-3">
+              <div class="card" style="border-radius: 16px; border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                <div class="card-header d-flex justify-content-between align-items-center" style="background: transparent; border-bottom: 1px solid #f3f4f6; padding: 20px 24px;">
+                  <h4 style="font-weight: 600; font-size: 15px; color: #374151;">Stock Levels by Warehouse</h4>
+                  <input type="text" id="stock-search" class="form-control" placeholder="Search products..." style="max-width: 250px;">
+                </div>
+                <div class="card-body" style="padding: 0;">
+                  <div class="table-responsive" style="max-height: 500px; overflow-y: auto;">
+                    <table class="table table-hover" id="stock-levels-table">
+                      <thead style="position: sticky; top: 0; background: #fff; z-index: 1;">
+                        <tr>
+                          <th style="padding: 12px 16px;">Product Name</th>
+                          <th style="padding: 12px 16px;">Code</th>
+                          <th style="padding: 12px 16px;">Warehouse</th>
+                          <th style="padding: 12px 16px; text-align: right;">Qty</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td colspan="4" class="text-center" style="padding: 30px;">Loading stock data...</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            @endif
           </div>
         </div>
       </section>
@@ -565,6 +625,7 @@
         $.get('dashboard-filter/' + start_date + '/' + end_date + '/' + warehouse_id, function(data) {
             dashboardFilter(data);
         });
+        loadStockLevels(warehouse_id);
     });
 
     function dashboardFilter(data){
@@ -583,6 +644,75 @@
         $('.purchase_return-data').hide();
         $('.purchase_return-data').html(parseFloat(data[3]).toFixed({{$general_setting->decimal}}));
         $('.purchase_return-data').show(500);
+    }
+
+    // Stock Levels
+    var stockDataCache = [];
+    function loadStockLevels(warehouse_id) {
+        $('#stock-levels-table tbody').html('<tr><td colspan="4" class="text-center" style="padding: 30px;">Loading stock data...</td></tr>');
+        $.ajax({
+            url: '{{url("/admin/stock-levels")}}',
+            type: 'GET',
+            data: { warehouse_id: warehouse_id },
+            dataType: 'json',
+            success: function(response) {
+                // Summary cards
+                $('#stock-total-products').text(response.summary.total_products.toLocaleString());
+                $('#stock-total-qty').text(parseFloat(response.summary.total_stock).toLocaleString());
+                $('#stock-low-count').text(response.summary.low_stock_count.toLocaleString());
+
+                stockDataCache = response.stock_data;
+                renderStockTable(stockDataCache);
+            },
+            error: function(xhr, status, error) {
+                console.error("Stock levels AJAX error:", error);
+                $('#stock-levels-table tbody').html('<tr><td colspan="4" class="text-center" style="padding:30px;color:#e74c3c;">Failed to load stock data. Please refresh the page.</td></tr>');
+                $('#stock-total-products, #stock-total-qty, #stock-low-count').text('Error');
+            }
+        });
+    }
+
+    $(document).ready(function(){
+      loadStockLevels($('#warehouse_btn').val());
+
+      $('#stock-search').on('keyup', function(){
+        var query = $(this).val().toLowerCase();
+        if(query.length === 0){
+          renderStockTable(stockDataCache);
+        } else {
+          var filtered = stockDataCache.filter(function(item){
+            return item.product_name.toLowerCase().includes(query) ||
+                   item.product_code.toLowerCase().includes(query) ||
+                   item.warehouse_name.toLowerCase().includes(query);
+          });
+          renderStockTable(filtered);
+        }
+      });
+    });
+
+    function renderStockTable(data){
+      var tbody = $('#stock-levels-table tbody');
+      tbody.empty();
+      if(data.length === 0){
+        tbody.append('<tr><td colspan="4" class="text-center" style="padding:30px;color:#999;">No stock data found</td></tr>');
+        return;
+      }
+      data.forEach(function(item){
+        var qty = parseFloat(item.qty);
+        var badgeClass = 'badge-success';
+        if(qty <= 0) badgeClass = 'badge-secondary';
+        else if(qty < 10) badgeClass = 'badge-danger';
+        else if(qty < 50) badgeClass = 'badge-warning';
+
+        tbody.append(
+          '<tr>' +
+            '<td style="padding:10px 16px;">' + item.product_name + '</td>' +
+            '<td style="padding:10px 16px;"><code>' + item.product_code + '</code></td>' +
+            '<td style="padding:10px 16px;">' + item.warehouse_name + '</td>' +
+            '<td style="padding:10px 16px;text-align:right;"><span class="badge ' + badgeClass + '" style="font-size:13px;padding:4px 10px;">' + qty + '</span></td>' +
+          '</tr>'
+        );
+      });
     }
 </script>
 @endpush

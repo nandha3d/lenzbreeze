@@ -96,6 +96,11 @@
                         <input type="hidden" name="return_id">
                         <button class="btn btn-default btn-sm d-print-none"><i class="dripicons-mail"></i> {{trans('file.Email')}}</button>
                     {{ Form::close() }}
+                    <a id="credit-note-btn" href="#" target="_blank" class="btn btn-warning btn-sm d-print-none"><i class="fa fa-file-text-o"></i> Credit Note</a>
+                    {{ Form::open(['route' => 'return-sale.send-credit-note', 'method' => 'post', 'class' => 'send-credit-note-form'] ) }}
+                        <input type="hidden" name="return_id" class="credit-note-return-id">
+                        <button type="submit" class="btn btn-info btn-sm d-print-none"><i class="dripicons-mail"></i> Email Credit Note</button>
+                    {{ Form::close() }}
                 </div>
                 <div class="col-md-6 d-print-none">
                     <button type="button" id="close-btn" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
@@ -361,6 +366,8 @@
 
     function returnDetails(returns){
         $('input[name="return_id"]').val(returns[13]);
+        $('#credit-note-btn').attr('href', 'return-sale/credit-note/' + returns[13]);
+        $('.credit-note-return-id').val(returns[13]);
         var htmltext = '<strong>{{trans("file.Date")}}: </strong>'+returns[0]+'<br><strong>{{trans("file.reference")}}: </strong>'+returns[1]+'<br><strong>{{trans("file.Sale Reference")}}: </strong>'+returns[24]+'<br><strong>{{trans("file.Warehouse")}}: </strong>'+returns[2]+'<br><strong>{{trans("file.Currency")}}: </strong>'+returns[26];
         if(returns[27])
             htmltext += '<br><strong>{{trans("file.Exchange Rate")}}: </strong>'+returns[27]+'<br>';

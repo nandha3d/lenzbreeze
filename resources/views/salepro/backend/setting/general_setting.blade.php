@@ -47,20 +47,28 @@
 
                                     </div>
                                 </div>
-                                @if(config('database.connections.saleprosaas_landlord'))
-                                    <div class="col-md-4 mt-4">
-                                        <div class="form-group">
-                                            @if($lims_general_setting_data->is_zatca)
-                                            <input type="checkbox" name="is_zatca" value="1" checked>
-                                            @else
-                                            <input type="checkbox" name="is_zatca" value="1" />
-                                            @endif
-                                            &nbsp;
-                                            <label>{{trans('file.ZATCA QrCode')}}</label>
-
-                                        </div>
+                                <div class="col-md-3 mt-4">
+                                    <div class="form-group">
+                                        @if($lims_general_setting_data->is_sale_status_active)
+                                        <input type="checkbox" name="is_sale_status_active" value="1" checked>
+                                        @else
+                                        <input type="checkbox" name="is_sale_status_active" value="1" />
+                                        @endif
+                                        &nbsp;
+                                        <label>{{trans('file.Sale Status')}}</label>
                                     </div>
-                                @endif
+                                </div>
+                                <div class="col-md-3 mt-4">
+                                    <div class="form-group">
+                                        @if($lims_general_setting_data->is_payment_status_active)
+                                        <input type="checkbox" name="is_payment_status_active" value="1" checked>
+                                        @else
+                                        <input type="checkbox" name="is_payment_status_active" value="1" />
+                                        @endif
+                                        &nbsp;
+                                        <label>{{trans('file.Payment Status')}}</label>
+                                    </div>
+                                </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Company Name')}}</label>

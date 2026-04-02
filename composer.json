@@ -105,7 +105,8 @@
         "secure-http": false,
         "platform": {
             "php": "8.3.29"
-        }
+        },
+        "disable-tls": true
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

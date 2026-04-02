@@ -1005,6 +1005,35 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Dynamic Order Extras -->
+                                <div class="col-md-12 mt-3 mb-3">
+                                    <h5>Dynamic Order Extras</h5>
+                                    <table class="table table-bordered table-condensed" id="order-extras-table">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 60%">Extra Type</th>
+                                                <th style="width: 30%">Value</th>
+                                                <th style="width: 10%"><button type="button" class="btn btn-sm btn-primary add-extra-btn"><i class="fa fa-plus"></i></button></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if(isset($order_extras))
+                                                @foreach($order_extras as $extra)
+                                                <tr>
+                                                    <td><select name="extra_type_id[]" class="form-control extra-type-select" required>
+                                                        <option value="">Select Type...</option>
+                                                        @foreach($order_extra_types as $type)
+                                                        <option value="{{$type->id}}" data-type="{{$type->type}}" @if($extra->order_extra_type_id == $type->id) selected @endif>{{$type->name}}</option>
+                                                        @endforeach
+                                                    </select></td>
+                                                    <td><input type="text" name="extra_value[]" class="form-control extra-value-input" value="{{$extra->value}}" required></td>
+                                                    <td><button type="button" class="btn btn-sm btn-danger remove-extra-btn"><i class="fa fa-trash"></i></button></td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div class="col-12 totals" style="border-top: 2px solid #e4e6fc; padding-top: 10px;">
                                     <div class="row">
                                         <div class="col-sm-4">
@@ -2872,7 +2901,17 @@
 
             item = ++item + '(' + total_qty + ')';
             order_tax = (subtotal - order_discount) * (order_tax / 100);
-            var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+            
+            var extra_fees = 0;
+            $('.extra-type-select').each(function(i) {
+                var type = $(this).find(':selected').data('type');
+                var val = parseFloat($('.extra-value-input').eq(i).val()) || 0;
+                if(type == 'fee') {
+                    extra_fees += val;
+                }
+            });
+
+            var grand_total = (subtotal + order_tax + shipping_cost + extra_fees) - order_discount;
             $('input[name="grand_total"]').val(grand_total.toFixed({{$general_setting->decimal}}));
 
             couponDiscount();
@@ -3013,6 +3052,34 @@
             dom: 'tp'
         });
 
+    var orderExtraTypes = @json($order_extra_types ?? []);
+
+    $(document).on('click', '.add-extra-btn', function() {
+        var optionsHtml = '<option value="">Select Type...</option>';
+        $.map(orderExtraTypes, function(type) {
+            optionsHtml += '<option value="' + type.id + '" data-type="' + type.type + '">' + type.name + '</option>';
+        });
+
+        var rowHtml = '<tr>' +
+            '<td><select name="extra_type_id[]" class="form-control extra-type-select" required>' + optionsHtml + '</select></td>' +
+            '<td><input type="text" name="extra_value[]" class="form-control extra-value-input" required placeholder="Value"></td>' +
+            '<td><button type="button" class="btn btn-sm btn-danger remove-extra-btn"><i class="fa fa-trash"></i></button></td>' +
+        '</tr>';
+        $('#order-extras-table tbody').append(rowHtml);
+    });
+
+    $(document).on('click', '.remove-extra-btn', function() {
+        $(this).closest('tr').remove();
+        calculateGrandTotal();
+    });
+
+    $(document).on('keyup', '.extra-value-input', function() {
+        calculateGrandTotal();
+    });
+
+    $(document).on('change', '.extra-type-select', function() {
+        calculateGrandTotal();
+    });
     </script>
 // <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 @endpush

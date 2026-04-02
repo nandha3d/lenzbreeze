@@ -19,6 +19,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\RewardPointSetting;
 use App\Models\Product_Warehouse;
+use App\Models\Warehouse;
 use App\Models\Unit;
 use Cache;
 use DB;
@@ -536,5 +537,66 @@ class HomeController extends Controller
     public function sessionRenew(Request $request)
     {
         return response()->json('success');
+    }
+
+    public function stockLevels(Request $request)
+    {
+        try {
+            $warehouse_id = $request->input('warehouse_id');
+
+            // Match strict mode configuration of the main dashboard
+            config()->set('database.connections.mysql.strict', false);
+            DB::reconnect();
+
+            // Base query for products with actual stock to keep it fast
+            $query = Product_Warehouse::join('products', 'product_warehouse.product_id', '=', 'products.id')
+                ->join('warehouses', 'product_warehouse.warehouse_id', '=', 'warehouses.id')
+                ->where('products.is_active', true)
+                ->where('warehouses.is_active', true)
+                ->where('product_warehouse.qty', '>', 0);
+
+            if ($warehouse_id && $warehouse_id != 0) {
+                $query->where('product_warehouse.warehouse_id', $warehouse_id);
+            }
+
+            $stock_data = (clone $query)->select(
+                'products.name as product_name',
+                'products.code as product_code',
+                'warehouses.name as warehouse_name',
+                'product_warehouse.qty'
+            )
+            ->orderBy('product_warehouse.qty', 'desc')
+            ->get();
+
+            // Summary totals based on filter
+            $total_products = (clone $query)->distinct('product_id')->count('product_id');
+            $total_stock = (clone $query)->sum('product_warehouse.qty') ?: 0;
+            $low_stock_count = (clone $query)
+                ->where('product_warehouse.qty', '<', 10)
+                ->count();
+
+            // Revert strict mode
+            config()->set('database.connections.mysql.strict', true);
+            DB::reconnect();
+
+            return response()->json([
+                'summary' => [
+                    'total_products' => $total_products,
+                    'total_stock' => $total_stock,
+                    'low_stock_count' => $low_stock_count,
+                ],
+                'stock_data' => $stock_data
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'summary' => [
+                    'total_products' => 0,
+                    'total_stock' => 0,
+                    'low_stock_count' => 0,
+                ],
+                'stock_data' => []
+            ], 500);
+        }
     }
 }

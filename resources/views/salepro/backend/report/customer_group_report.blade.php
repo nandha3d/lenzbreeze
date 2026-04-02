@@ -44,6 +44,11 @@
                         <button class="btn btn-primary print-btn" type="button">Print</button>
                     </div>
                 </div>
+                <div class="col-md-2 mt-3">
+                    <div class="form-group">
+                        <button class="btn btn-success excel-btn" type="button">Excel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -69,17 +74,21 @@
                     <thead>
                         <tr>
                             <th class="not-exported-sale"></th>
+                            <th>SI No</th>
+                            <th>Cust ID</th>
                             <th>{{trans('file.customer')}}</th>
-                            <th>Pre. Bal</th>
+                            <th>Pre Bal</th>
                             <th>Debit</th>
                             <th>Credit</th>
-                            <th>Payment</th>
-                            <th>Return</th>
-                            <th>Cl.Bal</th>
+                            <th class="not-exported-sale">Payment</th>
+                            <th class="not-exported-sale">Return</th>
+                            <th>Cl. Bal</th>
                         </tr>
                     </thead>
 
                     <tfoot class="tfoot active">
+                        <th></th>
+                        <th></th>
                         <th></th>
                         <th>{{trans('file.Total')}}</th>
                         <th></th>
@@ -218,8 +227,12 @@
 
     $(".print-btn").on("click", function(){
         var start_date = $('.date').val();
-        var customer_id = $("#customer_id").val();
         location.href = "{{route('report.customer_group_print')}}?start_date="+start_date+"&customer_group_id="+$("#customer_group_id").val();
+    });
+
+    $(".excel-btn").on("click", function(){
+        var start_date = $('.date').val();
+        location.href = "{{route('report.customer_group_excel')}}?start_date="+start_date+"&customer_group_id="+$("#customer_group_id").val();
     });
 
     $("#filter-btn").on('click', function (e) {
@@ -244,6 +257,8 @@
         },
         "columns": [
             {"data": "key"},
+            {"data": "key", "render": function(data, type, row, meta){ return meta.row + meta.settings._iDisplayStart + 1; }},
+            {"data": "customer_id"},
             {"data": "customer"},
             {"data": "pre_bal"},
             {"data": "grand_total"},
@@ -262,11 +277,11 @@
                     'next': '<i class="dripicons-chevron-right"></i>'
             }
         },
-        order:[['1', 'asc']],
+        order:[['3', 'asc']],
         'columnDefs': [
             {
                 "orderable": false,
-                'targets': [0, 3, 4]
+                'targets': [0, 1, 2, 4, 5, 6, 7, 8, 9]
             },
             {
                 'render': function(data, type, row, meta){
@@ -650,15 +665,6 @@
                 text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                 exportOptions: {
                     columns: ':visible:not(.not-exported-return)',
-                },
-                action: newexportaction,
-                footer:true
-            },
-            {
-                extend: 'excel',
-                text: '<i title="export to excel" class="dripicons-document-new"></i>',
-                exportOptions: {
-                    columns: ':visible:not(.not-exported)',
                 },
                 action: newexportaction,
                 footer:true

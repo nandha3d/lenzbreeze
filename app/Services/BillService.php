@@ -28,8 +28,7 @@ class BillService
         $date = is_object($date) ? $date->toDateString() : $date;
 
         $q = Sale::whereDate('created_at', '=',  $date )
-                 ->select('id', 'order_no', 'customer_id', 'total_qty', 'total_discount', 'order_tax', 'order_tax_rate', 'total_price', 'grand_total', 'shipping_cost', 'warehouse_id')
-                ->whereNull('is_deleted');
+                 ->select('id', 'order_no', 'customer_id', 'total_qty', 'total_discount', 'order_tax', 'order_tax_rate', 'total_price', 'grand_total', 'shipping_cost', 'warehouse_id');
 
         if( $customer_id  && $customer_id != 'all'){
             $q = $q->where('customer_id', $customer_id);
@@ -101,35 +100,37 @@ class BillService
 
 
     public function customerBillCheck($date, $customer_id){
+        try {
+            $query = "
+            select distinct cb.id as id, cb.customer_id, cb.order_tax_rate, cb.date
+            from customer_bills as cb
+            left join sales on
+                (cb.customer_id = sales.customer_id and cb.order_tax_rate = sales.order_tax_rate and date(sales.created_at) = '$date')
+            where cb.date = '$date' and sales.id is null ";
 
-        $query = "
-        select distinct cb.id as id, cb.customer_id, cb.order_tax_rate, cb.date
-        from customer_bills as cb
-        left join sales on
-            (cb.customer_id = sales.customer_id and cb.order_tax_rate = sales.order_tax_rate and date(sales.created_at) = '$date')
-        where cb.date = '$date' and sales.id is null ";
+            if($customer_id && $customer_id != 'all'){
+                $query .= " AND cb.customer_id = $customer_id ";
+            }
 
-        if($customer_id && $customer_id != 'all'){
-            $query .= " AND cb.customer_id = $customer_id ";
-        }
+            $bills = DB::select($query);
 
-        $bills = DB::select($query);
-
-        if(!empty($bills))
-        {
-            foreach ($bills as $key => $bill){
-               $sq =  Sale::whereDate('created_at', '=',  $date )
-                    ->where('customer_id', '=', $bill->customer_id)
-                    ->where('order_tax_rate', '=', $bill->order_tax_rate);
-                $saleBill = $sq->count();
+            if(!empty($bills))
+            {
+                foreach ($bills as $key => $bill){
+                $sq =  Sale::whereDate('created_at', '=',  $date )
+                        ->where('customer_id', '=', $bill->customer_id)
+                        ->where('order_tax_rate', '=', $bill->order_tax_rate);
+                    $saleBill = $sq->count();
 
 
-                if(!$saleBill){
-                    CustomerBill::where('id', $bill->id)->delete();
+                    if(!$saleBill){
+                        CustomerBill::where('id', $bill->id)->delete();
+                    }
                 }
             }
+        } catch (\Exception $e) {
+            \Log::error('customerBillCheck error: ' . $e->getMessage());
         }
-
     }
 
 
@@ -327,7 +328,6 @@ class BillService
                     SUM(CASE WHEN type_id = "Payment" THEN amount  ELSE 0 END) total_payment,
                     SUM(CASE WHEN type_id = "Less" THEN amount  ELSE 0 END) total_less
                      ')
-                     ->whereNull('is_deleted')
                      ->groupBy("customer_id")
             ->first();
         return $saleData;
