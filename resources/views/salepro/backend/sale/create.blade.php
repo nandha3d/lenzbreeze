@@ -898,9 +898,10 @@ $('select[name="category_id"]').on('change', function() {
 
 function filterDropdowns() {
     if ($('#show_all_products').is(':checked')) {
-        $('#category_id option').prop('disabled', false).prop('hidden', false);
-        $('#product_type_id option').prop('disabled', false).prop('hidden', false);
-        $('.selectpicker').selectpicker('refresh');
+        $('#category_id option').removeClass('d-none');
+        $('#product_type_id option').removeClass('d-none');
+        $('#category_id').selectpicker('refresh');
+        $('#product_type_id').selectpicker('refresh');
         return;
     }
 
@@ -920,21 +921,22 @@ function filterDropdowns() {
             $('#category_id option').each(function() {
                 var val = $(this).val();
                 if (val && !data.valid_categories.includes(parseInt(val))) {
-                    $(this).prop('disabled', true).prop('hidden', true);
+                    $(this).addClass('d-none');
                 } else {
-                    $(this).prop('disabled', false).prop('hidden', false);
+                    $(this).removeClass('d-none');
                 }
             });
             // Filter Product Types
             $('#product_type_id option').each(function() {
                 var val = $(this).val();
                 if (val && !data.valid_product_types.includes(parseInt(val))) {
-                    $(this).prop('disabled', true).prop('hidden', true);
+                    $(this).addClass('d-none');
                 } else {
-                    $(this).prop('disabled', false).prop('hidden', false);
+                    $(this).removeClass('d-none');
                 }
             });
-            $('.selectpicker').selectpicker('refresh');
+            $('#category_id').selectpicker('refresh');
+            $('#product_type_id').selectpicker('refresh');
         }
     });
 }
