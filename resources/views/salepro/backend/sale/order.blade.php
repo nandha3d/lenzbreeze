@@ -472,6 +472,8 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @else
+                                    <input type="hidden" name="sale_status" value="1">
                                     @endif
                                     @if($general_setting->is_payment_status_active)
                                     <div class="col-md-4">
@@ -874,11 +876,26 @@ function getProduct(warehouse_id){
 var lims_productcodeSearch = $('#lims_productcodeSearch');
 lims_productcodeSearch.autocomplete({
     source: function(request, response) {
-        var matcher = new RegExp(".?" + $.ui.autocomplete.escapeRegex(request.term), "i");
-        response($.grep(lims_product_array, function(item) {
-            return matcher.test(item);
-        }));
+        var brand_id = $('#brand_id').val();
+        if (!brand_id) {
+            response([]);
+            return;
+        }
+        $.ajax({
+            url: "{{ url('/admin/sales/product-autocomplete') }}",
+            dataType: "json",
+            data: {
+                term: request.term,
+                brand: brand_id,
+                category: $('#category_id').val() || '',
+                product_type: $('#product_type_id').val() || ''
+            },
+            success: function(data) {
+                response(data);
+            }
+        });
     },
+    minLength: 2,
     response: function(event, ui) {
         if (ui.content.length == 1) {
             var data = ui.content[0].value;
@@ -1049,7 +1066,7 @@ function productSearch(data) {
             cols += '<td><input type="text" class="form-control addition" name="addition[]" value="'+data['addition']+'" required/></td>';
             cols += '<td><input type="text" class="form-control lr" name="lr[]" value="'+data['lr']+'" required/></td>';
             cols += '<td><input type="text" class="form-control qty update_product" name="qty[]" value="'+data['qty']+'" required/></td>';
-            cols += '<td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="'+data['price']+'" readonly style="background-color:#e9ecef;" required/></td>';
+            cols += '<td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="'+data['price']+'" required/></td>';
             cols += `<td>
                 <div class="input-group-prepend">
                 <select  name="discount_type[]" class="form-control discount_type update_product" style="width:60px;padding: 6px;">
@@ -1156,7 +1173,6 @@ $('#lims_productcodeSearch').on('input', function(){
     var warehouse_id = $('#warehouse_id').val();
     temp_data = $('#lims_productcodeSearch').val();
     var brand_id = $('#brand_id').val();
-    var category_id = $('#category_id').val();
     if(!customer_id){
         $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
         alert('Please select Customer!');
@@ -1165,9 +1181,8 @@ $('#lims_productcodeSearch').on('input', function(){
         $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
         alert('Please select Warehouse!');
     }else if(!brand_id){
-        alert('Please select brand!');
-    }else if(!category_id){
-        alert('Please select category!');
+        $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
+        alert('Please select Brand!');
     }
 
 });
@@ -1816,37 +1831,28 @@ $(document).on('submit', '.payment-form', function(e) {
             type: $('.payment-form').attr('method'),
             data: $('.payment-form').serialize(),
             success: function(response) {
+                console.log('Order created, response:', response);
+                console.log('Sale status select:', $('select[name="sale_status"]').val());
+                console.log('Sale status input:', $('input[name="sale_status"]').val());
 
                 if (response.payment_method === 'pesapal' && response.redirect_url) {
                     // Redirect to the URL returned for Pesapal payment method
                     location.href = response.redirect_url;
-                } else if ($('select[name="sale_status"]').val() == 1 && response !== 'pesapal') {
-                    let link = "{{url('admin/sales/gen_invoice/')}}" + '/' + response;
-                    $('#print-layout').load(link, function() {
-                        setTimeout(function() {
-                            window.print();
-                        }, 50);
-                    });
-
+                } else if (response !== 'pesapal') {
+                    console.log('Showing lab receipt confirmation...');
                     $("#submit-button").prop('disabled', false);
                     $('#add-payment').modal('hide');
                     cancel($('table.order-list tbody tr:last').index());
 
-                    setTimeout(function() {
-                        window.onafterprint = function(){
-                            $('#print-layout').html('');
-                        }
-                    }, 100);
-                }
-                else if($('select[name="sale_status"]').val() != 1){
-                    localStorage.clear();
-                    alert('Order created successfully!');
-                    location.href = "{{route('sales.index')}}";
-                }
-                else {
-                    localStorage.clear();
-                    alert('Order created successfully!');
-                    location.href = response;
+                    var shouldPrintLabReceipt = confirm('Order created successfully!\nDo you want to see the Lab Receipt?');
+                    if (shouldPrintLabReceipt) {
+                        let link = "{{url('admin/sales/lab_receipt/')}}" + '/' + response;
+                        location.href = link;
+                    } else {
+                        localStorage.clear();
+                        location.href = "{{route('sales.create')}}";
+                    }
+
                 }
             },
             error: function(xhr) {

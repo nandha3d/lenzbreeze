@@ -273,7 +273,7 @@
 
                                                         <td ><input type="text" class="form-control qty update_product" name="qty[]" value="{{$product_sale->qty}}" step="any" required/></td>
                                                         {{-- <td class="net_unit_price">{{ number_format((float)$product_sale->net_unit_price, $general_setting->decimal, '.', '')}} </td> --}}
-                                                        <td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="{{ number_format((float)$product_sale->net_unit_price, $general_setting->decimal, '.', '')}}" readonly style="background-color:#e9ecef;" required/></td>
+                                                        <td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="{{ number_format((float)$product_sale->net_unit_price, $general_setting->decimal, '.', '')}}" required/></td>
                                                         <td>
 
                                                             <div class="input-group-prepend">
@@ -849,11 +849,26 @@
     var lims_productcodeSearch = $('#lims_productcodeSearch');
     lims_productcodeSearch.autocomplete({
         source: function(request, response) {
-            var matcher = new RegExp(".?" + $.ui.autocomplete.escapeRegex(request.term), "i");
-            response($.grep(lims_product_array, function(item) {
-                return matcher.test(item);
-            }));
+            var brand_id = $('#brand_id').val();
+            if (!brand_id) {
+                response([]);
+                return;
+            }
+            $.ajax({
+                url: "{{ url('/admin/sales/product-autocomplete') }}",
+                dataType: "json",
+                data: {
+                    term: request.term,
+                    brand: brand_id,
+                    category: $('#category_id').val() || '',
+                    product_type: $('#product_type_id').val() || ''
+                },
+                success: function(data) {
+                    response(data);
+                }
+            });
         },
+        minLength: 2,
         response: function(event, ui) {
             if (ui.content.length == 1) {
                 var data = ui.content[0].value;
@@ -1113,7 +1128,7 @@
 
                         cols += '<td><input type="text" class="form-control qty " name="qty[]" value="'+data['qty']+'"  required/></td>';
 
-                        cols += '<td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="'+data['price']+'" readonly style="background-color:#e9ecef;" required/></td>';
+                        cols += '<td><input type="text" class="form-control net_unit_price update_product" name="net_unit_price[]" value="'+data['price']+'" required/></td>';
                         cols += `<td>
                                     <div class="input-group-prepend">
                                     <select  name="discount_type[]" class="form-control discount_type" style="width:60px;padding: 6px;">

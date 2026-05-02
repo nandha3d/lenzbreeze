@@ -647,6 +647,24 @@ class SaleController extends Controller
             }
         }
 
+        // Bulk fetch customer order numbers
+        $customerOrderNoMap = [];
+        if (!empty($saleIds)) {
+            $extraData = collect();
+            foreach(array_chunk($saleIds, 5000) as $chunk) {
+                $chunkData = \DB::connection('salepro')->table('order_extras')
+                    ->join('order_extra_types', 'order_extras.order_extra_type_id', '=', 'order_extra_types.id')
+                    ->whereIn('order_extras.sale_id', $chunk)
+                    ->where('order_extra_types.name', 'Customer Order No.')
+                    ->select('order_extras.sale_id', 'order_extras.value')
+                    ->get();
+                $extraData = $extraData->concat($chunkData);
+            }
+            foreach ($extraData as $row) {
+                $customerOrderNoMap[$row->sale_id] = $row->value;
+            }
+        }
+
         // Bulk fetch deliveries
         $deliveryMapResults = collect();
         if (!empty($saleIds)) {
@@ -709,6 +727,7 @@ class SaleController extends Controller
                     $nestedData['key'] = $key;
                     $nestedData['order_tax'] = $sale->order_tax;
                     $nestedData['order_no'] = $sale->order_no;
+                    $nestedData['customer_order_no'] = $customerOrderNoMap[$sale->id] ?? 'N/A';
 
 
                     $order_tax = $sale->order_tax > 0 ? "Gst" :"Estimate";
@@ -910,7 +929,7 @@ class SaleController extends Controller
             $brand_list = Brand::where('is_active', true)->get();
             $category_list = Category::where('is_active', true)->get();
             $product_type_list = ProductType::where('is_active', true)->get();
-            $order_extra_types = \DB::table('order_extra_types')->where('is_active', true)->get();
+            $order_extra_types = \DB::connection('salepro')->table('order_extra_types')->where('is_active', true)->get();
 
             $uri = $request->path();
             if( str_replace('admin/', '', $uri) != 'sales/order'){
@@ -1340,7 +1359,7 @@ class SaleController extends Controller
             if(isset($data['extra_type_id'])) {
                 foreach($data['extra_type_id'] as $key => $type_id) {
                     if($type_id) {
-                        \DB::table('order_extras')->insert([
+                        \DB::connection('salepro')->table('order_extras')->insert([
                             'sale_id' => $lims_sale_data->id,
                             'order_extra_type_id' => $type_id,
                             'value' => $data['extra_value'][$key] ?? null,
@@ -2010,7 +2029,7 @@ class SaleController extends Controller
     public function getProductList(Request $request, $id)
     {
 
-        $query = Product::query();
+        $query = Product::where('products.is_active', true);
         if($request->has('brand') && $request->brand != '')
             $query->where('products.brand_id', $request->brand);
         if($request->has('category') && $request->category != '')
@@ -2049,6 +2068,62 @@ class SaleController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    /**
+     * Server-side product autocomplete search.
+     * Searches products by partial code or name match (e.g. "LB-069").
+     * Optionally filters by brand, category, product_type if provided.
+     */
+    public function productAutocomplete(Request $request)
+    {
+        $term = $request->input('term', '');
+        if (strlen($term) < 2) {
+            return response()->json([]);
+        }
+
+        $query = Product::where('products.is_active', true)
+            ->where(function ($q) use ($term) {
+                $q->where('products.code', 'LIKE', "%{$term}%")
+                  ->orWhere('products.name', 'LIKE', "%{$term}%");
+            });
+
+        // Apply optional filters if provided
+        if ($request->filled('brand')) {
+            $query->where('products.brand_id', $request->input('brand'));
+        }
+        if ($request->filled('category')) {
+            $query->where('products.category_id', $request->input('category'));
+        }
+        if ($request->filled('product_type')) {
+            $query->where('products.product_type_id', $request->input('product_type'));
+        }
+
+        $products = $query->select(
+                'products.id', 'products.name', 'products.code',
+                'products.price', 'products.brand_id', 'products.category_id',
+                'products.product_type_id'
+            )
+            ->orderByRaw("CASE WHEN products.code LIKE ? THEN 0 ELSE 1 END", ["{$term}%"])
+            ->limit(50)
+            ->get();
+
+        $results = [];
+        foreach ($products as $product) {
+            $brandName = $product->brand ? $product->brand->title : 'N/A';
+            $categoryName = $product->category ? $product->category->name : 'N/A';
+            $typeName = $product->productType ? $product->productType->name : 'N/A';
+
+            // Format: code|name|category|type|price|brand (same as lims_product_array format)
+            $value = $product->code . '|' . $product->name . '|' . $categoryName . '|' . $typeName . '|' . $product->price . '|' . $brandName;
+
+            $results[] = [
+                'label' => $product->code . ' | ' . $product->name . ' | ' . $categoryName . ' | ' . $typeName . ' | ' . $brandName,
+                'value' => $value,
+            ];
+        }
+
+        return response()->json($results);
     }
 
     public function posSale($id='')
@@ -2104,12 +2179,12 @@ class SaleController extends Controller
             $numberOfInvoice = Sale::count();
             $custom_fields = CustomField::where('belongs_to', 'sale')->get();
 
-            $order_extra_types = \DB::table('order_extra_types')->where('is_active', true)->get();
+            $order_extra_types = \DB::connection('salepro')->table('order_extra_types')->where('is_active', true)->get();
 
             if(isset($id)){
                 $lims_sale_data = Sale::find($id);
                 $lims_product_sale_data = Product_Sale::where('sale_id', $id)->get();
-                $order_extras = \DB::table('order_extras')->where('sale_id', $id)->get();
+                $order_extras = \DB::connection('salepro')->table('order_extras')->where('sale_id', $id)->get();
                 return view('backend.sale.pos', compact('lims_sale_data','lims_product_sale_data','currency_list','role','all_permission', 'lims_customer_list', 'lims_customer_group_all', 'lims_warehouse_list', 'lims_reward_point_setting_data', 'lims_tax_list', 'lims_biller_list', 'lims_pos_setting_data', 'options', 'lims_brand_list', 'lims_category_list', 'lims_table_list', 'lims_coupon_list', 'flag', 'numberOfInvoice', 'custom_fields', 'order_extra_types', 'order_extras'));
             }
 
@@ -2180,7 +2255,7 @@ class SaleController extends Controller
 
             $currency_list = Currency::where('is_active', true)->get();
 
-            $order_extra_types = \DB::table('order_extra_types')->where('is_active', true)->get();
+            $order_extra_types = \DB::connection('salepro')->table('order_extra_types')->where('is_active', true)->get();
             return view('backend.sale.create_sale',compact('currency_list', 'lims_biller_list', 'lims_customer_list', 'lims_warehouse_list', 'lims_tax_list', 'lims_sale_data','lims_product_sale_data', 'lims_pos_setting_data', 'lims_brand_list', 'lims_category_list', 'lims_coupon_list', 'lims_product_list', 'product_number', 'lims_customer_group_all', 'lims_reward_point_setting_data', 'order_extra_types'));
         }
         else
@@ -2504,7 +2579,7 @@ class SaleController extends Controller
             $lims_product_data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
                 ->select('products.*', 'product_variants.id as product_variant_id', 'product_variants.item_code', 'product_variants.additional_price')
                 ->where([
-                    ['product_variants.item_code', $product_code],
+                    ['product_variants.item_code', $product_data[0]],
                     ['products.is_active', true]
                 ])->first();
 
@@ -2964,8 +3039,8 @@ class SaleController extends Controller
             $uri = $request->path();
             $lastString = explode("/",$uri);
 
-            $order_extra_types = \DB::table('order_extra_types')->where('is_active', true)->get();
-            $order_extras = \DB::table('order_extras')->where('sale_id', $id)->get();
+            $order_extra_types = \DB::connection('salepro')->table('order_extra_types')->where('is_active', true)->get();
+            $order_extras = \DB::connection('salepro')->table('order_extras')->where('sale_id', $id)->get();
 
             if( array_pop($lastString) != 'order'){
                 return view('backend.sale.order_edit',compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_tax_list', 'lims_sale_data','lims_product_sale_data', 'currency_exchange_rate', 'custom_fields', 'brand_list', 'category_list', 'product_type_list', 'order_extra_types', 'order_extras'));
@@ -3350,11 +3425,11 @@ class SaleController extends Controller
         $lims_customer_data = Customer::find($data['customer_id']);
 
         // ── Sync Order Extras ───────────────────────────────────────
-        \DB::table('order_extras')->where('sale_id', $lims_sale_data->id)->delete();
+        \DB::connection('salepro')->table('order_extras')->where('sale_id', $lims_sale_data->id)->delete();
         if(isset($data['extra_type_id'])) {
             foreach($data['extra_type_id'] as $key => $type_id) {
                 if($type_id) {
-                    \DB::table('order_extras')->insert([
+                    \DB::connection('salepro')->table('order_extras')->insert([
                         'sale_id' => $lims_sale_data->id,
                         'order_extra_type_id' => $type_id,
                         'value' => $data['extra_value'][$key] ?? null,
@@ -3645,6 +3720,12 @@ class SaleController extends Controller
                     ->first();
         $totalDue = $saleData->grand_total - $returned_amount - $saleData->paid_amount;
 
+        $order_extras = DB::connection('salepro')->table('order_extras')
+            ->join('order_extra_types', 'order_extras.order_extra_type_id', '=', 'order_extra_types.id')
+            ->where('order_extras.sale_id', $id)
+            ->select('order_extras.*', 'order_extra_types.name', 'order_extra_types.type')
+            ->get();
+
         // Warranty QR generation
         $warranty = \App\Models\Warranty::where('sale_id', $id)->first();
         $warrantyQr = null;
@@ -3652,7 +3733,7 @@ class SaleController extends Controller
             $warrantyQr = (new \chillerlan\QRCode\QRCode)->render($warranty->getVerificationUrl());
         }
 
-        return view('backend.sale.lab_receipt', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue', 'warrantyQr', 'warranty'));
+        return view('backend.sale.lab_receipt', compact('lims_sale_data', 'currency_code', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords', 'sale_custom_fields', 'customer_custom_fields', 'product_custom_fields', 'qrText', 'totalDue', 'order_extras', 'warrantyQr', 'warranty'));
 
     }
 

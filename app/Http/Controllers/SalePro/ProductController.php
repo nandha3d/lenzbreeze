@@ -146,36 +146,25 @@ class ProductController extends Controller
                 ->leftjoin('product_purchases','product_purchases.product_id','=', 'products.id')
                 ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
                 ->leftjoin('product_variants', 'products.id', '=', 'product_variants.product_id')
-                ->where([
-                    ['products.name', 'LIKE', "%{$search}%"],
-                    ['products.is_active', true]
-                ])
-                ->orWhere([
-                    ['products.code', 'LIKE', "%{$search}%"],
-                    ['products.is_active', true]
-                ])
-                ->orWhere([
-                    ['product_variants.item_code', 'LIKE', "%{$search}%"],
-                    ['products.is_active', true]
-                ])
-                ->orWhere([
-                    ['categories.name', 'LIKE', "%{$search}%"],
-                    ['categories.is_active', true],
-                    ['products.is_active', true]
-                ])
-                ->orWhere([
-                    ['brands.title', 'LIKE', "%{$search}%"],
-                    ['brands.is_active', true],
-                    ['products.is_active', true]
-                ])
-                ->orWhere([
-                    ['product_purchases.imei_number', 'LIKE', "%{$search}%"],
-                    ['products.is_active', true]
-                ]);
-            //searching with custom field
-            foreach ($field_names as $key => $field_name) {
-                $q = $q->orwhere('products.' . $field_name, 'LIKE', "%{$search}%");
-            }
+                ->where('products.is_active', true)
+                ->where(function ($query) use ($search, $field_names) {
+                    $query->where('products.name', 'LIKE', "%{$search}%")
+                        ->orWhere('products.code', 'LIKE', "%{$search}%")
+                        ->orWhere('product_variants.item_code', 'LIKE', "%{$search}%")
+                        ->orWhere(function ($q2) use ($search) {
+                            $q2->where('categories.name', 'LIKE', "%{$search}%")
+                               ->where('categories.is_active', true);
+                        })
+                        ->orWhere(function ($q2) use ($search) {
+                            $q2->where('brands.title', 'LIKE', "%{$search}%")
+                               ->where('brands.is_active', true);
+                        })
+                        ->orWhere('product_purchases.imei_number', 'LIKE', "%{$search}%");
+                    // Search custom fields
+                    foreach ($field_names as $field_name) {
+                        $query->orWhere('products.' . $field_name, 'LIKE', "%{$search}%");
+                    }
+                });
 
             // ->where([
             //     ['products.brand_id', $request->brand],
@@ -193,12 +182,13 @@ class ProductController extends Controller
             //     $q = $q->orwhere('products.' . $field_name, 'LIKE', "%{$search}%");
             // }
 
+            $totalFiltered = (clone $q)->groupBy('products.id')->get()->count();
+
             $q = $q->offset($start)
                 ->limit($limit)
                 ->orderBy($order,$dir);
 
             $products = $q->groupBy('products.id')->get();
-            $totalFiltered = $q->groupBy('products.id')->count();
             /*$totalFiltered = Product::
                             join('categories', 'products.category_id', '=', 'categories.id')
                             ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
@@ -1711,11 +1701,32 @@ class ProductController extends Controller
             return redirect()->back()->with('message', 'CSV file is empty or invalid.');
         }
 
+        $headerMap = [
+            'productname'      => 'name',
+            'pcode'            => 'code',
+            'catogery'         => 'category',
+            'category'         => 'category',
+            'brand'            => 'brand',
+            'base'             => 'base',
+            'addition'         => 'addition',
+            'lr'               => 'lr',
+            'type'             => 'type',
+            'image'            => 'image',
+            'cost'             => 'cost',
+            'price'            => 'price',
+            'productdetails'   => 'productdetails',
+            'variantname'      => 'variantname',
+            'variantvalue'     => 'variantvalue',
+            'itemcode'         => 'itemcode',
+            'additionalcost'   => 'additionalcost',
+            'additionalprice'  => 'additionalprice'
+        ];
+
         $escapedHeader = [];
         foreach ($header as $key => $value) {
             $lheader = strtolower(trim($value));
             $escapedItem = preg_replace('/[^a-z]/', '', $lheader);
-            $escapedHeader[] = $escapedItem;
+            $escapedHeader[] = $headerMap[$escapedItem] ?? $escapedItem;
         }
 
         // Pre-fetch ALL invariant data ONCE (never inside the loop)
