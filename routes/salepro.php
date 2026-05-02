@@ -343,6 +343,7 @@ Route::group(['middleware' => ['common', 'auth', 'active']], function() {
         Route::get('sales/getproduct/{id}', 'getProduct')->name('sale.getproduct');
         Route::get('sales/getproduct-list/{id}', 'getProductList')->name('sale.getproduct-list');
         Route::get('sales/product-autocomplete', 'productAutocomplete')->name('sale.product-autocomplete');
+        Route::get('sales/valid-filters', 'getValidFilters')->name('sale.valid-filters');
         Route::get('sales/getproduct/{category_id}/{brand_id}', 'getProductByFilter');
         Route::get('sales/getfeatured', 'getFeatured');
         Route::get('sales/get_gift_card', 'getGiftCard');

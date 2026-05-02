@@ -2100,7 +2100,7 @@ class SaleController extends Controller
         }
 
         $products = $query->select(
-                'products.id', 'products.name', 'products.code',
+                'products.id', 'products.name', 'products.sku', 'products.code',
                 'products.price', 'products.brand_id', 'products.category_id',
                 'products.product_type_id'
             )
@@ -2115,15 +2115,45 @@ class SaleController extends Controller
             $typeName = $product->productType ? $product->productType->name : 'N/A';
 
             // Format: code|name|category|type|price|brand (same as lims_product_array format)
+            // Note: keeping name in value so that downstream JS parsing stays intact
             $value = $product->code . '|' . $product->name . '|' . $categoryName . '|' . $typeName . '|' . $product->price . '|' . $brandName;
 
+            $displayTitle = $product->sku ? $product->sku : $product->name;
+
             $results[] = [
-                'label' => $product->code . ' | ' . $product->name . ' | ' . $categoryName . ' | ' . $typeName . ' | ' . $brandName,
+                'label' => $product->code . ' | ' . $displayTitle . ' | ' . $categoryName . ' | ' . $typeName . ' | ' . $brandName,
                 'value' => $value,
             ];
         }
 
         return response()->json($results);
+    }
+
+    public function getValidFilters(Request $request)
+    {
+        $query = Product::where('is_active', true);
+
+        if ($request->filled('brand_id')) {
+            $query->where('brand_id', $request->input('brand_id'));
+        }
+
+        // We only care about categories and product types valid for this selection
+        // First clone the query to get valid categories before we apply the category filter itself
+        // (if we want to restrict types based on selected category)
+        
+        $categoryQuery = clone $query;
+        $validCategories = $categoryQuery->distinct()->pluck('category_id')->filter()->values();
+
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
+        $validProductTypes = $query->distinct()->pluck('product_type_id')->filter()->values();
+
+        return response()->json([
+            'valid_categories' => $validCategories,
+            'valid_product_types' => $validProductTypes
+        ]);
     }
 
     public function posSale($id='')

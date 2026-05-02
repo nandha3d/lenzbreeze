@@ -1719,7 +1719,9 @@ class ProductController extends Controller
             'variantvalue'     => 'variantvalue',
             'itemcode'         => 'itemcode',
             'additionalcost'   => 'additionalcost',
-            'additionalprice'  => 'additionalprice'
+            'additionalprice'  => 'additionalprice',
+            'sku'              => 'sku',
+            'dia'              => 'dia'
         ];
 
         $escapedHeader = [];
@@ -1836,6 +1838,8 @@ class ProductController extends Controller
                     'base'              => $data['base']     ?? '',
                     'addition'          => $data['addition'] ?? '',
                     'lr'                => $data['lr']       ?? '',
+                    'sku'               => $data['sku']      ?? '',
+                    'dia'               => $data['dia']      ?? '',
                 ]);
 
                 if ($hasEcommerce) {

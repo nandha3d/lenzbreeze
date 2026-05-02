@@ -145,7 +145,13 @@
 
                                 <div class="row mt-3">
                                     <div class="col-md-12">
-                                        <label>{{trans('file.Select Product')}}</label>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <label>{{trans('file.Select Product')}}</label>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="show_all_products">
+                                                <label class="custom-control-label" for="show_all_products">Show all products</label>
+                                            </div>
+                                        </div>
                                         <div class="search-box input-group">
                                             <button type="button" class="btn btn-secondary btn-lg"><i class="fa fa-barcode"></i></button>
                                             <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Please type product code and select..." class="form-control" />
@@ -831,15 +837,64 @@
     });
 
 
+    $('#show_all_products').on('change', function() {
+        filterDropdowns();
+    });
+
     $('select[name="brand_id"]').on('change', function() {
+        filterDropdowns();
         var warehouse_id = $("#warehouse_id").val();
         getProduct(warehouse_id);
     });
 
     $('select[name="category_id"]').on('change', function() {
+        filterDropdowns();
         var warehouse_id = $("#warehouse_id").val();
         getProduct(warehouse_id);
     });
+
+    function filterDropdowns() {
+        if ($('#show_all_products').is(':checked')) {
+            $('#category_id option').prop('disabled', false).prop('hidden', false);
+            $('#product_type_id option').prop('disabled', false).prop('hidden', false);
+            $('.selectpicker').selectpicker('refresh');
+            return;
+        }
+
+        var brand_id = $('#brand_id').val();
+        var category_id = $('#category_id').val();
+        
+        if (!brand_id) return;
+
+        $.ajax({
+            url: "{{ url('/admin/sales/valid-filters') }}",
+            data: {
+                brand_id: brand_id,
+                category_id: category_id
+            },
+            success: function(data) {
+                // Filter Categories
+                $('#category_id option').each(function() {
+                    var val = $(this).val();
+                    if (val && !data.valid_categories.includes(parseInt(val))) {
+                        $(this).prop('disabled', true).prop('hidden', true);
+                    } else {
+                        $(this).prop('disabled', false).prop('hidden', false);
+                    }
+                });
+                // Filter Product Types
+                $('#product_type_id option').each(function() {
+                    var val = $(this).val();
+                    if (val && !data.valid_product_types.includes(parseInt(val))) {
+                        $(this).prop('disabled', true).prop('hidden', true);
+                    } else {
+                        $(this).prop('disabled', false).prop('hidden', false);
+                    }
+                });
+                $('.selectpicker').selectpicker('refresh');
+            }
+        });
+    }
 
     $('select[name="product_type_id"]').on('change', function() {
         var warehouse_id = $("#warehouse_id").val();
